@@ -1,5 +1,5 @@
 "use client";
-import { formatMoney } from "../lib/money";
+import { formatMoney } from "../api/lib/money";
 
 import { ProductImage } from "./product-image";
 import Link from "next/link";

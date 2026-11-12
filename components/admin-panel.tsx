@@ -1,5 +1,5 @@
 "use client";
-import { formatMoney } from "../lib/money";
+import { formatMoney } from "../api/lib/money";
 
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Select, SelectItem, Switch, Textarea } from "@heroui/react";
 import Link from "next/link";

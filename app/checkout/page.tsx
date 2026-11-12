@@ -1,5 +1,5 @@
 "use client";
-import { formatMoney } from "../../lib/money";
+import { formatMoney } from "../../api/lib/money";
 
 import { Button, Input } from "@heroui/react";
 import Link from "next/link";
@@ -19,6 +19,7 @@ import {
   FiUser,
 } from "react-icons/fi";
 
+const money = formatMoney;
 const apiUrl = "";
 
 type CartItem = {

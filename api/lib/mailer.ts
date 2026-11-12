@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { formatMoney } from "../../lib/money.js";
+import { formatMoney } from "./money.js";
 import { prisma } from "./prisma";
 import { decrypt } from "./crypto";
 

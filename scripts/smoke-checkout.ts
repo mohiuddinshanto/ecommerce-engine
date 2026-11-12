@@ -6,6 +6,8 @@ import Stripe from "stripe";
 import jwt from "jsonwebtoken";
 import { prisma } from "../api/lib/prisma.js";
 
+
+async function main() {
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) throw new Error("Set DATABASE_URL to a local MySQL database in .env before running this smoke test.");
 const databaseHost = new URL(databaseUrl).hostname.toLowerCase();
@@ -109,3 +111,10 @@ try {
   await new Promise<void>((resolve) => server.close(() => resolve()));
   await prisma.$disconnect();
 }
+
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

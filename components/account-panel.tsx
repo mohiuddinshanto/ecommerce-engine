@@ -1,5 +1,5 @@
 "use client";
-import { formatMoney } from "../lib/money";
+import { formatMoney } from "../api/lib/money";
 
 import { Button, Input, Tab, Tabs } from "@heroui/react";
 import Image from "next/image";
@@ -23,6 +23,7 @@ import {
   FiUser,
 } from "react-icons/fi";
 
+const money = formatMoney;
 const apiUrl = "";
 
 type User = { id: string; name: string; email: string; role: string; emailVerified?: boolean };

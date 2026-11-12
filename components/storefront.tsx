@@ -1,5 +1,5 @@
 "use client";
-import { formatMoney } from "../lib/money";
+import { formatMoney } from "../api/lib/money";
 
 import { Button } from "@heroui/react";
 import Image from "next/image";
@@ -47,6 +47,7 @@ import {
   FiHeadphones,
 } from "react-icons/fi";
 
+const money = formatMoney;
 const StoreTestimonials = dynamic(() => import("./store-testimonials").then((module) => module.StoreTestimonials));
 
 const apiUrl = "";

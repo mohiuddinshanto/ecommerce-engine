@@ -1,5 +1,5 @@
 "use client";
-import { formatMoney } from "../lib/money";
+import { formatMoney } from "../api/lib/money";
 
 import { Button, Textarea } from "@heroui/react";
 import { ProductImage } from "./product-image";
