@@ -9,7 +9,7 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.server.json --noEmit",
     "deploy": "npm run build",
-    "seed": "tsx api/seed.ts",
+    "seed": "tsx api/seed-store.ts",
     "seed:store": "tsx api/seed-store.ts",
     "seed:store:prod": "node dist/seed-store.js",
     "seed:store:prod:empty": "node dist/seed-store.js --if-empty",
