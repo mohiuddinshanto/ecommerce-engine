@@ -92,6 +92,8 @@ type HomepageCategoriesSettings = {
 
 type Config = {
   storeName: string;
+  adminAdvanced: boolean;
+  currency: string;
   themeSettings?: { primaryColor?: string; secondaryColor?: string; font?: string };
   featureFlags: { cod: boolean; reviews: boolean; wishlist: boolean; coupons: boolean; addToCart: boolean; checkoutEmail: boolean; bottomNav: boolean; productCallButton?: boolean; productWhatsappButton?: boolean };
   paymentConfig?: {
@@ -102,6 +104,7 @@ type Config = {
   emailConfig?: { host: string; port: number; user: string; pass: string; fromEmail: string };
   checkoutForm?: Record<string, { enabled?: boolean; required?: boolean; label?: string; placeholder?: string }> | null;
   shippingConfig?: {
+    defaultCharge?: number;
     options?: { id?: string; name?: string; charge?: number }[];
   };
   courierConfig?: {
@@ -307,7 +310,7 @@ const STATUS_LABEL: Record<string, string> = {
   CANCELLED: "Cancelled",
 };
 
-type Section = "overview" | "products" | "media" | "categories" | "orders" | "coupons" | "reviews" | "staff" | "home" | "banner" | "menu" | "marketing" | "features" | "payments" | "delivery" | "checkout" | "storage";
+type Section = "overview" | "products" | "media" | "categories" | "orders" | "customers" | "coupons" | "reviews" | "staff" | "home" | "banner" | "menu" | "marketing" | "features" | "payments" | "settings" | "delivery" | "checkout" | "storage";
 
 const NAV: { key: Section; label: string; icon: string }[] = [
   { key: "overview", label: "Overview", icon: "◈" },
@@ -315,6 +318,7 @@ const NAV: { key: Section; label: string; icon: string }[] = [
   { key: "media", label: "Media Library", icon: "▧" },
   { key: "categories", label: "Categories", icon: "▤" },
   { key: "orders", label: "Orders", icon: "⊞" },
+  { key: "customers", label: "Customers", icon: "CU" },
   { key: "coupons", label: "Coupons", icon: "℅" },
   { key: "reviews", label: "Reviews", icon: "★" },
   { key: "staff", label: "Staff Team", icon: "◉" },
@@ -324,12 +328,14 @@ const NAV: { key: Section; label: string; icon: string }[] = [
   { key: "marketing", label: "Pixels & Chat", icon: "⬡" },
   { key: "features", label: "Store Features", icon: "⊕" },
   { key: "payments", label: "Payments", icon: "¢" },
+  { key: "settings", label: "Settings", icon: "ST" },
   { key: "delivery", label: "Delivery", icon: "◫" },
   { key: "checkout", label: "Checkout Form", icon: "▤" },
   { key: "storage", label: "Storage", icon: "▣" },
 ];
 
 const title = (section: Section) => NAV.find((n) => n.key === section)?.label ?? "";
+const BASIC_SECTIONS: Section[] = ["overview", "products", "categories", "orders", "customers", "coupons", "payments", "settings"];
 
 // STAFF sub-role split. ADMIN (or legacy staff with no staffType) sees every
 // section; each manager only sees the sections its API permissions allow.
@@ -371,11 +377,12 @@ export function AdminPanel() {
   const [staffScope, setStaffScope] = useState<{ role: string; staffType: string | null } | null>(null);
 
   const visibleNav = useMemo(() => {
-    if (!staffScope || staffScope.role === "ADMIN") return NAV;
+    const available = NAV.filter((item) => config?.adminAdvanced || BASIC_SECTIONS.includes(item.key));
+    if (!staffScope || staffScope.role === "ADMIN") return available;
     const allowed = staffScope.staffType ? STAFF_SECTIONS[staffScope.staffType] : null;
-    if (!allowed) return NAV;
-    return NAV.filter((n) => allowed.includes(n.key));
-  }, [staffScope]);
+    if (!allowed) return available;
+    return available.filter((n) => allowed.includes(n.key));
+  }, [staffScope, config?.adminAdvanced]);
 
   useEffect(() => {
     if (staffScope && !visibleNav.some((n) => n.key === section)) setSection("overview");
@@ -588,12 +595,14 @@ export function AdminPanel() {
 
         {/* CONTENT */}
         <div className="flex-1 overflow-y-auto p-4 pb-20 sm:p-6 sm:pb-6">
-          {section === "overview" && <AdminOverview token={token} onNavigate={setSection} />}
+          {section === "overview" && <AdminOverview token={token} onNavigate={setSection} courierConfigured={config.courierConfigured} />}
           {section === "products" && <AdminProducts token={token} />}
           {section === "media" && <MediaLibrary token={token} />}
           {section === "categories" && <AdminCategories token={token} config={config} save={save} saving={saving} />}
           {section === "orders" && <AdminOrders token={token} config={config} isAdmin={staffScope?.role === "ADMIN"} />}
+          {section === "customers" && <AdminCustomers token={token} />}
           {section === "coupons" && <AdminCoupons token={token} />}
+          {section === "settings" && <AdminSettings config={config} save={save} saving={saving} />}
           {section === "reviews" && <AdminReviews token={token} />}
           {section === "staff" && <AdminStaff token={token} />}
           {section === "home" && <HomeLayoutSettings config={config} save={save} saving={saving} token={token} />}
@@ -646,169 +655,33 @@ export function AdminPanel() {
   );
 }
 
+/* ==================== CUSTOMERS ==================== */
+function AdminCustomers({ token }: { token: string }) {
+  const [customers, setCustomers] = useState<{ id: string; name: string; email: string; createdAt: string; _count: { orders: number } }[]>([]);
+  useEffect(() => { api("/api/admin/customers", token).then((r) => r.json()).then((rows) => Array.isArray(rows) && setCustomers(rows)).catch(() => {}); }, [token]);
+  return <section className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h2 className="text-xl font-bold mb-4">Customers</h2><div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr>{["Name", "Email", "Orders", "Joined"].map((label) => <th key={label} className="text-left p-3 text-xs text-gray-400">{label}</th>)}</tr></thead><tbody>{customers.map((customer) => <tr key={customer.id} className="border-t border-gray-100 dark:border-white/8"><td className="p-3">{customer.name}</td><td className="p-3">{customer.email}</td><td className="p-3">{customer._count.orders}</td><td className="p-3">{new Date(customer.createdAt).toLocaleDateString("en-US")}</td></tr>)}</tbody></table></div>{!customers.length && <p className="text-sm text-gray-400">No customers found.</p>}</section>;
+}
+
+function AdminSettings({ config, save, saving }: { config: Config; save: (payload: object) => void; saving: boolean }) {
+  const [storeName, setStoreName] = useState(config.storeName);
+  const [shippingCharge, setShippingCharge] = useState(String(config.shippingConfig?.defaultCharge ?? 8));
+  return <section className="max-w-2xl rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5 space-y-5"><div><h2 className="text-xl font-bold">Store settings</h2><p className="mt-1 text-sm text-gray-400">Basic storefront settings.</p></div><Input label="Store name" value={storeName} onValueChange={setStoreName} /><Input label="Currency" value={config.currency || "USD"} isReadOnly /><Input label="Default shipping charge" type="number" min="0" step="0.01" value={shippingCharge} onValueChange={setShippingCharge} /><Button isLoading={saving} onPress={() => save({ storeName, shippingConfig: { defaultCharge: Math.max(0, Number(shippingCharge) || 0) } })}>Save settings</Button></section>;
+}
+
 /* ==================== OVERVIEW ==================== */
-function AdminOverview({ token, onNavigate }: { token: string; onNavigate: (section: Section) => void }) {
-  const [data, setData] = useState<{ products: number; recentOrders: Order[]; customers: number; pendingReviews: number; lowStock: { id: string; name: string; stock: number }[]; statusCounts: Record<string, number>; payment: Record<string, { count: number; amount: number }>; totalOrders: number; averageOrderValue: number; today: { count: number; gross: number }; yesterday: { count: number; gross: number }; pending: { count: number; amount: number }; codOutstanding: { count: number; amount: number }; alerts: { oldPending: Order[]; deliveredUnpaid: Order[]; confirmedUnsent: Order[] }; salesTrend: { day: string; paid: number; gross: number }[] } | null>(null);
+function AdminOverview({ token, onNavigate, courierConfigured }: { token: string; onNavigate: (section: Section) => void; courierConfigured: boolean }) {
+  const [data, setData] = useState<{ recentOrders: Order[]; customers: number; lowStock: { id: string; name: string; stock: number }[]; statusCounts: Record<string, number>; payment: Record<string, { count: number; amount: number }>; today: { count: number; gross: number }; pending: { count: number; amount: number }; salesTrend: { day: string; paid: number; gross: number }[] } | null>(null);
   const [range, setRange] = useState<7 | 30>(7);
-  const [salesMode, setSalesMode] = useState<"paid" | "gross">("paid");
-  const [sfBalance, setSfBalance] = useState<number | null>(null);
-  const [sfBalanceVisible, setSfBalanceVisible] = useState(false);
-  const [syncingSteadfast, setSyncingSteadfast] = useState(false);
-
-  const load = () => {
-    api(`/api/admin/dashboard?days=${range}`, token)
-      .then((r) => r.json())
-      .then(setData)
-      .catch(() => {});
-  };
-
-  useEffect(() => {
-    load();
-  }, [token, range]);
-
-  async function updateOrderStatus(id: string, status: string, paymentStatus: string) {
-    try {
-      const res = await api(`/api/admin/orders/${id}`, token, { method: "PATCH", body: JSON.stringify({ status, paymentStatus }) });
-      if (res.ok) {
-        toast.success("Order status updated.");
-        load();
-      }
-    } catch {
-      toast.error("Could not update the order.");
-    }
-  }
-
-  async function loadSfBalance() {
-    try {
-      const response = await api("/api/admin/steadfast/balance", token);
-      const result = await response.json();
-      if (response.ok) setSfBalance(Number(result.balance));
-      else toast.error(result.error || "Steadfast balance load failed");
-    } catch { toast.error("Steadfast balance load failed"); }
-  }
-
-  async function syncSteadfastFromOverview() {
-    setSyncingSteadfast(true);
-    try {
-      const response = await api("/api/admin/orders/sync-all-steadfast", token, { method: "POST" });
-      const result = await response.json();
-      if (!response.ok) { toast.error(result.error || "Steadfast sync failed"); return; }
-      toast.success(`Synced ${result.synced ?? 0} parcels${result.failed ? ` · ${result.failed} failed` : ""}`);
-      load();
-    } catch { toast.error("Steadfast sync failed"); }
-    finally { setSyncingSteadfast(false); }
-  }
-
+  useEffect(() => { api(`/api/admin/dashboard?days=${range}`, token).then((response) => response.json()).then(setData).catch(() => {}); }, [token, range]);
   const orders = data?.recentOrders ?? [];
-  const paidRevenue = data?.payment?.PAID?.amount ?? 0;
-  const unpaidRevenue = data?.payment?.UNPAID?.amount ?? 0;
-  const pendingOrders = data?.pending ?? { count: 0, amount: 0 };
-  const todayOrders = { length: data?.today.count ?? 0 }; const todaySales = data?.today.gross ?? 0;
-  const yesterdayOrders = { length: data?.yesterday.count ?? 0 }; const yesterdaySales = data?.yesterday.gross ?? 0;
-  const pctChange = (a: number, b: number) => b ? `${a >= b ? "+" : ""}${Math.round((a - b) / b * 100)}%` : a ? "New" : "0%";
-  const statuses = ["PENDING", "CONFIRMED", "IN_COURIER", "SHIPPED", "DELIVERED", "CANCELLED"];
-  const statusCount = (s: string) => data?.statusCounts?.[s] ?? 0;
-  const alertOrders = [...(data?.alerts.oldPending ?? []), ...(data?.alerts.deliveredUnpaid ?? []), ...(data?.alerts.confirmedUnsent ?? [])];
-  const lowStock = data?.lowStock ?? [];
-  const daily = data?.salesTrend.map((row) => ({ label: new Date(row.day).toLocaleDateString(undefined, { month: "short", day: "numeric" }), value: salesMode === "paid" ? row.paid : row.gross })) ?? [];
-  const maxDaily = Math.max(1, ...daily.map((d) => d.value));
-  const productsSold: Record<string, number> = {}; const customerStats: Record<string, { name: string; count: number; total: number }> = {};
-  orders.forEach((o) => { (o.orderItems ?? []).forEach((item) => productsSold[item.name] = (productsSold[item.name] ?? 0) + item.qty); const name = o.shippingDetails?.name || "Guest"; const c = customerStats[o.customerId || name] ?? { name, count: 0, total: 0 }; c.count++; c.total += Number(o.totalAmount); customerStats[o.customerId || name] = c; });
-  const hotProducts = Object.entries(productsSold).sort((a,b) => b[1]-a[1]).slice(0, 5);
-  const repeatCustomers = Object.values(customerStats).filter((c) => c.count > 1).sort((a,b) => b.count-a.count).slice(0, 5);
-  const kpis = [
-    ["Today's orders", `${todayOrders.length}`, `Yesterday: ${yesterdayOrders.length}`], ["Today's sales", money(todaySales), `Change from yesterday: ${pctChange(todaySales, yesterdaySales)}`],
-    ["Pending orders", `${pendingOrders.count}`, money(pendingOrders.amount)], ["Average order value", money(data?.averageOrderValue ?? 0), "All orders"],
-    ["Paid revenue", money(paidRevenue), `Last ${range} days`], ["Unpaid revenue", money(unpaidRevenue), `Last ${range} days`],
-  ];
-
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="text-xl font-bold text-gray-900 dark:text-white">Store overview</h2><p className="text-xs text-gray-400">Live store performance and action items</p></div><div className="flex gap-2">{[["Add Product","products"],["Create Order","orders"],["Add Coupon","coupons"]].map(([label, target])=><Button key={label} size="sm" variant="flat" onPress={()=>onNavigate(target as Section)}>{label}</Button>)}<Button size="sm" variant="flat" onPress={syncSteadfastFromOverview} isLoading={syncingSteadfast}><FiRefreshCw className={syncingSteadfast ? "animate-spin" : ""} /> Sync Steadfast</Button></div></div>
-      <div className="grid grid-cols-2 xl:grid-cols-3 gap-3">{kpis.map(([label,value,sub])=><div key={label} className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-4"><p className="text-xs text-gray-400">{label}</p><p className="mt-1 text-xl font-bold text-gray-900 dark:text-white">{value}</p><p className="mt-1 text-[11px] text-gray-400">{sub}</p></div>)}</div>
-      <div className="grid sm:grid-cols-2 gap-3"><div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-4"><p className="text-xs text-gray-400">Delivered COD outstanding</p><p className="mt-1 text-xl font-bold">{money(data?.codOutstanding.amount ?? 0)}</p><p className="text-[11px] text-gray-400">{data?.codOutstanding.count ?? 0} delivered unpaid orders</p></div><div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-4 flex items-center justify-between"><div><p className="text-xs text-gray-400">Steadfast balance</p><p className="mt-1 text-xl font-bold">{sfBalance === null ? "—" : sfBalanceVisible ? money(sfBalance) : "••••••"}</p></div><div className="flex items-center gap-1"><Button size="sm" variant="flat" onPress={loadSfBalance}>Refresh</Button><Button isIconOnly size="sm" variant="light" aria-label={sfBalanceVisible ? "Hide Steadfast balance" : "Show Steadfast balance"} title={sfBalanceVisible ? "Hide balance" : "Show balance"} onPress={()=>setSfBalanceVisible((visible)=>!visible)} className="min-w-9 text-gray-600 dark:text-slate-300"><span className="flex items-center justify-center">{sfBalanceVisible ? <FiEyeOff size={16} strokeWidth={2.5} /> : <FiEye size={16} strokeWidth={2.5} />}</span></Button></div></div></div>
-      <div className="grid xl:grid-cols-2 gap-4">
-        <div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><div className="flex flex-wrap justify-between items-center gap-2 mb-4"><h3 className="font-bold text-gray-900 dark:text-white">{salesMode === "paid" ? "Paid sales trend" : "All orders (Gross)"}</h3><div className="flex gap-1">{([7,30] as const).map(n=><Button key={n} size="sm" variant={range===n?"solid":"light"} onPress={()=>setRange(n)}>{n} days</Button>)}{(["paid","gross"] as const).map(m=><Button key={m} size="sm" variant={salesMode===m?"flat":"light"} onPress={()=>setSalesMode(m)}>{m === "paid" ? "Paid" : "All orders (Gross)"}</Button>)}</div></div><div className="flex h-36 items-end gap-1">{daily.map((d,i)=><div key={i} title={`${d.label}: ${money(d.value)}`} className={`flex-1 rounded-t ${d.value ? "bg-primary/70 hover:bg-primary" : "bg-gray-200 dark:bg-white/10"}`} style={{height:`${Math.max(3,d.value/maxDaily*100)}%`}} />)}</div><div className="mt-2 flex justify-between text-[10px] text-gray-400"><span>{daily[0]?.label}</span><span>{daily.at(-1)?.label}</span></div>{!daily.some((d)=>d.value>0)&&<p className="text-center text-xs text-gray-400 mt-2">No {salesMode === "paid" ? "paid sales" : "orders"} in this period.</p>}</div>
-        <div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h3 className="font-bold text-gray-900 dark:text-white mb-4">Order status breakdown</h3><div className="space-y-3">{statuses.map(s=>{const n=statusCount(s);return <div key={s}><div className="flex justify-between text-xs mb-1"><span>{STATUS_LABEL[s]??s}</span><span>{n} · {orders.length?Math.round(n/orders.length*100):0}%</span></div><div className="h-2 rounded-full bg-gray-100 dark:bg-white/8"><div className={`h-full rounded-full ${STATUS_COLORS[s]??"bg-primary"}`} style={{width:`${orders.length?n/orders.length*100:0}%`}} /></div></div>})}</div></div>
-      </div>
-      <div className="grid xl:grid-cols-3 gap-4">
-        <div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h3 className="font-bold mb-3">Alerts · {alertOrders.length + lowStock.length}</h3>{lowStock.slice(0,4).map(p=><p key={p.id} className="text-xs py-1 text-amber-600">{p.stock===0?"Out of stock":"Low stock"}: {p.name} ({p.stock})</p>)}{alertOrders.slice(0,6).map(o=><p key={o.id} className="text-xs py-1 text-gray-500">#{o.id.slice(0,6)} · {o.status==="DELIVERED"?"Delivered, unpaid":o.status==="CONFIRMED"?"Confirmed, not sent":"Pending over 2 days"}</p>)}{!alertOrders.length&&!lowStock.length&&<p className="text-xs text-gray-400">No alerts</p>}<p className="text-xs text-gray-400 mt-2">Total orders: {data?.totalOrders ?? 0} · Customers: {data?.customers ?? 0}</p></div>
-        <div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h3 className="font-bold mb-3">Hot products</h3>{hotProducts.map(([n,q])=><p key={n} className="flex justify-between text-xs py-1"><span>{n}</span><b>{q} sold</b></p>)}{!hotProducts.length&&<p className="text-xs text-gray-400">No sales yet</p>}</div>
-        <div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h3 className="font-bold mb-3">Repeat customers</h3>{repeatCustomers.map((c,i)=><p key={i} className="flex justify-between text-xs py-1"><span>{c.name}</span><b>{c.count} orders</b></p>)}{!repeatCustomers.length&&<p className="text-xs text-gray-400">No repeat customers yet</p>}<p className="mt-3 text-xs text-gray-400">Pending reviews: {data?.pendingReviews ?? 0}</p></div>
-      </div>
-
-      <div className="bg-white dark:bg-white/4 rounded-2xl border border-gray-100 dark:border-white/6 p-5">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-display font-bold text-gray-900 dark:text-white">Recent Orders</h3>
-          <span className="text-xs text-gray-400 dark:text-slate-500">Manage status & payment</span>
-        </div>
-
-        {!orders.length ? (
-          <p className="text-sm text-gray-400 dark:text-slate-500">No orders placed yet.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-100 dark:border-white/8">
-                  {["Order", "Customer", "Date", "Total", "Payment", "Status", "Actions"].map((h) => (
-                    <th key={h} className="text-left py-2 px-3 text-xs font-semibold text-gray-400 dark:text-slate-500 uppercase tracking-wider">
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50 dark:divide-white/4">
-                {orders.map((order) => (
-                  <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-white/3 transition-colors">
-                    <td className="py-3 px-3 font-mono text-xs text-primary font-bold">#{order.id.slice(0, 8)}</td>
-                    <td className="py-3 px-3">
-                      <p className="font-medium text-gray-800 dark:text-slate-200 text-xs">{order.shippingDetails?.name ?? "Guest"}</p>
-                      <p className="text-[10px] text-gray-400 dark:text-slate-500">{order.shippingDetails?.phone}</p>
-                    </td>
-                    <td className="py-3 px-3 text-gray-400 dark:text-slate-500 text-xs whitespace-nowrap">
-                      {new Date(order.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="py-3 px-3 font-bold text-xs text-gray-800 dark:text-slate-200">{money(order.totalAmount)}</td>
-                    <td className="py-3 px-3">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${order.paymentStatus === "PAID" ? "bg-emerald/10 text-emerald" : "bg-amber/10 text-amber"}`}>
-                        {order.paymentStatus}
-                      </span>
-                    </td>
-                    <td className="py-3 px-3">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${statusPill(order.status)}`}>{STATUS_LABEL[order.status] ?? order.status}</span>
-                    </td>
-                    <td className="py-3 px-3">
-                      <div className="flex items-center gap-2">
-                        <Select
-                          size="sm"
-                          aria-label="Order status"
-                          selectedKeys={[order.status]}
-                          onChange={(e) => updateOrderStatus(order.id, e.target.value, order.paymentStatus)}
-                          className="w-32"
-                        >
-                          {["PENDING", "CONFIRMED", "IN_COURIER", "SHIPPED", "DELIVERED", "CANCELLED"].map((s) => (
-                            <SelectItem key={s}>{STATUS_LABEL[s] ?? s}</SelectItem>
-                          ))}
-                        </Select>
-                        <Button
-                          size="sm"
-                          variant={order.paymentStatus === "PAID" ? "solid" : "flat"}
-                          color={order.paymentStatus === "PAID" ? "success" : "warning"}
-                          onPress={() => updateOrderStatus(order.id, order.status, order.paymentStatus === "PAID" ? "UNPAID" : "PAID")}
-                        >
-                          {order.paymentStatus === "PAID" ? "Paid" : "Mark Paid"}
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  const unpaid = data?.payment?.UNPAID?.amount ?? 0;
+  const statuses = ["PENDING", "CONFIRMED", ...(courierConfigured ? ["IN_COURIER"] : []), "SHIPPED", "DELIVERED", "CANCELLED"];
+  const topProducts: Record<string, number> = {};
+  orders.forEach((order) => (order.orderItems ?? []).forEach((item) => { topProducts[item.name] = (topProducts[item.name] ?? 0) + item.qty; }));
+  const trend = data?.salesTrend ?? [];
+  const max = Math.max(1, ...trend.map((row) => row.paid));
+  const cards = [["Today's orders", data?.today.count ?? 0], ["Today's sales", money(data?.today.gross ?? 0)], ["Pending orders", data?.pending.count ?? 0], ["Paid revenue", money(data?.payment?.PAID?.amount ?? 0)], ["Unpaid / COD outstanding", money(unpaid)]];
+  return <div className="space-y-5"><header className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="text-xl font-bold">Store overview</h2><p className="text-sm text-gray-400">Sales, orders, and inventory at a glance.</p></div><div className="flex gap-2"><Button size="sm" onPress={() => onNavigate("products")}>Add product</Button><Button size="sm" variant="flat" onPress={() => onNavigate("orders")}>View orders</Button></div></header><div className="grid grid-cols-2 xl:grid-cols-5 gap-3">{cards.map(([label, value]) => <div key={String(label)} className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-4"><p className="text-xs text-gray-400">{label}</p><p className="mt-1 text-xl font-bold">{value}</p></div>)}</div><div className="grid xl:grid-cols-2 gap-4"><section className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><div className="flex justify-between items-center mb-4"><h3 className="font-bold">Paid sales trend</h3><div className="flex gap-1">{([7, 30] as const).map((days) => <Button key={days} size="sm" variant={range === days ? "solid" : "light"} onPress={() => setRange(days)}>{days} days</Button>)}</div></div><div className="flex h-36 items-end gap-1">{trend.map((row) => <div key={row.day} title={`${new Date(row.day).toLocaleDateString("en-US")}: ${money(row.paid)}`} className="flex-1 rounded-t bg-primary/70" style={{ height: `${Math.max(3, row.paid / max * 100)}%` }} />)}</div></section><section className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h3 className="font-bold mb-4">Order status breakdown</h3>{statuses.map((status) => { const count = data?.statusCounts[status] ?? 0; return <div key={status} className="flex justify-between py-2 text-sm"><span>{STATUS_LABEL[status] ?? status}</span><span>{count}</span></div>; })}</section></div><div className="grid md:grid-cols-2 gap-4"><section className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h3 className="font-bold mb-3">Low-stock alerts</h3>{(data?.lowStock ?? []).slice(0, 8).map((product) => <p key={product.id} className="flex justify-between py-1 text-sm"><span>{product.name}</span><strong>{product.stock}</strong></p>)}{!data?.lowStock.length && <p className="text-sm text-gray-400">No low-stock products.</p>}</section><section className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h3 className="font-bold mb-3">Top products</h3>{Object.entries(topProducts).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([name, quantity]) => <p key={name} className="flex justify-between py-1 text-sm"><span>{name}</span><strong>{quantity} sold</strong></p>)}{!Object.keys(topProducts).length && <p className="text-sm text-gray-400">No product orders yet.</p>}</section></div></div>;
 }
 
 /* ==================== MENU BUILDER ==================== */
@@ -2957,10 +2830,10 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
 
   const courierPrefix: Record<string, string> = { steadfast: "ST", pathao: "PT", redx: "RX" };
   const couriers = [
-    { key: "steadfast", label: "Steadfast", enabled: Boolean(config.courierConfig?.steadfast?.enabled) },
+    { key: "steadfast", label: "Steadfast", enabled: Boolean(config.courierConfigured && (config.courierConfig?.steadfast?.enabled ?? true)) },
     { key: "pathao", label: "Pathao", enabled: Boolean(config.courierConfig?.pathao?.enabled) },
     { key: "redx", label: "RedX", enabled: Boolean(config.courierConfig?.redx?.enabled) },
-  ].filter((c) => c.enabled);
+  ].filter((c) => config.courierConfigured && c.enabled);
 
   const courierStats = couriers.map((c) => {
     const parcels = orders.filter((o) => (o.courierName || "").trim().toLowerCase() === c.label.toLowerCase());
@@ -2989,7 +2862,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
     } else toast.error("Could not send the order.");
   }
 
-  const columns = ["PENDING", "CONFIRMED", "IN_COURIER", "SHIPPED", "DELIVERED", "CANCELLED"];
+  const columns = ["PENDING", "CONFIRMED", ...(config.courierConfigured ? ["IN_COURIER"] : []), "SHIPPED", "DELIVERED", "CANCELLED"];
   const columnColor: Record<string, string> = {
     PENDING: "text-amber border-amber/30 bg-amber/5",
     CONFIRMED: "text-primary border-primary/30 bg-primary/5",
@@ -3045,10 +2918,10 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
     cancelled: orders.filter((o) => o.status === "CANCELLED").length,
     delivered: orders.filter((o) => o.status === "DELIVERED").length,
     pending: orders.filter((o) => o.status === "PENDING").length,
-    shipped: orders.filter((o) => o.status === "SHIPPED" || o.status === "IN_COURIER").length,
+    shipped: orders.filter((o) => o.status === "SHIPPED" || (config.courierConfigured && o.status === "IN_COURIER")).length,
   };
   const sfAgg: Record<string, number> = {};
-  orders.forEach((o) => {
+  if (config.courierConfigured) orders.forEach((o) => {
     const st = o.shippingDetails?.sfStatus;
     if (st) sfAgg[st] = (sfAgg[st] ?? 0) + 1;
   });
@@ -3100,7 +2973,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
     if (!win) return toast.error("The browser blocked the print window.");
     const row = (l: string, r: string) => `<tr><td style="padding:3px 0;color:#444">${l}</td><td style="padding:3px 0;text-align:right;font-weight:700">${r}</td></tr>`;
     const itemRows = items.map((it) => `<tr><td style="padding:2px 0;font-size:12px">${it.name}</td><td style="padding:2px 0;font-size:12px;text-align:right">${it.qty} x ${money(it.price)}</td></tr>`).join("");
-    const isSf = o.courierName?.toLowerCase() === "steadfast";
+    const isSf = config.courierConfigured && o.courierName?.toLowerCase() === "steadfast";
     const sfRef = isSf ? sd.sfTrackingCode ?? o.courierTrackingId ?? "" : "";
     const invoiceRef = isSf && sfRef ? `SF-${sfRef}` : `#${o.id.slice(0, 8)}`;
     win.document.write(`<!DOCTYPE html><html><head><title>Invoice ${invoiceRef}</title><style>
@@ -3190,7 +3063,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
         onClick={() => setShowInfo((v) => !v)}
         className="lg:hidden w-full flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-slate-400 bg-white dark:bg-white/4 border border-gray-100 dark:border-white/6 rounded-xl px-3 py-2.5 mb-2"
       >
-        <span className="flex-1 text-left">Dashboard info & courier parcels</span>
+        <span className="flex-1 text-left">{config.courierConfigured ? "Dashboard info & courier parcels" : "Dashboard info"}</span>
         <span>{showInfo ? "Hide" : "Show"}</span>
         <span className={`transition-transform ${showInfo ? "" : "rotate-180"}`}>▾</span>
       </button>
@@ -3201,11 +3074,9 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
           { label: "Total", value: stats.total, cls: "text-gray-900 dark:text-white" },
           { label: "Today", value: stats.today, cls: "text-primary" },
           { label: "Pending", value: stats.pending, cls: "text-amber" },
-          { label: "Courier", value: stats.shipped, cls: "text-indigo-500" },
+          ...(config.courierConfigured ? [{ label: "Courier", value: stats.shipped, cls: "text-indigo-500" }, { label: "SF: In Review", value: sfAgg.in_review ?? 0, cls: "text-amber" }, { label: "SF: Delivered", value: sfAgg.delivered ?? 0, cls: "text-emerald" }] : []),
           { label: "Delivered", value: stats.delivered, cls: "text-emerald" },
           { label: "Cancelled", value: stats.cancelled, cls: "text-rose-500" },
-          { label: "SF: In Review", value: sfAgg.in_review ?? 0, cls: "text-amber" },
-          { label: "SF: Delivered", value: sfAgg.delivered ?? 0, cls: "text-emerald" },
         ].map((s) => (
           <div key={s.label} className="bg-white dark:bg-white/4 rounded-xl border border-gray-100 dark:border-white/6 px-3 py-2.5">
             <p className="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider whitespace-nowrap">{s.label}</p>
@@ -3257,7 +3128,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50 dark:divide-white/4">
-                {courierStats.map((c) => {
+                {config.courierConfigured && courierStats.map((c) => {
                   const count = (st: string) => c.parcels.filter((o) => o.status === st).length;
                   return (
                     <tr key={c.key} className="hover:bg-gray-50/60 dark:hover:bg-white/3">
@@ -3369,7 +3240,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
                       </div>
 <p className="font-display font-semibold text-sm text-gray-900 dark:text-white truncate">{o.shippingDetails?.name ?? "Guest"}</p>
 <p className="text-[10px] text-gray-400 dark:text-slate-500 mt-0.5 truncate">{o.shippingDetails?.phone}</p>
-{o.courierName && (
+{config.courierConfigured && o.courierName && (
   <div className="mt-2 flex flex-wrap items-center gap-1.5">
     <span className="shrink-0 text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-500 font-bold">{o.courierName}</span>
     {o.courierTrackingId && (
@@ -3545,7 +3416,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
                 <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${detail.paymentStatus === "PAID" ? "bg-emerald/10 text-emerald" : "bg-amber/10 text-amber"}`}>
                   Payment: {detail.paymentStatus}
                 </span>
-                {detail.courierName && (
+                {config.courierConfigured && detail.courierName && (
                   <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-indigo-500/10 text-indigo-500">
                     {detail.courierName}{detail.courierTrackingId ? ` · ${detail.courierTrackingId}` : ""}
                   </span>
@@ -5186,7 +5057,7 @@ function PaymentSettings({ save, saving, config }: { save: (payload: object) => 
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    save({ featureFlags: { ...config.featureFlags, cod: codEnabled } });
+    save({ featureFlags: { cod: codEnabled } });
   }
 
   return (
@@ -5210,7 +5081,7 @@ function PaymentSettings({ save, saving, config }: { save: (payload: object) => 
         </div>
       </div>
       <button type="submit" disabled={saving} className="px-5 h-10 bg-primary text-white text-sm font-bold font-display rounded-xl hover:bg-primary-dark transition-colors disabled:opacity-60">
-        {saving ? "Saving?" : "Save Payment Settings"}
+        {saving ? "Saving..." : "Save Payment Settings"}
       </button>
     </form>
   );

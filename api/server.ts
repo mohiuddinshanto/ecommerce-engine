@@ -19,6 +19,7 @@ import { uploadImage, deleteImage, getLocalProductsDirectory, imageContentType, 
 import { baseSkuForParts, generateVariationsForProduct, makeUniqueSku, replaceProductVariations } from "./lib/product-variations.js";
 import { resendStoredEmail, sendEmailVerification, sendNewOrderToOwner, sendOrderConfirmation, sendOrderStatusEmail, sendPasswordReset, sendTestMail } from "./lib/mailer.js";
 import { handleStripeEvent, stripe } from "./lib/payments.js";
+import { isCourierConfigured, type CourierSettings } from "./lib/courier.js";
 
 const app = express();
 async function handleStripeWebhook(req: express.Request, res: express.Response) {
@@ -75,6 +76,22 @@ app.use((req, res, next) => {
 });
 // Any successful admin mutation may change products, categories or store
 // config, so drop the read cache instead of tracking every write by hand.
+const advancedAdminEnabled = () => process.env.ADMIN_ADVANCED === "true";
+const requireAdvancedAdmin: express.RequestHandler = (_req, res, next) =>
+  advancedAdminEnabled() ? next() : res.status(404).json({ error: "Not found" });
+for (const path of ["/api/admin/media", "/api/admin/reviews", "/api/admin/staff", "/api/admin/test-email", "/api/admin/failed-emails"]) {
+  app.use(path, requireAdvancedAdmin);
+}
+const requireCourier: express.RequestHandler = async (_req, res, next) => {
+  try {
+    const row = await prisma.storeConfig.findUnique({ where: { id: "store-config-singleton" }, select: { courierConfig: true } });
+    const stored = row?.courierConfig as { encrypted?: string } | null;
+    const settings = stored?.encrypted ? decrypt<NonNullable<Parameters<typeof isCourierConfigured>[0]>>(stored.encrypted) : null;
+    if (!isCourierConfigured(settings)) return res.status(404).json({ error: "Courier integration is not configured" });
+    next();
+  } catch (error) { next(error); }
+};
+
 app.use("/api/admin", (req, res, next) => {
   if (req.method !== "GET" && req.method !== "HEAD") {
     res.on("finish", () => {
@@ -1031,6 +1048,11 @@ app.get("/api/admin/dashboard", requireAuth, requireRole("ADMIN", "STAFF"), asyn
     alerts: { oldPending: visible(oldPending), deliveredUnpaid: visible(deliveredUnpaid), confirmedUnsent: visible(confirmedUnsent) }, salesTrend: trendRows.map((r) => ({ day: r.day, gross: Number(r.gross ?? 0), paid: Number(r.paid ?? 0) })) });
 });
 
+app.get("/api/admin/customers", requireAuth, requireRole("ADMIN"), async (_req, res) => {
+  const customers = await prisma.user.findMany({ where: { role: "CUSTOMER" }, orderBy: { createdAt: "desc" }, take: 200, select: { id: true, name: true, email: true, createdAt: true, _count: { select: { orders: true } } } });
+  res.json(customers);
+});
+
 app.get("/api/admin/products", requireAuth, requireRole("ADMIN", "STAFF"), async (_req, res) => {
   res.json(
     await prisma.product.findMany({
@@ -1157,7 +1179,20 @@ app.get("/api/admin/categories", requireAuth, requireRole("ADMIN", "STAFF"), asy
 });
 
 app.get("/api/admin/orders", requireAuth, requireRole("ADMIN", "STAFF"), requireStaffArea("orders"), restrictStaffOrderView, async (_req, res) => {
-  res.json(await prisma.order.findMany({ where: { deletedAt: null }, orderBy: { createdAt: "desc" }, take: 100 }));
+  const orders = await prisma.order.findMany({ where: { deletedAt: null }, orderBy: { createdAt: "desc" }, take: 100 });
+  const settings = await prisma.storeConfig.findUnique({ where: { id: "store-config-singleton" }, select: { courierConfig: true } });
+  const stored = settings?.courierConfig as { encrypted?: string } | null;
+  const courierSettings = stored?.encrypted ? decrypt<CourierSettings>(stored.encrypted) : null;
+  if (isCourierConfigured(courierSettings)) return res.json(orders);
+  res.json(orders.map((order) => ({
+    ...order,
+    status: order.status === "IN_COURIER" ? "SHIPPED" : order.status,
+    courierName: null,
+    courierTrackingId: null,
+    shippingDetails: order.shippingDetails && typeof order.shippingDetails === "object"
+      ? Object.fromEntries(Object.entries(order.shippingDetails).filter(([key]) => !["sfStatus", "sfSyncedAt", "sfConsignmentId", "sfTrackingCode"].includes(key)))
+      : order.shippingDetails,
+  })));
 });
 
 app.get("/api/admin/abandoned-checkouts", requireAuth, requireRole("ADMIN", "STAFF"), requireStaffArea("orders"), async (_req, res) => {
@@ -1184,7 +1219,11 @@ app.get("/api/admin/order-deletion-audit", requireAuth, requireRole("ADMIN"), as
 });
 
 app.get("/api/admin/orders/archived", requireAuth, requireRole("ADMIN"), async (_req, res) => {
-  res.json(await prisma.order.findMany({ where: { deletedAt: { not: null } }, orderBy: { deletedAt: "desc" }, take: 100, select: { id: true, status: true, paymentStatus: true, totalAmount: true, deletedAt: true, courierName: true, courierTrackingId: true } }));
+  const orders = await prisma.order.findMany({ where: { deletedAt: { not: null } }, orderBy: { deletedAt: "desc" }, take: 100, select: { id: true, status: true, paymentStatus: true, totalAmount: true, deletedAt: true, courierName: true, courierTrackingId: true } });
+  const settings = await prisma.storeConfig.findUnique({ where: { id: "store-config-singleton" }, select: { courierConfig: true } });
+  const stored = settings?.courierConfig as { encrypted?: string } | null;
+  if (isCourierConfigured(stored?.encrypted ? decrypt<CourierSettings>(stored.encrypted) : null)) return res.json(orders);
+  res.json(orders.map((order) => ({ ...order, status: order.status === "IN_COURIER" ? "SHIPPED" : order.status, courierName: null, courierTrackingId: null })));
 });
 
 app.post("/api/admin/orders/:id/restore", requireAuth, requireRole("ADMIN"), async (req, res) => {
@@ -1223,6 +1262,12 @@ app.patch("/api/admin/orders/:id", requireAuth, requireRole("ADMIN", "STAFF"), r
     })
     .safeParse(req.body);
   if (!data.success) return res.status(400).json({ error: "Invalid order update" });
+  if ((data.data.status === "IN_COURIER" || data.data.courierName !== undefined || data.data.courierTrackingId !== undefined)) {
+    const config = await prisma.storeConfig.findUnique({ where: { id: "store-config-singleton" }, select: { courierConfig: true } });
+    const stored = config?.courierConfig as { encrypted?: string } | null;
+    const settings = stored?.encrypted ? decrypt<NonNullable<Parameters<typeof isCourierConfigured>[0]>>(stored.encrypted) : null;
+    if (!isCourierConfigured(settings)) return res.status(404).json({ error: "Courier integration is not configured" });
+  }
   const prior = await prisma.order.findFirst({ where: { id: String(req.params.id), deletedAt: null }, select: { status: true, shippingDetails: true, orderItems: true, stockAdjusted: true } });
   if (!prior) return res.status(404).json({ error: "Order not found" });
   if (req.user && !staffCanAccessOrderItems(req.user, prior.orderItems)) return res.status(403).json({ error: "Not authorized for this order" });
@@ -1256,7 +1301,7 @@ app.patch("/api/admin/orders/:id", requireAuth, requireRole("ADMIN", "STAFF"), r
   res.json(updated);
 });
 
-app.post("/api/admin/orders/:id/send-steadfast", requireAuth, requireRole("ADMIN", "STAFF"), requireStaffArea("orders"), async (req, res) => {
+app.post("/api/admin/orders/:id/send-steadfast", requireAuth, requireRole("ADMIN", "STAFF"), requireStaffArea("orders"), requireCourier, async (req, res) => {
   const order = await prisma.order.findFirst({ where: { id: String(req.params.id), deletedAt: null } });
   if (!order) return res.status(404).json({ error: "Order not found" });
   if (req.user && !staffCanAccessOrderItems(req.user, order.orderItems)) return res.status(403).json({ error: "Not authorized for this order" });
@@ -1267,7 +1312,7 @@ app.post("/api/admin/orders/:id/send-steadfast", requireAuth, requireRole("ADMIN
   const courier = (settings.courierConfig as { encrypted?: string })?.encrypted
     ? (decrypt<{ steadfast?: { enabled?: boolean; apiKey?: string; secretKey?: string } }>(String((settings.courierConfig as { encrypted?: string }).encrypted)) ?? {})
     : {};
-  const sf = courier.steadfast;
+  const sf = courier.steadfast ?? (process.env.STEADFAST_API_KEY && process.env.STEADFAST_SECRET_KEY ? { enabled: true, apiKey: process.env.STEADFAST_API_KEY, secretKey: process.env.STEADFAST_SECRET_KEY } : undefined);
   if (!sf?.enabled) return res.status(400).json({ error: "Steadfast is not enabled" });
   if (!sf.apiKey || !sf.secretKey) return res.status(400).json({ error: "Steadfast API credentials missing" });
 
@@ -1333,12 +1378,12 @@ function decodeSteadfast(settings: { courierConfig: unknown } | null) {
   const courier = (settings.courierConfig as { encrypted?: string })?.encrypted
     ? (decrypt<{ steadfast?: { enabled?: boolean; apiKey?: string; secretKey?: string } }>(String((settings.courierConfig as { encrypted?: string }).encrypted)) ?? {})
     : {};
-  const sf = courier.steadfast;
+  const sf = courier.steadfast ?? (process.env.STEADFAST_API_KEY && process.env.STEADFAST_SECRET_KEY ? { enabled: true, apiKey: process.env.STEADFAST_API_KEY, secretKey: process.env.STEADFAST_SECRET_KEY } : undefined);
   if (!sf?.enabled || !sf.apiKey || !sf.secretKey) return null;
   return sf as { apiKey: string; secretKey: string };
 }
 
-app.post("/api/admin/orders/:id/sync-steadfast", requireAuth, requireRole("ADMIN", "STAFF"), requireStaffArea("orders"), async (req, res) => {
+app.post("/api/admin/orders/:id/sync-steadfast", requireAuth, requireRole("ADMIN", "STAFF"), requireStaffArea("orders"), requireCourier, async (req, res) => {
   const order = await prisma.order.findFirst({ where: { id: String(req.params.id), deletedAt: null } });
   if (!order) return res.status(404).json({ error: "Order not found" });
   if ((order.courierName ?? "").trim().toLowerCase() !== "steadfast" || !order.courierTrackingId)
@@ -1368,7 +1413,7 @@ app.post("/api/admin/orders/:id/sync-steadfast", requireAuth, requireRole("ADMIN
   res.json({ ok: true, delivery_status: body.delivery_status, sfSyncedAt: (updated.shippingDetails as Record<string, unknown>)?.sfSyncedAt });
 });
 
-app.post("/api/admin/orders/sync-all-steadfast", requireAuth, requireRole("ADMIN", "STAFF"), requireStaffArea("orders"), async (_req, res) => {
+app.post("/api/admin/orders/sync-all-steadfast", requireAuth, requireRole("ADMIN", "STAFF"), requireStaffArea("orders"), requireCourier, async (_req, res) => {
   const sf = await getSteadfastClient().then(decodeSteadfast);
   if (!sf) return res.status(400).json({ error: "Steadfast API credentials missing" });
 
@@ -1400,7 +1445,7 @@ app.post("/api/admin/orders/sync-all-steadfast", requireAuth, requireRole("ADMIN
   res.json({ ok: true, synced: parcels.length - failed, failed, statuses });
 });
 
-app.get("/api/admin/steadfast/balance", requireAuth, requireRole("ADMIN", "STAFF"), requireStaffArea("orders"), async (_req, res) => {
+app.get("/api/admin/steadfast/balance", requireAuth, requireRole("ADMIN", "STAFF"), requireStaffArea("orders"), requireCourier, async (_req, res) => {
   const sf = await getSteadfastClient().then(decodeSteadfast);
   if (!sf) return res.status(400).json({ error: "Steadfast API credentials missing" });
 
@@ -1552,6 +1597,7 @@ app.post("/api/admin/products", requireAuth, requireRole("ADMIN", "STAFF"), requ
 });
 
 app.post("/api/admin/upload", requireAuth, requireRole("ADMIN", "STAFF"), requireStaffArea("products"), upload.single("image"), async (req, res) => {
+  if (!advancedAdminEnabled() && req.body.kind === "hero") return res.status(404).json({ error: "Not found" });
   const file = req.file;
   if (!file) return res.status(400).json({ error: "No image file provided" });
   try {
@@ -2023,6 +2069,12 @@ function mergeSecretConfig<T extends Record<string, unknown>>(oldValue: T | unde
 }
 
 app.patch("/api/admin/config", requireAuth, requireRole("ADMIN"), async (req, res) => {
+  if (!advancedAdminEnabled()) {
+    const allowed = new Set(["storeName", "featureFlags", "shippingConfig"]);
+    if (Object.keys(req.body ?? {}).some((key) => !allowed.has(key))) return res.status(404).json({ error: "Not found" });
+    if (req.body?.featureFlags && Object.keys(req.body.featureFlags).some((key) => key !== "cod")) return res.status(404).json({ error: "Not found" });
+    if (req.body?.shippingConfig && Object.keys(req.body.shippingConfig).some((key) => key !== "defaultCharge")) return res.status(404).json({ error: "Not found" });
+  }
   const data = z
     .object({
       storeName: z.string().min(2).max(100).optional(),
@@ -2340,7 +2392,7 @@ app.patch("/api/admin/config", requireAuth, requireRole("ADMIN"), async (req, re
   const input = data.data;
   const existing = await prisma.storeConfig.findUnique({
     where: { id: "store-config-singleton" },
-    select: { featureFlags: true, paymentConfig: true, emailConfig: true, courierConfig: true, storageConfig: true, aiConfig: true, heroBannerConfig: true, homePageConfig: true },
+    select: { featureFlags: true, paymentConfig: true, emailConfig: true, courierConfig: true, storageConfig: true, aiConfig: true, heroBannerConfig: true, homePageConfig: true, shippingConfig: true },
   });
   const priorPayment = decrypt<PaymentSettings>((existing?.paymentConfig as { encrypted?: string } | null)?.encrypted) ?? {};
   const mergeGateway = <T extends Record<string, unknown>>(oldValue: T | undefined, newValue: T | undefined) =>
@@ -2384,7 +2436,7 @@ app.patch("/api/admin/config", requireAuth, requireRole("ADMIN"), async (req, re
         ? ({ ...((existing?.heroBannerConfig as Record<string, unknown>) ?? {}), ...Object.fromEntries(Object.entries(input.heroBannerConfig).filter(([, v]) => v !== undefined)) } as Prisma.InputJsonValue)
         : undefined,
       navigationConfig: input.navigationConfig as Prisma.InputJsonValue,
-      shippingConfig: input.shippingConfig as Prisma.InputJsonValue,
+      shippingConfig: input.shippingConfig ? ({ ...((existing?.shippingConfig as Record<string, unknown> | null) ?? {}), ...input.shippingConfig } as Prisma.InputJsonValue) : undefined,
       paymentConfig: paymentConfig ? { encrypted: encrypt(paymentConfig) } : undefined,
       emailConfig: emailConfig ? { encrypted: encrypt(emailConfig) } : undefined,
       courierConfig: courierConfig ? { encrypted: encrypt(courierConfig) } : undefined,
@@ -2420,21 +2472,29 @@ app.get("/api/admin/config", requireAuth, requireRole("ADMIN"), async (_req, res
   const email = config.emailConfig as { encrypted?: string } | null;
   const emailDecrypted = email?.encrypted ? (decrypt<Record<string, unknown>>(email.encrypted) ?? null) : null;
   const courier = config.courierConfig as { encrypted?: string } | null;
-  const courierDecrypted = courier?.encrypted ? (decrypt<Record<string, unknown>>(courier.encrypted) ?? null) : null;
+  const courierDecrypted = courier?.encrypted ? (decrypt<CourierSettings>(courier.encrypted) ?? null) : null;
   const ai = config.aiConfig as { encrypted?: string } | null;
   const aiDecrypted = ai?.encrypted ? (decrypt<Record<string, unknown>>(ai.encrypted) ?? null) : null;
   res.json({
     ...config,
-    featureFlags: { ...defaultFeatureFlags, ...((config.featureFlags as Record<string, boolean> | null) ?? {}) },
-    paymentConfig: maskSecrets(payments),
-    emailConfig: maskSecrets(emailDecrypted),
-    courierConfig: maskSecrets(courierDecrypted),
-    storageConfig: maskSecrets(storageDecrypted),
-    aiConfig: maskSecrets(aiDecrypted),
-    emailConfigured: Boolean(config.emailConfig),
-    courierConfigured: Boolean(config.courierConfig),
-    storageConfigured: Boolean(config.storageConfig),
-    aiConfigured: Boolean(config.aiConfig),
+    homePageConfig: advancedAdminEnabled() ? config.homePageConfig : null,
+    heroBannerConfig: advancedAdminEnabled() ? config.heroBannerConfig : null,
+    navigationConfig: advancedAdminEnabled() ? config.navigationConfig : null,
+    marketingPixels: advancedAdminEnabled() ? config.marketingPixels : null,
+    chatConfig: advancedAdminEnabled() ? config.chatConfig : null,
+    checkoutForm: advancedAdminEnabled() ? config.checkoutForm : null,
+    shippingConfig: advancedAdminEnabled() ? config.shippingConfig : { defaultCharge: (config.shippingConfig as { defaultCharge?: number } | null)?.defaultCharge ?? 8 },
+    paymentConfig: advancedAdminEnabled() ? maskSecrets(payments) : null,
+    emailConfig: advancedAdminEnabled() ? maskSecrets(emailDecrypted) : null,
+    courierConfig: advancedAdminEnabled() ? maskSecrets(courierDecrypted) : null,
+    storageConfig: advancedAdminEnabled() ? maskSecrets(storageDecrypted) : null,
+    aiConfig: advancedAdminEnabled() ? maskSecrets(aiDecrypted) : null,
+    adminAdvanced: advancedAdminEnabled(),
+    currency: process.env.NEXT_PUBLIC_CURRENCY || process.env.PAYMENT_CURRENCY || "USD",
+    emailConfigured: advancedAdminEnabled() && Boolean(config.emailConfig),
+    courierConfigured: isCourierConfigured(courierDecrypted),
+    storageConfigured: advancedAdminEnabled() && Boolean(config.storageConfig),
+    aiConfigured: advancedAdminEnabled() && Boolean(config.aiConfig),
     stripeConfigured: Boolean(process.env.STRIPE_SECRET_KEY && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY),
     stripeTestMode: Boolean(process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_")),
   });
