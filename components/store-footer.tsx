@@ -205,7 +205,7 @@ export function StoreFooter({ config, storeName, storeLogo, whatsappUrl, phone, 
 
         {showCategories && catItems.length > 0 && (
           <div>
-            <h4>{cfg.categoryTitle?.trim() || "ক্যাটাগরি"}</h4>
+            <h4>{cfg.categoryTitle?.trim() || "Categories"}</h4>
             <ul className="ft-cats">
               {catItems.map((c, i) => (
                 <li key={`${c.label}-${i}`}>
@@ -222,7 +222,7 @@ export function StoreFooter({ config, storeName, storeLogo, whatsappUrl, phone, 
 
         {showContact && (
           <div>
-            <h4>{cfg.contactTitle?.trim() || "যোগাযোগ"}</h4>
+            <h4>{cfg.contactTitle?.trim() || "Contact"}</h4>
             <ul className="ft-info">
               {contact.address?.trim() && (
                 <li>

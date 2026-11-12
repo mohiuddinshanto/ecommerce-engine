@@ -9,10 +9,10 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "আমাদের স্টোর",
-    template: "%s | আমাদের স্টোর",
+    default: process.env.STORE_NAME || "ShopEngine",
+    template: `%s | ${process.env.STORE_NAME || "ShopEngine"}`,
   },
-  description: "সেরা মানের পণ্য সংগ্রহ করুন। দ্রুত ডেলিভারি, নিরাপদ পেমেন্ট এবং সহজ রিটার্ন পলিসি।",
+  description: "Explore a thoughtfully curated collection with secure payments, reliable delivery, and easy returns.",
 };
 
 type ThemeSettings = { primaryColor?: string; secondaryColor?: string; font?: string };
@@ -58,7 +58,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   } as CSSProperties;
 
   return (
-    <html lang="bn">
+    <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

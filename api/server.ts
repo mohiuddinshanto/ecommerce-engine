@@ -141,11 +141,14 @@ const defaultFeatureFlags = { reviews: true, wishlist: true, coupons: true, cod:
 
 const defaultCheckoutForm = {
   name: { enabled: true, required: true, label: "Full name", placeholder: "Rahim Ahmed" },
-  phone: { enabled: true, required: true, label: "Mobile number", placeholder: "01712345678" },
+  phone: { enabled: true, required: true, label: "Phone number", placeholder: "+1 555 0100" },
   email: { enabled: false, required: false, label: "Email address (optional)", placeholder: "you@example.com" },
-  address: { enabled: true, required: true, label: "Delivery address", placeholder: "House 12, Road 5, Block B" },
-  district: { enabled: true, required: true, label: "District", placeholder: "Dhaka" },
-  division: { enabled: true, required: true, label: "Division", placeholder: "Dhaka" },
+  addressLine1: { enabled: true, required: true, label: "Address line 1", placeholder: "Street address" },
+  addressLine2: { enabled: true, required: false, label: "Address line 2", placeholder: "Apartment, suite, unit (optional)" },
+  city: { enabled: true, required: true, label: "City", placeholder: "City" },
+  state: { enabled: true, required: true, label: "State / Region", placeholder: "State or region" },
+  postalCode: { enabled: true, required: true, label: "Postal code", placeholder: "Postal code" },
+  country: { enabled: true, required: true, label: "Country", placeholder: "Country" },
 };
 const gatewayBase = {
   enabled: z.boolean(),
@@ -178,7 +181,7 @@ type PaymentSettings = z.infer<typeof paymentSettingsSchema>;
 
 const DEFAULT_SHIPPING_CENTS = Math.round(Number(process.env.DEFAULT_SHIPPING_CHARGE ?? 80) * 100);
 
-export type ShippingZone = { name?: string; charge?: number; districts?: string[] };
+export type ShippingZone = { name?: string; charge?: number; countries?: string[]; regions?: string[]; cities?: string[]; postalCodes?: string[] };
 export type ShippingOption = { id?: string; name?: string; charge?: number };
 export type ShippingConfig = { defaultCharge?: number; freeAbove?: number | null; zones?: ShippingZone[]; options?: ShippingOption[] };
 
@@ -188,16 +191,15 @@ export function computeShippingCents(subtotalCents: number, config: unknown, det
   const cfg = (config ?? {}) as ShippingConfig;
   const freeAbove = cfg.freeAbove;
   if (typeof freeAbove === "number" && freeAbove > 0 && subtotalCents >= Math.round(freeAbove * 100)) return 0;
-  const district = String(details.district ?? "").trim().toLowerCase();
-  const division = String(details.division ?? "").trim().toLowerCase();
+  const location = [details.country, details.state, details.city, details.postalCode].map((value) => String(value ?? "").trim().toLowerCase());
   const zones = Array.isArray(cfg.zones) ? cfg.zones : [];
   const match = zones.find(
-    (zone) =>
-      Array.isArray(zone?.districts) &&
-      zone.districts.some((entry) => {
+    (zone) => [zone?.countries, zone?.regions, zone?.cities, zone?.postalCodes].some((entries) =>
+      Array.isArray(entries) && entries.some((entry) => {
         const target = String(entry ?? "").trim().toLowerCase();
-        return target !== "" && (target === district || target === division);
+        return target !== "" && location.includes(target);
       }),
+    ),
   );
   const chargeTaka = match?.charge ?? cfg.defaultCharge;
   if (typeof chargeTaka === "number" && Number.isFinite(chargeTaka) && chargeTaka >= 0) return Math.round(chargeTaka * 100);
@@ -821,17 +823,9 @@ app.post("/api/orders", requireAuth, rateLimit({ windowMs: 10 * 60_000, max: 20,
 
   const customerId = req.user!.id;
 
-  const storeConfig = await prisma.storeConfig.findUnique({ where: { id: "store-config-singleton" }, select: { featureFlags: true, paymentConfig: true, checkoutForm: true, shippingConfig: true } });
+  const storeConfig = await prisma.storeConfig.findUnique({ where: { id: "store-config-singleton" }, select: { featureFlags: true, checkoutForm: true, shippingConfig: true } });
   const flags = { ...defaultFeatureFlags, ...((storeConfig?.featureFlags as Record<string, boolean> | null) ?? {}) };
-  const encryptedPayments = storeConfig?.paymentConfig as { encrypted?: string } | null;
-  const payments = encryptedPayments?.encrypted ? (decrypt<PaymentSettings>(encryptedPayments.encrypted) ?? {}) : {};
-  const methods = [
-    ...(flags.cod ? ["COD"] : []),
-    ...(payments.bkash?.enabled && ACTIVE_PAYMENT_GATEWAYS.has("bKash") ? ["bKash"] : []),
-    ...(payments.nagad?.enabled && ACTIVE_PAYMENT_GATEWAYS.has("Nagad") ? ["Nagad"] : []),
-    ...(payments.sslcommerz?.enabled && ACTIVE_PAYMENT_GATEWAYS.has("SSLCommerz") ? ["SSLCommerz"] : []),
-  ];
-  if (!methods.includes(parsed.data.paymentMethod)) return res.status(400).json({ error: "Selected payment method is unavailable." });
+  if (!flags.cod) return res.status(400).json({ error: "Cash on Delivery is not available." });
 
   const shippingDetails = parsed.data.shippingDetails as Record<string, unknown>;
   const savedForm = (storeConfig?.checkoutForm as Record<string, Record<string, unknown>> | null) ?? {};
@@ -2040,8 +2034,12 @@ app.patch("/api/admin/config", requireAuth, requireRole("ADMIN"), async (req, re
         phone: z.object({ enabled: z.boolean().optional(), required: z.boolean().optional(), label: z.string().max(80).optional(), placeholder: z.string().max(120).optional() }).optional(),
         email: z.object({ enabled: z.boolean().optional(), required: z.boolean().optional(), label: z.string().max(80).optional(), placeholder: z.string().max(120).optional() }).optional(),
         address: z.object({ enabled: z.boolean().optional(), required: z.boolean().optional(), label: z.string().max(80).optional(), placeholder: z.string().max(120).optional() }).optional(),
-        district: z.object({ enabled: z.boolean().optional(), required: z.boolean().optional(), label: z.string().max(80).optional(), placeholder: z.string().max(120).optional() }).optional(),
-        division: z.object({ enabled: z.boolean().optional(), required: z.boolean().optional(), label: z.string().max(80).optional(), placeholder: z.string().max(120).optional() }).optional(),
+        addressLine1: z.object({ enabled: z.boolean().optional(), required: z.boolean().optional(), label: z.string().max(80).optional(), placeholder: z.string().max(120).optional() }).optional(),
+        addressLine2: z.object({ enabled: z.boolean().optional(), required: z.boolean().optional(), label: z.string().max(80).optional(), placeholder: z.string().max(120).optional() }).optional(),
+        city: z.object({ enabled: z.boolean().optional(), required: z.boolean().optional(), label: z.string().max(80).optional(), placeholder: z.string().max(120).optional() }).optional(),
+        state: z.object({ enabled: z.boolean().optional(), required: z.boolean().optional(), label: z.string().max(80).optional(), placeholder: z.string().max(120).optional() }).optional(),
+        postalCode: z.object({ enabled: z.boolean().optional(), required: z.boolean().optional(), label: z.string().max(80).optional(), placeholder: z.string().max(120).optional() }).optional(),
+        country: z.object({ enabled: z.boolean().optional(), required: z.boolean().optional(), label: z.string().max(80).optional(), placeholder: z.string().max(120).optional() }).optional(),
       }).optional(),
       shippingConfig: z
         .object({
@@ -2052,7 +2050,10 @@ app.patch("/api/admin/config", requireAuth, requireRole("ADMIN"), async (req, re
               z.object({
                 name: z.string().max(80).optional(),
                 charge: z.number().min(0).max(100000).optional(),
-                districts: z.array(z.string().max(80)).max(200).optional(),
+                countries: z.array(z.string().max(80)).max(200).optional(),
+                regions: z.array(z.string().max(80)).max(200).optional(),
+                cities: z.array(z.string().max(80)).max(200).optional(),
+                postalCodes: z.array(z.string().max(40)).max(200).optional(),
               }),
             )
             .max(50)

@@ -20,8 +20,8 @@ export default function ResetPasswordPage() {
     const form = new FormData(event.currentTarget);
     const password = String(form.get("password") ?? "");
     const confirm = String(form.get("confirm") ?? "");
-    if (password.length < 8) return setError("পাসওয়ার্ড কমপক্ষে ৮ অক্ষর হতে হবে।");
-    if (password !== confirm) return setError("দুইটি পাসওয়ার্ড মিলছে না।");
+    if (password.length < 8) return setError("Password must be at least 8 characters long.");
+    if (password !== confirm) return setError("The passwords do not match.");
     setBusy(true);
     setError("");
     try {

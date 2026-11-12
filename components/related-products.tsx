@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "../lib/money";
 
 import { ProductImage } from "./product-image";
 import Link from "next/link";
@@ -18,7 +19,7 @@ type RelatedProduct = {
   category: { name: string; slug: string };
 };
 
-const bdt = (value: string | number) => Number(value).toLocaleString("en-BD");
+const money = formatMoney;
 
 function RelatedCard({ p }: { p: RelatedProduct }) {
   const hasSale = Boolean(p.salePrice && Number(p.salePrice) < Number(p.price));
@@ -35,14 +36,14 @@ function RelatedCard({ p }: { p: RelatedProduct }) {
         />
         {hasSale && (
           <span className="absolute left-3 top-3 rounded-full border border-rose-500/30 bg-rose-500/90 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-white backdrop-blur-md">
-            {discountPercent}% ছাড়
+            {discountPercent}% off
           </span>
         )}
       </Link>
       <div className="space-y-1.5 p-4">
         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-          <span className="text-lg font-bold text-primary">৳ {bdt(hasSale ? p.salePrice! : p.price)}</span>
-          {hasSale && <span className="text-sm text-slate-400 line-through">৳ {bdt(p.price)}</span>}
+          <span className="text-lg font-bold text-primary">{money(hasSale ? p.salePrice! : p.price)}</span>
+          {hasSale && <span className="text-sm text-slate-400 line-through">{money(p.price)}</span>}
         </div>
         <h3 className="line-clamp-2 text-sm font-semibold text-slate-900 group-hover:text-primary">{p.name}</h3>
         <span className="block text-xs font-medium text-slate-500">{p.category.name}</span>
@@ -74,7 +75,7 @@ export function RelatedProducts({ productId, categorySlug }: { productId: string
     <section style={{ marginTop: "60px", paddingTop: "40px", borderTop: "1px solid var(--border)" }}>
       <div style={{ marginBottom: "20px" }}>
         <span className="eyebrow">You may also like</span>
-        <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "1.8rem", margin: "4px 0 0" }}>সম্পর্কিত পণ্য</h2>
+        <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "1.8rem", margin: "4px 0 0" }}>Related products</h2>
       </div>
       <CarouselSlider
         items={items.map((p) => <RelatedCard key={p.id} p={p} />)}

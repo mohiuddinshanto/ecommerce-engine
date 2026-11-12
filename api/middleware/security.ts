@@ -11,7 +11,7 @@ export async function checkIpCooldown(req: Request, res: Response, next: NextFun
     const lastOrder = await prisma.order.findFirst({ where: { ipAddress, deletedAt: null }, orderBy: { createdAt: "desc" } });
     if (!lastOrder) return next();
     const waitMs = config.cooldownMinutes * 60_000 - (Date.now() - lastOrder.createdAt.getTime());
-    if (waitMs > 0) return res.status(429).json({ error: "Spam Guard Activated", message: `অনুগ্রহ করে ${Math.ceil(waitMs / 60_000)} মিনিট পর আবার চেষ্টা করুন।` });
+    if (waitMs > 0) return res.status(429).json({ error: "Spam guard activated", message: `Please try again in ${Math.ceil(waitMs / 60_000)} minutes.` });
     next();
   } catch { res.status(500).json({ error: "Spam check failed" }); }
 }

@@ -26,8 +26,8 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
             }}
           >
             <p style={{ fontSize: 44, margin: 0 }}>⚠️</p>
-            <h1 style={{ fontSize: 20, margin: "16px 0 8px", color: "#0f172a" }}>কিছু একটা ভুল হয়েছে</h1>
-            <p style={{ fontSize: 14, color: "#64748b", margin: 0 }}>সাইটটি লোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।</p>
+            <h1 style={{ fontSize: 20, margin: "16px 0 8px", color: "#0f172a" }}>Something went wrong</h1>
+            <p style={{ fontSize: 14, color: "#64748b", margin: 0 }}>The site could not load. Please try again.</p>
             <button
               type="button"
               onClick={reset}
@@ -44,7 +44,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
                 cursor: "pointer",
               }}
             >
-              আবার চেষ্টা করুন
+              Try again
             </button>
           </div>
         </main>

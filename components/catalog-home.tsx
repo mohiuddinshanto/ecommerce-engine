@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "../lib/money";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -21,7 +22,7 @@ const ICON_MAP: Record<string, IconType> = {
 };
 import { CarouselSlider } from "./carousel-slider";
 
-const money = (v: number | string) => `৳ ${Number(v).toLocaleString("en-BD")}`;
+const money = formatMoney;
 
 const FALLBACK =
   "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80";
@@ -71,7 +72,7 @@ type HeroSlide = {
 const scrollToId = (link: string) => document.getElementById(link.replace(/^#/, ""))?.scrollIntoView({ behavior: "smooth" });
 
 const CTA = ({ label, href, primary }: { label: string; href?: string; primary?: boolean }) => {
-  const text = label || (primary ? "এখনই কিনুন" : "কালেকশন দেখুন");
+  const text = label || (primary ? "Shop now" : "View collection");
   const base = primary
     ? "inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-500 text-gray-950 font-bold px-7 py-3 rounded-full text-sm transition shadow hover:shadow-lg transform active:scale-95"
     : "inline-flex items-center gap-2 bg-emerald-900 hover:bg-emerald-800 text-white font-semibold px-5 py-2.5 rounded-full text-sm transition shadow-sm hover:shadow active:scale-95";
@@ -106,13 +107,13 @@ export function CatalogCard({
   const isVariable = p.productType === "VARIABLE" && (p.variations?.length ?? 0) > 0;
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
-  const sizeAttr = (p.attributes ?? []).find((a) => /size|সাইজ/i.test(a.name));
+  const sizeAttr = (p.attributes ?? []).find((a) => /size/i.test(a.name));
   const sizes = sizeAttr?.values.map((v) => v.value) ?? [];
 
   const selectedVariation = isVariable && selectedSize
     ? (p.variations ?? []).find((v) =>
         v.attributes.some(
-          (va) => /size|সাইজ/i.test(sizeAttr?.name ?? "") && va.value.value === selectedSize
+          (va) => /size/i.test(sizeAttr?.name ?? "") && va.value.value === selectedSize
         )
       )
     : null;
@@ -132,10 +133,10 @@ export function CatalogCard({
     if (!allowAddToCart) return;
     if (isVariable) {
       if (selectedVariation) {
-        if (selectedVariation.stock <= 0) { toast.error("এই সাইজ স্টকে নেই"); return; }
+        if (selectedVariation.stock <= 0) { toast.error("This size is out of stock."); return; }
         add(p, selectedVariation);
       } else if (sizes.length > 0) {
-        toast.error("প্রথমে একটি সাইজ সিলেক্ট করুন");
+        toast.error("Please select a size first.");
       } else {
         add(p);
       }
@@ -147,10 +148,10 @@ export function CatalogCard({
   const handleBuyNow = () => {
     if (isVariable) {
       if (selectedVariation) {
-        if (selectedVariation.stock <= 0) { toast.error("এই সাইজ স্টকে নেই"); return; }
+        if (selectedVariation.stock <= 0) { toast.error("This size is out of stock."); return; }
         buyNow(p, selectedVariation);
       } else if (sizes.length > 0) {
-        toast.error("প্রথমে একটি সাইজ সিলেক্ট করুন");
+        toast.error("Please select a size first.");
       } else {
         buyNow(p);
       }
@@ -160,7 +161,7 @@ export function CatalogCard({
   };
 
   const waHref = whatsapp
-    ? `${whatsapp}?text=${encodeURIComponent(`আমি ${p.name}${selectedSize ? ` (সাইজ: ${selectedSize})` : ""} (${money(displayPrice)}) নিতে চাই।`)}`
+    ? `${whatsapp}?text=${encodeURIComponent(`Hello, I would like ${p.name}${selectedSize ? ` (Size: ${selectedSize})` : ""} (${money(displayPrice)}).` )}`
     : null;
 
   return (
@@ -172,7 +173,7 @@ export function CatalogCard({
           </span>
           {hasSale && (
             <span className="absolute right-2.5 top-2.5 z-10 rounded bg-rose-700 px-2.5 py-0.5 text-xs font-bold text-white shadow-sm">
-              {discountPercent}% ছাড়
+              {discountPercent}% off
             </span>
           )}
           <Link href={productUrl(p.slug, p.name, p.id)} className="block h-full w-full">
@@ -196,7 +197,7 @@ export function CatalogCard({
         {sizes.length > 0 && (
           <div className="mb-3">
             <p className="mb-1.5 text-xs font-medium text-gray-600 sm:text-sm">
-              সাইজ সিলেক্ট করুন:
+              Choose a size:
               {selectedSize && <span className="ml-1 font-bold text-[var(--primary)]">({selectedSize})</span>}
             </p>
             <div className="flex flex-wrap items-center gap-1">
@@ -237,37 +238,37 @@ export function CatalogCard({
           className="flex min-h-10 w-full items-center justify-center gap-1 whitespace-nowrap rounded-lg bg-[var(--primary)] px-1.5 py-2 text-center text-[10px] font-bold leading-tight text-white shadow transition hover:bg-[var(--primary-hover)] hover:shadow-md active:scale-[0.98] min-[400px]:px-2 min-[400px]:text-xs sm:min-h-11 sm:px-3 sm:text-sm"
         >
           <span className="text-sm text-amber-400">⚡</span>
-          <span>সরাসরি অর্ডার করুন</span>
+          <span>Buy now</span>
         </button>
         <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
           <button
             type="button"
             onClick={handleAddToCart}
             disabled={!allowAddToCart}
-            aria-label="কার্টে যোগ করুন"
-            title="কার্টে যোগ করুন"
+            aria-label="Add to cart"
+            title="Add to cart"
             className={`flex min-h-10 min-w-0 items-center justify-center gap-1 whitespace-nowrap rounded-lg px-1 py-2 text-[0px] font-semibold leading-tight transition min-[480px]:px-2 min-[480px]:text-xs ${
               !allowAddToCart
                 ? "cursor-not-allowed bg-gray-100 text-gray-500"
                 : "bg-gray-100 text-gray-800 hover:bg-gray-200"
             }`}
           >
-            <FiShoppingBag size={13} /> কার্টে রাখুন
+            <FiShoppingBag size={13} /> Add to cart
           </button>
           {waHref ? (
             <a
               href={waHref}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="WhatsApp-এ যোগাযোগ করুন"
-              title="WhatsApp-এ যোগাযোগ করুন"
+              aria-label="Contact us on WhatsApp"
+              title="Contact us on WhatsApp"
               className="flex min-h-10 min-w-0 items-center justify-center gap-1 whitespace-nowrap rounded-lg border border-emerald-200 bg-emerald-50 px-1 py-2 text-[0px] font-semibold leading-tight text-emerald-800 transition hover:bg-emerald-100 min-[480px]:px-2 min-[480px]:text-xs"
             >
-              <FiMessageCircle size={13} /> হোয়াটসঅ্যাপ
+              <FiMessageCircle size={13} /> WhatsApp
             </a>
           ) : (
             <span aria-label="WhatsApp unavailable" className="flex min-h-10 min-w-0 items-center justify-center gap-1 whitespace-nowrap rounded-lg border border-gray-100 bg-gray-50 px-1 py-2 text-[0px] leading-tight text-gray-400 min-[480px]:px-2 min-[480px]:text-xs">
-              <FiMessageCircle size={13} /> হোয়াটসঅ্যাপ
+              <FiMessageCircle size={13} /> WhatsApp
             </span>
           )}
         </div>
@@ -465,7 +466,7 @@ export function CatalogHome({
       const items = limit === null ? allItems : allItems.slice(0, limit);
       if (!items.length) return null;
       const cat = categories.find((c) => c.id === s.categoryIds[0]);
-      return { ...s, items, slug: cat?.slug ?? null, displayName: cat?.name ?? s.title ?? "কালেকশন" };
+      return { ...s, items, slug: cat?.slug ?? null, displayName: cat?.name ?? s.title ?? "Collection" };
     })
     .filter(Boolean) as (HomeSectionDef & { items: Product[]; slug: string | null; displayName: string })[];
 
@@ -493,11 +494,11 @@ export function CatalogHome({
   const promos: (Required<Pick<PromoBannerDef, "enabled" | "badge" | "title" | "accent" | "subtitle" | "buttonLabel" | "buttonLink" | "image">> & { theme: "amber" | "emerald"; linkSide: "left" | "right" })[] = [
     {
       enabled: true,
-      badge: "বিশেষ কালেকশন",
-      title: "ঈদে পরুন",
-      accent: "ঐতিহ্যের ছোঁয়া",
-      subtitle: "বিশেষ ডিজাইনের পণ্য এখন আপনার জন্য",
-      buttonLabel: "কালেকশন দেখুন →",
+      badge: "Featured collection",
+      title: "Made for the season",
+      accent: "Everyday style",
+      subtitle: "Thoughtful designs selected for you.",
+      buttonLabel: "Explore collection →",
       buttonLink: "/shop",
       image: products[0]?.images[0] || FALLBACK,
       theme: "amber",
@@ -505,11 +506,11 @@ export function CatalogHome({
     },
     {
       enabled: true,
-      badge: "একই ডিজাইনে",
-      title: "এক্সক্লুসিভ সেট",
-      accent: "সেট পণ্য",
-      subtitle: "আকর্ষণীয় মূল্যে কম্বো অফার",
-      buttonLabel: "সেট দেখুন →",
+      badge: "Curated pairings",
+      title: "The essentials set",
+      accent: "Bundle and save",
+      subtitle: "A considered collection at a special price.",
+      buttonLabel: "Shop the set →",
       buttonLink: "/shop",
       image: products[1]?.images[0] || products[0]?.images[0] || FALLBACK,
       theme: "emerald",
@@ -562,8 +563,8 @@ export function CatalogHome({
                   <div className="space-y-4 md:col-span-7">
                     {s.badge && <p className="text-sm font-medium tracking-wide text-amber-300">{s.badge}</p>}
                     <h1 className="text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl md:text-5xl lg:text-6xl">
-                      {s.title || "প্রতিটি মুহূর্তে"} <br />
-                      <span className="text-amber-400">{s.accent || "স্টাইলের সঙ্গী"}</span>
+                      {s.title || "For every moment"} <br />
+                      <span className="text-amber-400">{s.accent || "Made to be worn"}</span>
                     </h1>
                     {s.subtitle && (
                       <p className="flex flex-wrap items-center gap-2 text-sm text-emerald-100/95 font-normal md:text-base">
@@ -626,7 +627,7 @@ export function CatalogHome({
               />
             </div>
             <h3 className="truncate text-sm font-bold text-gray-800 group-hover:text-[var(--primary)] sm:text-[0.95rem]">{c.name}</h3>
-            <p className="text-xs text-gray-500">({c.count} টি)</p>
+            <p className="text-xs text-gray-500">({c.count})</p>
           </Link>
         );
         return (
@@ -639,13 +640,13 @@ export function CatalogHome({
                 <div>
                   {eyebrow && <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">{eyebrow}</p>}
                   <h2 className="text-xl font-bold text-gray-900 md:text-2xl">
-                    {title || "ক্যাটাগরি সমূহ"}
+                    {title || "Categories"}
                     {accent && <span className="text-emerald-700"> {accent}</span>}
                   </h2>
                 </div>
               </div>
               <Link href="/shop" className="flex shrink-0 items-center gap-1 text-sm font-semibold text-[var(--primary)] hover:underline">
-                সকল দেখুন <span>→</span>
+                View all <span>→</span>
               </Link>
             </div>
             {mode === "grid" ? (
@@ -673,15 +674,15 @@ export function CatalogHome({
       {sectionVisibility?.products !== false && <section id="shop" className="mx-auto max-w-7xl px-4 py-8">
         <div className="mb-7 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <p className="mb-1 text-sm font-semibold text-amber-700">{popularProducts?.eyebrow ?? "আমাদের জনপ্রিয় কালেকশন"}</p>
-            <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">{popularProducts?.title ?? "স্টোরের সেরা পণ্য সমূহ"}</h2>
+            <p className="mb-1 text-sm font-semibold text-amber-700">{popularProducts?.eyebrow ?? "Customer favorites"}</p>
+            <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">{popularProducts?.title ?? "Shop our bestsellers"}</h2>
           </div>
           <div className="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1">
             <button
               className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition ${activeTab === "all" ? "border-[var(--primary)] bg-[var(--primary)] text-white shadow-sm" : "border-gray-200 bg-white text-gray-700 hover:bg-gray-100"}`}
               onClick={() => setActiveTab("all")}
             >
-              সবগুলো
+              View all
             </button>
             {tabCats.map((c) => (
               <button
@@ -723,13 +724,13 @@ export function CatalogHome({
             <div>
               <div className="mb-1 flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-emerald-600" />
-                <span className="text-sm font-bold text-emerald-800">{c.displayName} কালেকশন</span>
+                <span className="text-sm font-bold text-emerald-800">{c.displayName} collection</span>
               </div>
               <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">{c.displayName}</h2>
             </div>
             {c.slug && (
               <Link href={`/categories/${c.slug}`} className="mr-2 text-xs font-semibold text-[var(--primary)] hover:underline sm:text-sm">
-                সবগুলো দেখুন →
+                View all →
               </Link>
             )}
           </div>
@@ -763,10 +764,10 @@ export function CatalogHome({
       {/* TRUST */}
       {sectionVisibility?.trust !== false && (() => {
         const defaults: { key: string; icon: string; title: string; subtitle: string }[] = [
-          { key: "shield", icon: "shield", title: "১০০% অরিজিনাল পণ্য", subtitle: "নকল পণ্যের সাথে আপস নয়" },
-          { key: "truck", icon: "truck", title: "সারা বাংলাদেশে ডেলিভারি", subtitle: "দ্রুত ও নিরাপদ ডেলিভারি" },
-          { key: "refresh", icon: "refresh", title: "সহজ রিটার্ন পলিসি", subtitle: "৭ দিনের মধ্যে রিটার্ন সুবিধা" },
-          { key: "check", icon: "check", title: "নিরাপদ পেমেন্ট", subtitle: "ক্যাশ অন ডেলিভারি / বিকাশ / ব্যাংক" },
+          { key: "shield", icon: "shield", title: "Quality products", subtitle: "Carefully selected for everyday use" },
+          { key: "truck", icon: "truck", title: "Reliable delivery", subtitle: "Fast and secure shipping" },
+          { key: "refresh", icon: "refresh", title: "Easy returns", subtitle: "Simple returns within 7 days" },
+          { key: "check", icon: "check", title: "Secure payments", subtitle: "Cash on delivery or card" },
         ];
         const merged = defaults.map((d, i) => {
           const c = trustBadges?.[i] ?? {};

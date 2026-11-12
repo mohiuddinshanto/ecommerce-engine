@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "../../lib/money";
 
 import { Button, Input } from "@heroui/react";
 import Link from "next/link";
@@ -40,7 +41,7 @@ type CheckoutForm = Record<string, CheckoutField>;
 type ShippingConfig = {
   defaultCharge?: number;
   freeAbove?: number | null;
-  zones?: { name?: string; charge?: number; districts?: string[] }[];
+  zones?: { name?: string; charge?: number; countries?: string[]; regions?: string[]; cities?: string[]; postalCodes?: string[] }[];
   options?: { id?: string; name?: string; charge?: number }[];
 };
 
@@ -48,11 +49,14 @@ const FALLBACK_SHIPPING = Number(process.env.NEXT_PUBLIC_DEFAULT_SHIPPING_CHARGE
 
 const DEFAULT_CHECKOUT_FORM: CheckoutForm = {
   name: { enabled: true, required: true, label: "Full name", placeholder: "Rahim Ahmed" },
-  phone: { enabled: true, required: true, label: "Mobile number", placeholder: "01712345678" },
+  phone: { enabled: true, required: true, label: "Phone number", placeholder: "+1 555 0100" },
   email: { enabled: true, required: false, label: "Email address (optional)", placeholder: "you@example.com" },
-  address: { enabled: true, required: true, label: "Delivery address", placeholder: "House 12, Road 5, Block B" },
-  district: { enabled: true, required: true, label: "District", placeholder: "Dhaka" },
-  division: { enabled: true, required: true, label: "Division", placeholder: "Dhaka" },
+  addressLine1: { enabled: true, required: true, label: "Address line 1", placeholder: "Street address" },
+  addressLine2: { enabled: true, required: false, label: "Address line 2", placeholder: "Apartment, suite, unit (optional)" },
+  city: { enabled: true, required: true, label: "City", placeholder: "City" },
+  state: { enabled: true, required: true, label: "State / Region", placeholder: "State or region" },
+  postalCode: { enabled: true, required: true, label: "Postal code", placeholder: "Postal code" },
+  country: { enabled: true, required: true, label: "Country", placeholder: "Country" },
 };
 
 const FIELD_META: Record<string, { icon?: ReactNode; full?: boolean }> = {
@@ -60,24 +64,20 @@ const FIELD_META: Record<string, { icon?: ReactNode; full?: boolean }> = {
   phone: { icon: <FiPhone className="text-gray-400" /> },
   email: { icon: <FiMail className="text-gray-400" /> },
   address: { icon: <FiMapPin className="text-gray-400" />, full: true },
-  district: {},
-  division: {},
+  addressLine1: { full: true },
+  addressLine2: { full: true },
 };
 
-const currency = process.env.NEXT_PUBLIC_CURRENCY || "BDT";
-const money = (value: number) => new Intl.NumberFormat(undefined, { style: "currency", currency }).format(value);
 
-function computeShipping(subtotal: number, config: ShippingConfig | null, district: string, division: string): number {
+function computeShipping(subtotal: number, config: ShippingConfig | null, details: Record<string, string>): number {
   if (!subtotal) return 0;
   const freeAbove = config?.freeAbove;
   if (typeof freeAbove === "number" && freeAbove > 0 && subtotal >= freeAbove) return 0;
-  const d = district.trim().toLowerCase();
-  const v = division.trim().toLowerCase();
+  const location = [details.country, details.state, details.city, details.postalCode].map((value) => value.trim().toLowerCase());
   const match = (config?.zones ?? []).find((zone) =>
-    (zone.districts ?? []).some((entry) => {
-      const target = entry.trim().toLowerCase();
-      return target !== "" && (target === d || target === v);
-    }),
+    [zone.countries, zone.regions, zone.cities, zone.postalCodes].some((entries) =>
+      (entries ?? []).some((entry) => location.includes(entry.trim().toLowerCase())),
+    ),
   );
   const charge = match?.charge ?? config?.defaultCharge;
   return typeof charge === "number" && charge >= 0 ? charge : FALLBACK_SHIPPING;
@@ -96,8 +96,7 @@ export default function CheckoutPage() {
   const [optionsLoading, setOptionsLoading] = useState(true);
   const [shippingConfig, setShippingConfig] = useState<ShippingConfig | null>(null);
   const [selectedShipping, setSelectedShipping] = useState("");
-  const [districtValue, setDistrictValue] = useState("");
-  const [divisionValue, setDivisionValue] = useState("");
+  const [shippingDetails, setShippingDetails] = useState<Record<string, string>>({ country: "" });
   const [checkoutSessionId, setCheckoutSessionId] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const abandonTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -106,7 +105,7 @@ export default function CheckoutPage() {
   const shippingOptions = shippingConfig?.options ?? [];
   const shipping = shippingOptions.length
     ? (shippingOptions.find((option, index) => String(option.id ?? index) === selectedShipping)?.charge ?? 0)
-    : computeShipping(subtotal, shippingConfig, districtValue, divisionValue);
+    : computeShipping(subtotal, shippingConfig, shippingDetails);
   const totalAmount = Math.max(0, subtotal - discountAmount + shipping);
 
   useEffect(() => {
@@ -177,7 +176,7 @@ export default function CheckoutPage() {
     if (abandonTimer.current) clearTimeout(abandonTimer.current);
     abandonTimer.current = setTimeout(() => {
       fetch(apiUrl + "/api/checkout/abandoned", { method: "POST", headers: { "Content-Type": "application/json" }, keepalive: true,
-        body: JSON.stringify({ sessionId: checkoutSessionId, name: details.name, phone: details.phone, email: details.email, address: details.address, items: cart.map(({ name, qty, price }) => ({ name, qty, price })), total: totalAmount }) }).catch(() => {});
+        body: JSON.stringify({ sessionId: checkoutSessionId, name: details.name, phone: details.phone, email: details.email, address: details.addressLine1, items: cart.map(({ name, qty, price }) => ({ name, qty, price })), total: totalAmount }) }).catch(() => {});
     }, 700);
   }
 
@@ -196,7 +195,7 @@ export default function CheckoutPage() {
 
       setDiscountAmount(data.discount);
       setCouponId(data.id);
-      toast.success(`কুপন প্রয়োগ করা হয়েছে! ${money(data.discount)} ছাড় পেয়েছেন।`);
+      toast.success(`Coupon applied! You saved ${money(data.discount)}.`);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Coupon invalid");
       setDiscountAmount(0);
@@ -270,10 +269,10 @@ export default function CheckoutPage() {
       localStorage.removeItem("epic-cart");
       setCart([]);
       sessionStorage.setItem("epic-last-order", JSON.stringify(data));
-      toast.success("অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!");
+      toast.success("Your order was placed successfully!");
       window.location.href = "/order-success";
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "অর্ডার করা যায়নি");
+      toast.error(error instanceof Error ? error.message : "Could not place the order.");
     } finally {
       setSaving(false);
     }
@@ -316,8 +315,7 @@ export default function CheckoutPage() {
                     placeholder={field.placeholder}
                     isRequired={Boolean(field.required)}
                     startContent={FIELD_META[key]?.icon}
-                    {...(key === "district" ? { value: districtValue, onValueChange: setDistrictValue } : {})}
-                    {...(key === "division" ? { value: divisionValue, onValueChange: setDivisionValue } : {})}
+                    {...(["country", "state", "city", "postalCode"].includes(key) ? { value: shippingDetails[key] ?? "", onValueChange: (value: string) => setShippingDetails((current) => ({ ...current, [key]: value })) } : {})}
                   />
                 ))}
             </div>

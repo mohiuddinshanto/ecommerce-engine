@@ -108,7 +108,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
     offers: {
       "@type": "Offer",
       url: new URL(productUrl(data.slug, data.name, data.id), origin).toString(),
-      priceCurrency: "BDT",
+      priceCurrency: process.env.NEXT_PUBLIC_CURRENCY || process.env.PAYMENT_CURRENCY || "USD",
       price: data.salePrice && Number(data.salePrice) < Number(data.price) ? data.salePrice : data.price,
       availability: data.manageStock === false || data.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",

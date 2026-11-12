@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "../lib/money";
 
 import { ProductImage } from "./product-image";
 import Link from "next/link";
@@ -84,7 +85,7 @@ type CartItem = {
   sku?: string;
 };
 
-const money = (v: number | string) => "৳ " + Number(v).toLocaleString("en-BD");
+const money = formatMoney;
 
 /* -------------------------------------------------------------------------- */
 /* PRODUCT CARD COMPONENT                                                     */
@@ -118,14 +119,14 @@ function ShopProductCard({
   const isVariable = p.productType === "VARIABLE" && (p.variations?.length ?? 0) > 0;
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
-  const sizeAttr = (p.attributes ?? []).find((a) => /size|সাইজ/i.test(a.name));
+  const sizeAttr = (p.attributes ?? []).find((a) => /size/i.test(a.name));
   const sizes = sizeAttr?.values.map((v) => v.value) ?? [];
 
   const selectedVariation =
     isVariable && selectedSize
       ? (p.variations ?? []).find((v) =>
           v.attributes.some(
-            (va) => /size|সাইজ/i.test(sizeAttr?.name ?? "") && va.value.value === selectedSize
+            (va) => /size/i.test(sizeAttr?.name ?? "") && va.value.value === selectedSize
           )
         )
       : null;
@@ -149,12 +150,12 @@ function ShopProductCard({
     if (isVariable) {
       if (selectedVariation) {
         if (selectedVariation.stock <= 0) {
-          toast.error("এই সাইজটি স্টকে নেই");
+          toast.error("This size is out of stock.");
           return;
         }
         add(p, selectedVariation);
       } else if (sizes.length > 0) {
-        toast.error("প্রথমে একটি সাইজ সিলেক্ট করুন");
+        toast.error("Please select a size first.");
       } else {
         add(p);
       }
@@ -167,12 +168,12 @@ function ShopProductCard({
     if (isVariable) {
       if (selectedVariation) {
         if (selectedVariation.stock <= 0) {
-          toast.error("এই সাইজটি স্টকে নেই");
+          toast.error("This size is out of stock.");
           return;
         }
         buyNow(p, selectedVariation);
       } else if (sizes.length > 0) {
-        toast.error("প্রথমে একটি সাইজ সিলেক্ট করুন");
+        toast.error("Please select a size first.");
       } else {
         buyNow(p);
       }
@@ -183,7 +184,7 @@ function ShopProductCard({
 
   const waHref = whatsapp
     ? `${whatsapp}?text=${encodeURIComponent(
-        `আমি ${p.name}${selectedSize ? ` (সাইজ: ${selectedSize})` : ""} (${money(displayPrice)}) নিতে চাই।`
+        `Hello, I would like ${p.name}${selectedSize ? ` (Size: ${selectedSize})` : ""} (${money(displayPrice)}).`
       )}`
     : null;
 
@@ -196,7 +197,7 @@ function ShopProductCard({
           </span>
           {hasSale && (
             <span className="absolute right-2.5 top-2.5 z-10 rounded-full bg-rose-600 px-2.5 py-0.5 text-xs font-bold text-white shadow-sm">
-              {discountPercent}% ছাড়
+              {discountPercent}% off
             </span>
           )}
           <Link href={productUrl(p.slug, p.name, p.id)} className="block h-full w-full">
@@ -240,7 +241,7 @@ function ShopProductCard({
             {sizes.length > 0 && (
               <div className="mt-3">
                 <p className="mb-1 text-xs font-medium text-gray-600">
-                  সাইজ সিলেক্ট করুন:
+                  Choose a size:
                   {selectedSize && <span className="ml-1 font-bold text-[var(--shop-brand)]">({selectedSize})</span>}
                 </p>
                 <div className="flex flex-wrap items-center gap-1.5">
@@ -282,7 +283,7 @@ function ShopProductCard({
               className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--shop-brand)] px-4 py-2.5 text-xs font-bold text-white shadow transition hover:bg-[var(--shop-brand-hover)] active:scale-95"
             >
               <span className="text-amber-400">⚡</span>
-              <span>সরাসরি অর্ডার করুন</span>
+              <span>Buy now</span>
             </button>
 
             <button
@@ -295,7 +296,7 @@ function ShopProductCard({
                   : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
               }`}
             >
-              <FiShoppingBag size={14} /> কার্টে রাখুন
+              <FiShoppingBag size={14} /> Add to cart
             </button>
 
             {waHref && (
@@ -305,7 +306,7 @@ function ShopProductCard({
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--shop-brand-border)] bg-[var(--shop-brand-soft)] px-3 py-2.5 text-xs font-semibold text-[var(--shop-brand-text)] hover:bg-[var(--shop-brand-soft-strong)]"
               >
-                <FiMessageCircle size={14} /> হোয়াটসঅ্যাপ
+                <FiMessageCircle size={14} /> WhatsApp
               </a>
             )}
           </div>
@@ -323,7 +324,7 @@ function ShopProductCard({
           </span>
           {hasSale && (
             <span className="absolute right-2.5 top-2.5 z-10 rounded-full bg-rose-600 px-2.5 py-0.5 text-[11px] font-bold text-white shadow-xs">
-              {discountPercent}% ছাড়
+              {discountPercent}% off
             </span>
           )}
           <Link href={productUrl(p.slug, p.name, p.id)} className="block h-full w-full">
@@ -363,7 +364,7 @@ function ShopProductCard({
         {sizes.length > 0 && (
           <div className="mb-3">
             <p className="mb-1 text-[11px] font-medium text-gray-600">
-              সাইজ:
+                  Size:
               {selectedSize && <span className="ml-1 font-bold text-[var(--shop-brand)]">({selectedSize})</span>}
             </p>
             <div className="flex flex-wrap items-center gap-1">
@@ -405,7 +406,7 @@ function ShopProductCard({
           className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-[var(--shop-brand)] px-3 py-2.5 text-center text-xs sm:text-sm font-bold text-white shadow-xs transition hover:bg-[var(--shop-brand-hover)] active:scale-95"
         >
           <span className="text-amber-400 flex-shrink-0">⚡</span>
-          <span className="truncate">সরাসরি অর্ডার করুন</span>
+          <span className="truncate">Buy now</span>
         </button>
 
         <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-1.5">
@@ -420,7 +421,7 @@ function ShopProductCard({
             }`}
           >
             <FiShoppingBag size={12} className="flex-shrink-0" />
-            <span className="truncate text-[11px]">কার্টে রাখুন</span>
+            <span className="truncate text-[11px]">Add to cart</span>
           </button>
 
           {waHref ? (
@@ -431,12 +432,12 @@ function ShopProductCard({
               className="flex items-center justify-center gap-1 rounded-lg border border-[var(--shop-brand-border)] bg-[var(--shop-brand-soft)] px-2 py-1.5 text-xs font-semibold text-[var(--shop-brand-text)] hover:bg-[var(--shop-brand-soft-strong)]"
             >
               <FiMessageCircle size={12} className="flex-shrink-0" />
-              <span className="truncate text-[11px]">হোয়াটসঅ্যাপ</span>
+              <span className="truncate text-[11px]">WhatsApp</span>
             </a>
           ) : (
             <span className="flex items-center justify-center gap-1 rounded-lg border border-gray-100 bg-gray-50 px-2 py-1.5 text-xs text-gray-400">
               <FiMessageCircle size={12} className="flex-shrink-0" />
-              <span className="truncate text-[11px]">হোয়াটসঅ্যাপ</span>
+              <span className="truncate text-[11px]">WhatsApp</span>
             </span>
           )}
         </div>
@@ -567,7 +568,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
     const set = new Set<string>();
     products.forEach((p) => {
       p.attributes?.forEach((attr) => {
-        if (/size|সাইজ/i.test(attr.name)) {
+        if (/size/i.test(attr.name)) {
           attr.values.forEach((v) => set.add(v.value));
         }
       });
@@ -618,7 +619,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
       "epic-cart",
       JSON.stringify(hit ? old.map((i: CartItem) => (i.id === key ? item : i)) : [...old, item])
     );
-    toast.success("কার্টে যোগ হয়েছে");
+    toast.success("Added to cart.");
   }
 
   function buyNowAction(p: Product, variation?: Variation) {
@@ -633,7 +634,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
       method: "POST",
     }).then((response) => {
       if (response.status === 401) {
-        toast.error("অনুগ্রহ করে প্রথমে লগইন করুন");
+        toast.error("Please sign in first.");
         throw new Error("unauthorized");
       }
       if (!response.ok) throw new Error("Could not update wishlist");
@@ -688,7 +689,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
       // 6. Sizes Filter
       if (selectedSizes.length > 0) {
         const pSizes = (p.attributes ?? [])
-          .filter((a) => /size|সাইজ/i.test(a.name))
+          .filter((a) => /size/i.test(a.name))
           .flatMap((a) => a.values.map((v) => v.value));
         const varSizes = (p.variations ?? []).flatMap((v) =>
           v.attributes.map((va) => va.value?.value).filter(Boolean)
@@ -793,11 +794,11 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
     <div className="space-y-6">
       {/* Search Input */}
       <div>
-        <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">খুঁজুন</h3>
+        <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">Search</h3>
         <div className="relative">
           <input
             type="text"
-            placeholder="পণ্যের নাম লিখে খুঁজুন..."
+            placeholder="Search products..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full rounded-xl border border-gray-200 bg-gray-50/70 py-2.5 pl-9 pr-8 text-xs sm:text-sm text-gray-900 transition focus:border-[var(--shop-brand)] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[var(--shop-brand)]"
@@ -817,13 +818,13 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
       {/* Category List */}
       <div>
         <div className="mb-2.5 flex items-center justify-between">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500">ক্যাটাগরি সমূহ</h3>
+          <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500">Categories</h3>
           {selectedCategory !== "all" && (
             <button
               onClick={() => setSelectedCategory("all")}
               className="text-[11px] font-semibold text-[var(--shop-brand)] hover:underline"
             >
-              সবগুলো
+              View all
             </button>
           )}
         </div>
@@ -836,7 +837,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
                 : "text-gray-700 hover:bg-gray-100"
             }`}
           >
-            <span>সব প্রোডাক্ট</span>
+            <span>All products</span>
             <span className={`text-xs px-2 py-0.5 rounded-full ${selectedCategory === "all" ? "bg-[var(--shop-brand-hover)] text-white" : "bg-gray-100 text-gray-500"}`}>
               {products.length}
             </span>
@@ -871,12 +872,12 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
 
       {/* Price Filter */}
       <div>
-        <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">মূল্য নির্বাচন (৳)</h3>
+        <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">Price range</h3>
 
         {/* Range Text Inputs */}
         <div className="mb-3 flex items-center justify-between gap-2">
           <div className="flex-1">
-            <span className="text-[10px] text-gray-400">সর্বনিম্ন</span>
+            <span className="text-[10px] text-gray-400">Minimum</span>
             <input
               type="number"
               value={priceMin}
@@ -886,7 +887,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
           </div>
           <span className="mt-3 text-gray-400">-</span>
           <div className="flex-1">
-            <span className="text-[10px] text-gray-400">সর্বোচ্চ</span>
+            <span className="text-[10px] text-gray-400">Maximum</span>
             <input
               type="number"
               value={priceMax}
@@ -911,10 +912,10 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
 
       {/* Toggles: Stock & Discount */}
       <div className="space-y-3 pt-2 border-t border-gray-100">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500">ফিল্টার সুবিধা</h3>
+        <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500">Filter options</h3>
 
         <label className="flex cursor-pointer items-center justify-between rounded-xl border border-gray-100 bg-gray-50/50 p-2.5 hover:bg-gray-100/60">
-          <span className="text-xs font-semibold text-gray-800">শুধুমাত্র স্টকে থাকা পণ্য</span>
+          <span className="text-xs font-semibold text-gray-800">In-stock products only</span>
           <input
             type="checkbox"
             checked={inStockOnly}
@@ -924,7 +925,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
         </label>
 
         <label className="flex cursor-pointer items-center justify-between rounded-xl border border-gray-100 bg-rose-50/40 p-2.5 hover:bg-rose-50/70">
-          <span className="text-xs font-semibold text-rose-900">ছাড়ের পণ্য (On Sale)</span>
+          <span className="text-xs font-semibold text-rose-900">On sale</span>
           <input
             type="checkbox"
             checked={onSaleOnly}
@@ -938,13 +939,13 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
       {availableSizes.length > 0 && (
         <div className="pt-2 border-t border-gray-100">
           <div className="mb-2 flex items-center justify-between">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500">সাইজ ফিল্টার</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500">Size filter</h3>
             {selectedSizes.length > 0 && (
               <button
                 onClick={() => setSelectedSizes([])}
                 className="text-[11px] font-semibold text-rose-600 hover:underline"
               >
-                রিসেট
+                Reset
               </button>
             )}
           </div>
@@ -977,7 +978,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
           className="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 py-2.5 text-xs font-bold text-rose-700 transition hover:bg-rose-100 active:scale-98"
         >
           <FiRefreshCw size={13} />
-          <span>ফিল্টার পরিষ্কার করুন ({activeFiltersCount})</span>
+          <span>Clear filters ({activeFiltersCount})</span>
         </button>
       )}
     </div>
@@ -996,9 +997,9 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
       <section className="border-b border-slate-100 bg-gradient-to-br from-white via-slate-50 to-white py-10 px-4">
         <div className="mx-auto max-w-7xl">
           <nav aria-label="Breadcrumb" className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
-            <Link href="/" className="hover:text-[var(--shop-brand)] transition">হোম</Link>
+            <Link href="/" className="hover:text-[var(--shop-brand)] transition">Home</Link>
             <span className="opacity-40">/</span>
-            <span className="font-bold text-slate-900">শপ</span>
+            <span className="font-bold text-slate-900">Shop</span>
             {selectedCategory !== "all" && (
               <>
                 <span className="opacity-40">/</span>
@@ -1015,11 +1016,11 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
                 ALL PRODUCTS · ONE PLATFORM
               </span>
               <h1 className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl text-slate-900">
-                আমাদের শপ কালেকশন
-                <span className="gradient-text"> সব এক জায়গায়</span>
+                Explore our collection
+                <span className="gradient-text"> all in one place</span>
               </h1>
               <p className="mt-2 text-xs sm:text-sm text-slate-500 max-w-xl">
-                আপনার পছন্দের পোশাক ও এক্সেসরিজ সেরা দামে বেছে নিন এবং অতি দ্রুত হোম ডেলিভারি পান।
+                Find clothing and accessories at great prices, delivered quickly to your door.
               </p>
             </div>
 
@@ -1027,7 +1028,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="যেকোনো পণ্য খুঁজুন..."
+                  placeholder="Search any product..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full rounded-full border border-slate-200 bg-white px-4 py-2.5 pl-10 text-xs sm:text-sm text-gray-900 placeholder-gray-400 shadow-sm transition focus:border-[var(--shop-brand)] focus:outline-none focus:ring-1 focus:ring-[var(--shop-brand)]"
@@ -1042,9 +1043,9 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
       <section className="bg-gradient-to-r from-[#031d14] via-[var(--shop-brand)] to-[#12573d] text-white py-10 px-4">
         <div className="mx-auto max-w-7xl">
           <nav aria-label="Breadcrumb" className="mb-4 flex items-center gap-2 text-xs font-medium text-emerald-200/90">
-            <Link href="/" className="hover:text-amber-300 transition">হোম</Link>
+            <Link href="/" className="hover:text-amber-300 transition">Home</Link>
             <span className="opacity-40">/</span>
-            <span className="text-amber-400 font-bold">শপ</span>
+            <span className="text-amber-400 font-bold">Shop</span>
             {selectedCategory !== "all" && (
               <>
                 <span className="opacity-40">/</span>
@@ -1058,13 +1059,13 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/20 px-3 py-1 text-xs font-bold text-amber-300 backdrop-blur-md mb-2">
-                <FiShoppingBag size={13} /> সব প্রডাক্ট এক প্ল্যাটফর্মে
+                <FiShoppingBag size={13} /> Shop all products in one place
               </span>
               <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-white">
-                আমাদের শপ কালেকশন
+                Explore our collection
               </h1>
               <p className="mt-1 text-xs sm:text-sm text-emerald-100/90 max-w-xl">
-                আপনার পছন্দের পোশাক ও এক্সেসরিজ সেরা দামে বেছে নিন এবং অতি দ্রুত হোম ডেলিভারি পান।
+                Find clothing and accessories at great prices, delivered quickly to your door.
               </p>
             </div>
 
@@ -1073,7 +1074,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="যেকোনো পণ্য খুঁজুন..."
+                  placeholder="Search any product..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full rounded-full border border-emerald-600/50 bg-white/10 px-4 py-2.5 pl-10 text-xs sm:text-sm text-white placeholder-emerald-200/60 backdrop-blur-md transition focus:bg-white focus:text-gray-900 focus:placeholder-gray-400 focus:outline-none"
@@ -1100,7 +1101,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
-              সব পণ্য ({products.length})
+              All products ({products.length})
             </button>
             {categories.map((c) => (
               <button
@@ -1129,14 +1130,14 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
             <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3">
               <h2 className="flex items-center gap-2 text-base font-bold text-gray-900">
                 <FiSliders className="text-[var(--shop-brand)]" />
-                <span>ফিল্টারসমূহ</span>
+                <span>Filters</span>
               </h2>
               {activeFiltersCount > 0 && (
                 <button
                   onClick={resetFilters}
                   className="text-xs font-semibold text-rose-600 hover:underline"
                 >
-                  রিসেট
+                  Reset
                 </button>
               )}
             </div>
@@ -1152,11 +1153,11 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
                 <div>
                   <h2 className="text-base font-bold text-gray-900">
                     {selectedCategory === "all"
-                      ? "সমস্ত প্রোডাক্ট"
-                      : categories.find((c) => c.slug === selectedCategory)?.name ?? "প্রোডাক্টের তালিকা"}
+                      ? "All products"
+                      : categories.find((c) => c.slug === selectedCategory)?.name ?? "Product list"}
                   </h2>
                   <p className="text-xs text-gray-500">
-                    মোট <span className="font-bold text-[var(--shop-brand)]">{sortedProducts.length}</span> টি পণ্য পাওয়া গেছে
+                    <span className="font-bold text-[var(--shop-brand)]">{sortedProducts.length}</span> products found
                   </p>
                 </div>
 
@@ -1166,7 +1167,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
                   className="flex items-center gap-2 rounded-xl border border-gray-200 bg-[var(--shop-brand-soft)] px-3.5 py-2 text-xs font-bold text-[var(--shop-brand)] lg:hidden hover:bg-[var(--shop-brand-soft-strong)] active:scale-95"
                 >
                   <FiFilter size={14} />
-                  <span>ফিল্টার</span>
+                  <span>Filter</span>
                   {activeFiltersCount > 0 && (
                     <span className="grid h-5 w-5 place-items-center rounded-full bg-[var(--shop-brand)] text-[10px] font-extrabold text-white">
                       {activeFiltersCount}
@@ -1179,17 +1180,17 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
               <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t border-gray-100 sm:border-t-0">
                 {/* Sort Dropdown */}
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-gray-500 hidden min-[400px]:inline">সাজান:</span>
+                  <span className="text-xs font-medium text-gray-500 hidden min-[400px]:inline">Sort:</span>
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as any)}
                     className="rounded-xl border border-gray-200 bg-gray-50 py-2 px-3 text-xs font-bold text-gray-800 transition focus:border-[var(--shop-brand)] focus:bg-white focus:outline-none"
                   >
-                    <option value="newest">নতুন আপলোড</option>
-                    <option value="price-asc">দাম: কম থেকে বেশি</option>
-                    <option value="price-desc">দাম: বেশি থেকে কম</option>
-                    <option value="discount">সর্বোচ্চ ছাড়</option>
-                    <option value="name">নাম (A to Z)</option>
+                    <option value="newest">Newest</option>
+                    <option value="price-asc">Price: low to high</option>
+                    <option value="price-desc">Price: high to low</option>
+                    <option value="discount">Largest discount</option>
+                    <option value="name">Name (A to Z)</option>
                   </select>
                 </div>
 
@@ -1239,12 +1240,12 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
             {activeFiltersCount > 0 && (
               <div className="mb-4 flex flex-wrap items-center gap-2 bg-[var(--shop-brand-soft)] rounded-xl p-3 border border-[var(--shop-brand-border)]">
                 <span className="text-xs font-bold text-[var(--shop-brand-text-strong)] flex items-center gap-1">
-                  <FiTag size={12} /> অ্যাক্টিভ ফিল্টার:
+                  <FiTag size={12} /> Active filters:
                 </span>
 
                 {searchQuery && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-800 shadow-xs border border-[var(--shop-brand-border)]">
-                    সার্চ: &quot;{searchQuery}&quot;
+                    Search: &quot;{searchQuery}&quot;
                     <button onClick={() => setSearchQuery("")} className="ml-0.5 text-gray-400 hover:text-rose-600">
                       <FiX size={12} />
                     </button>
@@ -1253,7 +1254,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
 
                 {selectedCategory !== "all" && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-800 shadow-xs border border-[var(--shop-brand-border)]">
-                    ক্যাটাগরি: {categories.find((c) => c.slug === selectedCategory)?.name ?? selectedCategory}
+                    Category: {categories.find((c) => c.slug === selectedCategory)?.name ?? selectedCategory}
                     <button onClick={() => setSelectedCategory("all")} className="ml-0.5 text-gray-400 hover:text-rose-600">
                       <FiX size={12} />
                     </button>
@@ -1262,7 +1263,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
 
                 {(priceMin > 0 || priceMax < maxPriceLimit) && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-800 shadow-xs border border-[var(--shop-brand-border)]">
-                    মূল্য: {money(priceMin)} - {money(priceMax)}
+                    Price: {money(priceMin)} - {money(priceMax)}
                     <button onClick={() => { setPriceMin(0); setPriceMax(maxPriceLimit); }} className="ml-0.5 text-gray-400 hover:text-rose-600">
                       <FiX size={12} />
                     </button>
@@ -1271,7 +1272,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
 
                 {inStockOnly && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-800 shadow-xs border border-[var(--shop-brand-border)]">
-                    স্টকে আছে
+                    In stock
                     <button onClick={() => setInStockOnly(false)} className="ml-0.5 text-gray-400 hover:text-rose-600">
                       <FiX size={12} />
                     </button>
@@ -1280,7 +1281,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
 
                 {onSaleOnly && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-rose-800 shadow-xs border border-rose-200">
-                    ছাড়ের পণ্য
+                    On sale
                     <button onClick={() => setOnSaleOnly(false)} className="ml-0.5 text-gray-400 hover:text-rose-600">
                       <FiX size={12} />
                     </button>
@@ -1289,7 +1290,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
 
                 {selectedSizes.map((size) => (
                   <span key={size} className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-800 shadow-xs border border-[var(--shop-brand-border)]">
-                    সাইজ: {size}
+                    Size: {size}
                     <button onClick={() => toggleSize(size)} className="ml-0.5 text-gray-400 hover:text-rose-600">
                       <FiX size={12} />
                     </button>
@@ -1300,7 +1301,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
                   onClick={resetFilters}
                   className="ml-auto text-xs font-bold text-rose-600 hover:underline"
                 >
-                  সবগুলো মুছুন
+                  Clear all
                 </button>
               </div>
             )}
@@ -1366,10 +1367,10 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
                       className="inline-flex items-center gap-2 rounded-full bg-[var(--shop-brand)] px-8 py-3 text-sm font-bold text-white shadow-md transition hover:bg-[var(--shop-brand-hover)] active:scale-95"
                     >
                       <FiRefreshCw size={14} />
-                      <span>আরও দেখুন ({sortedProducts.length - visibleCount}টি বাকি)</span>
+                      <span>Show more ({sortedProducts.length - visibleCount} remaining)</span>
                     </button>
                     <span className="text-xs text-gray-400">
-                      {visibleCount} / {sortedProducts.length} দেখানো হচ্ছে
+                      {visibleCount} / {sortedProducts.length} shown
                     </span>
                   </div>
                 )}
@@ -1381,17 +1382,17 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
                   <FiSearch size={28} />
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 sm:text-xl">
-                  কোনো পণ্য পাওয়া যায়নি
+                  No products found
                 </h3>
                 <p className="mt-1 text-xs sm:text-sm text-gray-500 max-w-md mx-auto">
-                  আপনার নির্বাচিত ফিল্টার বা সার্চ টার্মের সাথে মিল রেখে কোনো প্রোডাক্ট পাওয়া যায়নি। অনুগ্রহ করে ফিল্টার পরিবর্তন করে আবার চেষ্টা করুন।
+                  No products match your filters or search. Try adjusting your filters and searching again.
                 </p>
                 <button
                   onClick={resetFilters}
                   className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--shop-brand)] px-6 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md transition hover:bg-[var(--shop-brand-hover)] active:scale-95"
                 >
                   <FiRefreshCw size={14} />
-                  <span>সকল ফিল্টার রিসেট করুন</span>
+                  <span>Reset all filters</span>
                 </button>
               </div>
             )}
@@ -1416,7 +1417,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
                 <div className="flex items-center justify-between border-b border-gray-100 pb-4 mb-5">
                   <div className="flex items-center gap-2">
                     <FiSliders className="text-[var(--shop-brand)]" size={18} />
-                    <h2 className="text-lg font-bold text-gray-900">ফিল্টার নির্বাচন করুন</h2>
+                    <h2 className="text-lg font-bold text-gray-900">Choose filters</h2>
                   </div>
                   <button
                     onClick={() => setMobileFilterOpen(false)}
@@ -1435,7 +1436,7 @@ export function ShopView({ initialLayout = "classic", initialProducts, initialCa
                   className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--shop-brand)] py-3 text-sm font-bold text-white shadow-md active:scale-98"
                 >
                   <FiCheck size={16} />
-                  <span>ফলাফল দেখুন ({sortedProducts.length} টি পণ্য)</span>
+                  <span>View results ({sortedProducts.length} products)</span>
                 </button>
               </div>
             </div>

@@ -42,9 +42,9 @@ export function SiteHeader() {
       </Link>
 
       <div className="nav-links">
-        <Link href="/" prefetch>হোম</Link>
-        <Link href="/shop" prefetch>শপ</Link>
-        <Link href="/account" prefetch>প্রোফাইল</Link>
+        <Link href="/" prefetch>Home</Link>
+        <Link href="/shop" prefetch>Shop</Link>
+        <Link href="/account" prefetch>Account</Link>
       </div>
 
       <div className="nav-actions">

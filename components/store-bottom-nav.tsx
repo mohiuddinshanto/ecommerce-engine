@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "../lib/money";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -6,7 +7,7 @@ import { useEffect, useState } from "react";
 import { FiArrowRight, FiGrid, FiHome, FiShoppingBag, FiUser } from "react-icons/fi";
 import { getStoreStatus } from "../lib/store-status";
 
-const money = (value: number) => "৳ " + (Number(value) || 0).toLocaleString("en-BD");
+const money = formatMoney;
 
 function readCart(): { count: number; total: number } {
   try {
@@ -82,7 +83,7 @@ export function StoreBottomNav() {
           prefetch
           className="fixed bottom-[76px] right-3 z-40 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary to-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-lg shadow-indigo-500/30 active:scale-[0.98] md:hidden"
         >
-          <FiShoppingBag size={14} /> ব্যাগ দেখুন · {money(total)}{" "}
+          <FiShoppingBag size={14} /> View bag · {money(total)}{" "}
           <FiArrowRight size={14} />
         </Link>
       )}
@@ -97,14 +98,14 @@ export function StoreBottomNav() {
             prefetch
             className={`flex flex-col items-center gap-0.5 rounded-xl py-1 text-[10px] font-semibold ${pathname === "/" ? "text-[var(--primary)]" : "text-slate-500"}`}
           >
-            <FiHome className="text-base" /> হোম
+            <FiHome className="text-base" /> Home
           </Link>
           <Link
             href="/shop"
             prefetch
             className={`flex flex-col items-center gap-0.5 rounded-xl py-1 text-[10px] font-semibold ${pathname === "/shop" ? "text-[var(--primary)]" : "text-slate-500"}`}
           >
-            <FiGrid className="text-base" /> শপ
+            <FiGrid className="text-base" /> Shop
           </Link>
           <Link href="/checkout" prefetch className="relative flex flex-col items-center gap-0.5 rounded-xl py-1 text-[10px] font-semibold text-slate-500">
             <span className="relative">
@@ -115,10 +116,10 @@ export function StoreBottomNav() {
                 </span>
               )}
             </span>
-            ব্যাগ
+            Bag
           </Link>
           <Link href="/account" prefetch className="flex flex-col items-center gap-0.5 rounded-xl py-1 text-[10px] font-semibold text-slate-500">
-            <FiUser className="text-base" /> প্রোফাইল
+            <FiUser className="text-base" /> Account
           </Link>
         </div>
       </nav>

@@ -37,7 +37,7 @@ export function OnboardingWizard() {
 
       if (!response.ok) throw new Error((await response.json()).error);
 
-      toast.success("স্টোর সেটআপ সফলভাবে সম্পন্ন হয়েছে!");
+      toast.success("Store setup completed successfully!");
       window.location.href = "/?refresh_onboarding=1";
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Setup failed");
@@ -53,10 +53,10 @@ export function OnboardingWizard() {
           <Link href="/" className="brand" style={{ justifyContent: "center", marginBottom: "12px" }}>
             EPIC<span>.</span>
           </Link>
-          <span className="eyebrow">স্টোর সেটআপ</span>
-          <h1>আপনার স্টোর সেটআপ করুন</h1>
+          <span className="eyebrow">Store setup</span>
+          <h1>Set up your store</h1>
           <p style={{ color: "var(--muted)", margin: "8px 0 0", fontSize: "0.9rem" }}>
-            আপনার অ্যাডমিন তথ্য দিন এবং স্টোরের থিম বেছে নিন।
+            Add your administrator details and choose a theme for your store.
           </p>
         </div>
 

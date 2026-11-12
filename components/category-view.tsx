@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "../lib/money";
 import { ProductImage } from "./product-image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -40,7 +41,7 @@ type Product = {
 type Variation = NonNullable<Product["variations"]>[number];
 type CartItem = { id: string; slug: string; name: string; images: string[]; price: number; categoryId: string; categoryIds?: string[]; qty: number; variationId?: string; sku?: string };
 
-const money = (v: number | string) => "৳ " + Number(v).toLocaleString("en-BD");
+const money = formatMoney;
 
 function CatalogCard({
   p, allowAddToCart, add, buyNow, whatsapp,
@@ -57,10 +58,10 @@ function CatalogCard({
   const discountPercent = hasSale ? Math.round(((price - salePrice!) / price) * 100) : 0;
   const isVariable = p.productType === "VARIABLE" && (p.variations?.length ?? 0) > 0;
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const sizeAttr = (p.attributes ?? []).find((a) => /size|সাইজ/i.test(a.name));
+  const sizeAttr = (p.attributes ?? []).find((a) => /size/i.test(a.name));
   const sizes = sizeAttr?.values.map((v) => v.value) ?? [];
   const selectedVariation = isVariable && selectedSize
-    ? (p.variations ?? []).find((v) => v.attributes.some((va) => /size|সাইজ/i.test(sizeAttr?.name ?? "") && va.value.value === selectedSize))
+    ? (p.variations ?? []).find((v) => v.attributes.some((va) => /size/i.test(sizeAttr?.name ?? "") && va.value.value === selectedSize))
     : null;
   const displayPrice = selectedVariation
     ? (selectedVariation.salePrice && selectedVariation.salePrice < selectedVariation.price) ? selectedVariation.salePrice : selectedVariation.price
@@ -71,27 +72,27 @@ function CatalogCard({
   const handleAddToCart = () => {
     if (!allowAddToCart) return;
     if (isVariable) {
-      if (selectedVariation) { if (selectedVariation.stock <= 0) { toast.error("এই সাইজ স্টকে নেই"); return; } add(p, selectedVariation); }
-      else if (sizes.length > 0) toast.error("প্রথমে একটি সাইজ সিলেক্ট করুন");
+      if (selectedVariation) { if (selectedVariation.stock <= 0) { toast.error("This size is out of stock."); return; } add(p, selectedVariation); }
+      else if (sizes.length > 0) toast.error("Please select a size first.");
       else add(p);
     } else add(p);
   };
   const handleBuyNow = () => {
     if (isVariable) {
-      if (selectedVariation) { if (selectedVariation.stock <= 0) { toast.error("এই সাইজ স্টকে নেই"); return; } buyNow(p, selectedVariation); }
-      else if (sizes.length > 0) toast.error("প্রথমে একটি সাইজ সিলেক্ট করুন");
+      if (selectedVariation) { if (selectedVariation.stock <= 0) { toast.error("This size is out of stock."); return; } buyNow(p, selectedVariation); }
+      else if (sizes.length > 0) toast.error("Please select a size first.");
       else buyNow(p);
     } else buyNow(p);
   };
   const waHref = whatsapp
-    ? `${whatsapp}?text=${encodeURIComponent(`আমি ${p.name}${selectedSize ? ` (সাইজ: ${selectedSize})` : ""} (${money(displayPrice)}) নিতে চাই।`)}`
+    ? `${whatsapp}?text=${encodeURIComponent(`Hello, I would like ${p.name}${selectedSize ? ` (Size: ${selectedSize})` : ""} (${money(displayPrice)}).` )}`
     : null;
   return (
     <div className="flex w-full min-w-0 flex-col justify-between rounded-2xl border border-gray-100 bg-white p-3 shadow-sm transition-all duration-300 hover:shadow-xl">
       <div>
         <div className="relative mb-3 aspect-[4/5] overflow-hidden rounded-xl bg-gray-100 group">
           <span className="absolute left-2.5 top-2.5 z-10 rounded bg-white/90 px-2.5 py-0.5 text-xs font-medium text-gray-800 shadow-sm backdrop-blur-sm">{p.category.name}</span>
-          {hasSale && <span className="absolute right-2.5 top-2.5 z-10 rounded bg-rose-700 px-2.5 py-0.5 text-xs font-bold text-white shadow-sm">{discountPercent}% ছাড়</span>}
+          {hasSale && <span className="absolute right-2.5 top-2.5 z-10 rounded bg-rose-700 px-2.5 py-0.5 text-xs font-bold text-white shadow-sm">{discountPercent}% off</span>}
           <Link href={productUrl(p.slug, p.name, p.id)} className="block h-full w-full">
             <ProductImage src={img} alt={p.name} fill sizes="(max-width: 650px) 50vw, 290px" className="object-cover object-top transition duration-500 group-hover:scale-105" />
           </Link>
@@ -103,7 +104,7 @@ function CatalogCard({
         </div>
         {sizes.length > 0 && (
           <div className="mb-3">
-            <p className="mb-1.5 text-sm font-medium text-gray-600">সাইজ সিলেক্ট করুন:{selectedSize && <span className="ml-1 font-bold text-[var(--primary)]">({selectedSize})</span>}</p>
+            <p className="mb-1.5 text-sm font-medium text-gray-600">Choose a size:{selectedSize && <span className="ml-1 font-bold text-[var(--primary)]">({selectedSize})</span>}</p>
             <div className="flex flex-wrap items-center gap-1">
               {sizes.map((size) => {
                 const sv = (p.variations ?? []).find((v) => v.attributes.some((va) => va.value.value === size));
@@ -122,20 +123,20 @@ function CatalogCard({
       </div>
       <div className="space-y-2">
         <button type="button" onClick={handleBuyNow} className="flex w-full items-center justify-center gap-1.5 whitespace-normal rounded-lg bg-[var(--primary)] px-2 py-2.5 text-center text-sm font-bold leading-tight text-white shadow transition hover:bg-[var(--primary-hover)] hover:shadow-md active:scale-[0.98]">
-          <span className="text-sm text-amber-400">⚡</span><span>সরাসরি অর্ডার করুন</span>
+          <span className="text-sm text-amber-400">⚡</span><span>Buy now</span>
         </button>
         <div className="grid grid-cols-1 gap-2 min-[400px]:grid-cols-2">
           <button type="button" onClick={handleAddToCart} disabled={!allowAddToCart}
             className={`flex items-center justify-center gap-1 whitespace-normal rounded-lg px-2 py-2 text-sm font-semibold leading-tight transition ${!allowAddToCart ? "cursor-not-allowed bg-gray-100 text-gray-400" : "bg-gray-100 text-gray-800 hover:bg-gray-200"}`}>
-            <FiShoppingBag size={13} /> কার্টে রাখুন
+            <FiShoppingBag size={13} /> Add to cart
           </button>
           {waHref ? (
             <a href={waHref} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1 whitespace-normal rounded-lg border border-emerald-200 bg-emerald-50 px-2 py-2 text-sm font-semibold leading-tight text-emerald-800 transition hover:bg-emerald-100">
-              <FiMessageCircle size={13} /> হোয়াটসঅ্যাপ
+              <FiMessageCircle size={13} /> WhatsApp
             </a>
           ) : (
             <span className="flex items-center justify-center whitespace-normal rounded-lg border border-gray-100 bg-gray-50 px-2 py-2 text-sm leading-tight text-gray-400">
-              <FiMessageCircle size={13} /> হোয়াটসঅ্যাপ
+              <FiMessageCircle size={13} /> WhatsApp
             </span>
           )}
         </div>
@@ -159,7 +160,7 @@ function ClassicCard({
     <article className="group overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md w-full h-full">
       <Link href={productUrl(p.slug, p.name, p.id)} className="relative block aspect-[3/4] overflow-hidden bg-slate-100">
         <ProductImage src={p.images[0] || FALLBACK_IMG} alt={p.name} fill sizes="(max-width: 650px) 50vw, 280px" className="object-cover transition-transform duration-300 group-hover:scale-105" />
-        {hasSale && <span className="absolute left-3 top-3 rounded-full border border-rose-500/30 bg-rose-500/90 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-white backdrop-blur-md">{discountPercent}% ছাড়</span>}
+        {hasSale && <span className="absolute left-3 top-3 rounded-full border border-rose-500/30 bg-rose-500/90 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-white backdrop-blur-md">{discountPercent}% off</span>}
         <button onClick={(e) => onWishlist(p.id, e)} aria-label="Wishlist" className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full border border-white/60 bg-white/85 text-slate-500 backdrop-blur-md transition-all hover:text-rose-500" style={{ color: wishlisted ? "#ef4444" : "inherit" }}>
           <FiHeart size={16} fill={wishlisted ? "#ef4444" : "none"} />
         </button>
@@ -245,7 +246,7 @@ export function CategoryView({ slug, initialProducts, initialCategories, initial
     const hit = old.find((i: CartItem) => i.id === key);
     const item: CartItem = { id: key, slug: p.slug, name: p.name, images: p.images, price, categoryId: p.categoryId, categoryIds: [...new Set([p.categoryId, ...(p.categoryLinks ?? []).map((link) => link.categoryId)])], qty: hit ? hit.qty + 1 : 1, variationId, sku };
     localStorage.setItem("epic-cart", JSON.stringify(hit ? old.map((i: CartItem) => i.id === key ? item : i) : [...old, item]));
-    toast.success("কার্টে যোগ হয়েছে");
+    toast.success("Added to your cart.");
   }
 
   function buyNowAction(p: Product, variation?: Variation) {
@@ -265,7 +266,7 @@ export function CategoryView({ slug, initialProducts, initialCategories, initial
       method: "POST",
     }).then((response) => {
       if (response.status === 401) {
-        toast.error("লগইন করুন");
+    toast.error("Please sign in.");
         throw new Error("unauthorized");
       }
       if (!response.ok) throw new Error("Could not update wishlist");

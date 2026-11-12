@@ -3,8 +3,8 @@ import { FiStar } from "react-icons/fi";
 type Testimonial = { init?: string; image?: string; name?: string; role?: string; quote?: string; rating?: number };
 
 const defaults: Testimonial[] = [
-  { init: "TM", name: "Tasnim Mahbub", role: "Verified Buyer • Dhaka", quote: "The linen shirt felt premium the moment I opened the box. Delivery to Dhanmondi took just two days — quality and speed both exceeded expectations." },
-  { init: "SR", name: "Sakib Rahman", role: "Verified Buyer • Chattogram", quote: "Ordered the sneakers during the festive drop and got a solid discount. Comfort is real — I wear them daily. bKash checkout was effortless." },
+  { init: "AM", name: "Alex Morgan", role: "Verified customer", quote: "The linen shirt felt premium right out of the box. Delivery was quick, and the quality exceeded expectations." },
+  { init: "JT", name: "Jordan Taylor", role: "Verified customer", quote: "The sneakers are comfortable enough to wear every day. Great quality and a smooth checkout experience." },
   { init: "NF", name: "Nusrat Faria", role: "Boutique Owner • Sylhet", quote: "We stock EPIC essentials for our boutique clients. Consistent quality, honest pricing, and their exchange policy keeps our customers happy." },
 ];
 
@@ -16,7 +16,7 @@ export function StoreTestimonials({ config }: { config?: { enabled?: boolean; ey
       <div className="mx-auto mb-12 max-w-2xl text-center">
         <span className="eyebrow justify-center">{config?.eyebrow ?? "CUSTOMER CHRONICLES"}</span>
         <h2 className="font-display text-4xl font-extrabold tracking-tight text-slate-900">{config?.title ?? "Loved by"} <span className="gradient-text">{config?.accent ?? "thousands."}</span></h2>
-        <p className="muted mt-2">{config?.subtitle ?? "Real stories from customers across Bangladesh and beyond."}</p>
+        <p className="muted mt-2">{config?.subtitle ?? "Real stories from customers around the world."}</p>
       </div>
       <div className="grid gap-6 md:grid-cols-3">
         {items.map((item) => <div key={item.name || item.quote} className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md">

@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "../lib/money";
 
 import { Button, Input, Tab, Tabs } from "@heroui/react";
 import Image from "next/image";
@@ -41,8 +42,6 @@ type WishlistItem = {
 
 const request = (path: string) => fetch(apiUrl + path);
 
-const currency = process.env.NEXT_PUBLIC_CURRENCY || "BDT";
-const money = (v: number | string) => new Intl.NumberFormat(undefined, { style: "currency", currency }).format(Number(v));
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/);
@@ -87,9 +86,9 @@ export function AccountPanel() {
     try {
       const response = await fetch(apiUrl + "/api/auth/resend-verification", { method: "POST" });
       if (!response.ok) throw new Error();
-      toast.success("Verification email পাঠানো হয়েছে");
+      toast.success("Verification email sent.");
     } catch {
-      toast.error("Verification email পাঠানো যায়নি");
+      toast.error("Could not send the verification email.");
     } finally {
       setResending(false);
     }
@@ -107,7 +106,7 @@ export function AccountPanel() {
       const result = await response.json().catch(() => ({}));
       return toast.error(result.error ?? "Could not send reset link");
     }
-    toast.success("এই ইমেইল থাকলে একটি রিসেট লিংক পাঠানো হয়েছে।");
+    toast.success("If this email is registered, a reset link has been sent.");
     setShowForgot(false);
   }
 
@@ -140,7 +139,7 @@ export function AccountPanel() {
   async function removeFromWishlist(productId: string) {
     await fetch(`${apiUrl}/api/wishlist/${productId}`, { method: "POST" });
     setWishlist((prev) => prev.filter((item) => item.product.id !== productId));
-    toast.success("উইশলিস্ট থেকে সরানো হয়েছে");
+    toast.success("Removed from your wishlist.");
   }
 
   async function submit(event: FormEvent<HTMLFormElement>, mode: "sign-in" | "sign-up") {
@@ -188,7 +187,7 @@ export function AccountPanel() {
     setUser(null);
     setOrders([]);
     setWishlist([]);
-    toast.success("সাইন আউট হয়েছে");
+    toast.success("You have signed out.");
   }
 
   async function changePassword(event: FormEvent<HTMLFormElement>) {
@@ -196,16 +195,16 @@ export function AccountPanel() {
     const formEl = event.currentTarget;
     const form = new FormData(formEl);
     const newPassword = form.get("newPassword");
-    if (newPassword !== form.get("confirmPassword")) return toast.error("নতুন পাসওয়ার্ড দুইবার একই দিতে হবে");
+    if (newPassword !== form.get("confirmPassword")) return toast.error("Enter the same new password twice.");
     const response = await fetch(apiUrl + "/api/auth/change-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ currentPassword: form.get("currentPassword"), newPassword }),
     });
     const result = await response.json().catch(() => ({}));
-    if (!response.ok) return toast.error(result.error ?? "পাসওয়ার্ড বদলানো যায়নি");
+    if (!response.ok) return toast.error(result.error ?? "Could not change your password.");
     formEl.reset();
-    toast.success("পাসওয়ার্ড বদলানো হয়েছে। অন্য ডিভাইসগুলো লগআউট হয়ে গেছে।");
+    toast.success("Password changed. Other devices have been signed out.");
   }
 
   if (checking) {
@@ -230,17 +229,17 @@ export function AccountPanel() {
               EPIC<span>.</span>
             </Link>
             <Link href="/" className="back-link" style={{ margin: 0 }}>
-              <FiArrowLeft /> স্টোরে ফিরুন
+              <FiArrowLeft /> Return to store
             </Link>
           </div>
 
           <div className="account-auth-card overflow-hidden rounded-3xl border border-white/70 bg-white/85 shadow-xl shadow-slate-900/10 glass">
             <div className="account-auth-hero relative bg-gradient-to-br from-primary via-indigo-600 to-cyan px-8 py-9 text-white">
               <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-bold uppercase tracking-wide backdrop-blur-sm">
-                <FiUser size={12} /> কাস্টমার পোর্টাল
+                <FiUser size={12} /> Customer account
               </span>
               <h1 className="font-display mt-4 text-3xl font-extrabold tracking-tight">
-                <span>স্বাগতম।</span> লগইন করুন।
+                <span>Welcome.</span> Sign in to continue.
               </h1>
               <div aria-hidden className="absolute -right-10 -top-10 h-36 w-36 rounded-full bg-white/10 blur-2xl" />
             </div>
@@ -249,21 +248,21 @@ export function AccountPanel() {
               {showForgot ? (
                 <form onSubmit={requestReset} className="flex flex-col gap-4">
                   <p className="text-sm text-slate-500">
-                    আপনার ইমেইল দিন — আমরা একটি রিসেট লিংক পাঠাব।
+                    Enter your email and we will send you a reset link.
                   </p>
                   <Input name="email" type="email" label="Email" placeholder="you@example.com" isRequired startContent={<FiMail />} />
                   <Button type="submit" color="primary" size="lg" radius="full" className="mt-1 font-display text-sm font-bold tracking-wide">
-                    পাঠান
+                    Send link
                   </Button>
                   <button type="button" onClick={() => setShowForgot(false)} className="text-xs font-semibold text-slate-400 hover:text-primary">
-                    ফিরে যান
+                    Back
                   </button>
                 </form>
               ) : (
                 <>
                   <div className="account-auth-tabs" role="tablist" aria-label="Account">
-                    <button type="button" role="tab" aria-selected={authMode === "sign-in"} onClick={() => setAuthMode("sign-in")}>লগইন</button>
-                    <button type="button" role="tab" aria-selected={authMode === "sign-up"} onClick={() => setAuthMode("sign-up")}>নতুন অ্যাকাউন্ট</button>
+                    <button type="button" role="tab" aria-selected={authMode === "sign-in"} onClick={() => setAuthMode("sign-in")}>Sign in</button>
+                    <button type="button" role="tab" aria-selected={authMode === "sign-up"} onClick={() => setAuthMode("sign-up")}>Create account</button>
                   </div>
                   <AccountForm mode={authMode} submit={submit} />
                   <button
@@ -271,7 +270,7 @@ export function AccountPanel() {
                     onClick={() => setShowForgot(true)}
                     className="mt-4 w-full text-center text-xs font-semibold text-slate-400 hover:text-primary"
                   >
-                    পাসওয়ার্ড ভুলে গেছেন?
+                    Forgot password?
                   </button>
                 </>
               )}
@@ -279,7 +278,7 @@ export function AccountPanel() {
           </div>
 
           <p className="mt-6 text-center text-xs tracking-widest text-slate-400">
-            কাস্টমার&nbsp;পোর্টাল
+            Customer&nbsp;account
           </p>
         </div>
       </main>
@@ -299,10 +298,10 @@ export function AccountPanel() {
             href="/"
             className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-600 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary"
           >
-            <FiShoppingBag /> শপিং চালিয়ে যান
+            <FiShoppingBag /> Continue shopping
           </Link>
           <Button size="sm" variant="light" color="danger" onPress={signOut} radius="full">
-            <FiLogOut /> লগআউট
+            <FiLogOut /> Sign out
           </Button>
         </div>
       </header>
@@ -310,10 +309,10 @@ export function AccountPanel() {
       {user.emailVerified === false && (
         <div className="mb-8 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-300/70 bg-amber-50 px-5 py-4 text-sm text-amber-800">
           <span className="flex items-center gap-2">
-            <FiMail size={16} /> আপনার ইমেইল এখনো ভেরিফাই হয়নি — ইনবক্সে পাঠানো লিংকে ক্লিক করুন।
+            <FiMail size={16} /> Your email is not verified yet. Click the link in your inbox to verify it.
           </span>
           <Button size="sm" color="warning" variant="flat" radius="full" onPress={resendVerification} isLoading={resending}>
-            আবার পাঠান
+            Resend email
           </Button>
         </div>
       )}
@@ -328,9 +327,9 @@ export function AccountPanel() {
             {initials(user.name)}
           </div>
           <div className="min-w-[220px] flex-1">
-            <span className="eyebrow mb-2">কাস্টমার ড্যাশবোর্ড</span>
+            <span className="eyebrow mb-2">Account dashboard</span>
             <h1 className="font-display text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-              হ্যালো, {firstName} <span className="gradient-text">👋</span>
+              Hello, {firstName} <span className="gradient-text">👋</span>
             </h1>
             <p className="mt-1 flex items-center gap-2 text-sm text-slate-400">
               <FiMail size={14} /> {user.email}
@@ -339,11 +338,11 @@ export function AccountPanel() {
           <div className="flex flex-wrap items-center gap-3">
             <div className="rounded-2xl border border-slate-100 bg-slate-50 px-5 py-3 text-center">
               <div className="font-display text-2xl font-extrabold text-slate-900">{orders.length}</div>
-              <div className="text-xs uppercase tracking-widest text-slate-400">অর্ডার</div>
+              <div className="text-xs uppercase tracking-widest text-slate-400">Orders</div>
             </div>
             <div className="rounded-2xl border border-slate-100 bg-slate-50 px-5 py-3 text-center">
               <div className="font-display text-2xl font-extrabold text-slate-900">{wishlist.length}</div>
-              <div className="text-xs uppercase tracking-widest text-slate-400">সংরক্ষিত</div>
+              <div className="text-xs uppercase tracking-widest text-slate-400">Saved items</div>
             </div>
           </div>
         </div>
@@ -354,7 +353,7 @@ export function AccountPanel() {
           key="orders"
           title={
             <span className="flex items-center gap-2">
-              <FiPackage /> অর্ডার হিস্ট্রি
+              <FiPackage /> Order history
             </span>
           }
         >
@@ -397,13 +396,13 @@ export function AccountPanel() {
                 <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-400">
                   <FiPackage size={24} />
                 </div>
-                <h3 className="font-display text-lg font-bold text-slate-900">এখনো কোনো অর্ডার নেই</h3>
-                <p className="muted mt-1">আপনি অর্ডার করলে এখানে দেখা যাবে।</p>
+                <h3 className="font-display text-lg font-bold text-slate-900">No orders yet</h3>
+                <p className="muted mt-1">Your orders will appear here after you place one.</p>
                 <Link
                   href="/#categories"
                   className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary to-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-500/30 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/40"
                 >
-                  কালেকশন দেখুন →
+                  Browse the collection →
                 </Link>
               </div>
             )}
@@ -414,7 +413,7 @@ export function AccountPanel() {
           key="wishlist"
           title={
             <span className="flex items-center gap-2">
-              <FiHeart /> সংরক্ষিত পণ্য
+              <FiHeart /> Saved items
             </span>
           }
         >
@@ -424,13 +423,13 @@ export function AccountPanel() {
                 <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-400">
                   <FiHeart size={24} />
                 </div>
-                <h3 className="font-display text-lg font-bold text-slate-900">কিছু সংরক্ষণ করা হয়নি</h3>
-                <p className="muted mt-1">যেকোনো পণ্যে হার্ট আইকনে ট্যাপ করে সংরক্ষণ করুন।</p>
+                <h3 className="font-display text-lg font-bold text-slate-900">Nothing saved yet</h3>
+                <p className="muted mt-1">Tap the heart on any product to save it here.</p>
                 <Link
                   href="/#categories"
                   className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary to-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-500/30 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/40"
                 >
-                  পণ্য দেখুন →
+                  Browse products →
                 </Link>
               </div>
             ) : (
@@ -476,7 +475,7 @@ export function AccountPanel() {
                           radius="full"
                           onPress={() => removeFromWishlist(item.product.id)}
                         >
-                          <FiTrash2 /> সরান
+                          <FiTrash2 /> Remove
                         </Button>
                       </div>
                     </div>
@@ -491,7 +490,7 @@ export function AccountPanel() {
           key="security"
           title={
             <span className="flex items-center gap-2">
-              <FiLock /> নিরাপত্তা
+              <FiLock /> Security
             </span>
           }
         >
@@ -500,13 +499,13 @@ export function AccountPanel() {
               onSubmit={changePassword}
               className="mx-auto flex max-w-md flex-col gap-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm"
             >
-              <h3 className="font-display text-lg font-bold text-slate-900">পাসওয়ার্ড বদলান</h3>
-              <p className="muted text-sm">পাসওয়ার্ড বদলালে অন্য সব ডিভাইস থেকে লগআউট হয়ে যাবে।</p>
-              <Input name="currentPassword" type="password" label="বর্তমান পাসওয়ার্ড" isRequired startContent={<FiLock />} />
-              <Input name="newPassword" type="password" label="নতুন পাসওয়ার্ড" minLength={8} isRequired startContent={<FiLock />} />
-              <Input name="confirmPassword" type="password" label="নতুন পাসওয়ার্ড (আবার)" minLength={8} isRequired startContent={<FiLock />} />
+              <h3 className="font-display text-lg font-bold text-slate-900">Change password</h3>
+              <p className="muted text-sm">Changing your password signs out other devices.</p>
+              <Input name="currentPassword" type="password" label="Current password" isRequired startContent={<FiLock />} />
+              <Input name="newPassword" type="password" label="New password" minLength={8} isRequired startContent={<FiLock />} />
+              <Input name="confirmPassword" type="password" label="Confirm new password" minLength={8} isRequired startContent={<FiLock />} />
               <Button type="submit" color="primary" radius="full" className="mt-2 font-display text-sm font-bold tracking-wide">
-                পাসওয়ার্ড সংরক্ষণ করুন
+                Save password
               </Button>
             </form>
           </section>
@@ -547,7 +546,7 @@ function AccountForm({
             type="button"
             className="account-password-toggle"
             onClick={() => setShowPassword((visible) => !visible)}
-            aria-label={showPassword ? "পাসওয়ার্ড লুকান" : "পাসওয়ার্ড দেখান"}
+            aria-label={showPassword ? "Hide password" : "Show password"}
             aria-pressed={showPassword}
           >
             {showPassword ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}

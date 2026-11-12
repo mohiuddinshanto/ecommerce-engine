@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "../lib/money";
 
 import { Button, Textarea } from "@heroui/react";
 import { ProductImage } from "./product-image";
@@ -219,7 +220,7 @@ export function ProductView({ slug, initialProduct, contactOptions }: { slug: st
   const whatsappNumber = waNumber(contactOptions?.whatsapp ?? "");
   const whatsappMessage = (contactOptions?.template || "Hello, I want to order {product}.")
     .replaceAll("{product}", product.name)
-    .replaceAll("{price}", `৳ ${finalPrice.toLocaleString("en-BD")}`)
+    .replaceAll("{price}", formatMoney(finalPrice))
     .replaceAll("{quantity}", String(qty))
     .replaceAll("{variation}", selectedVariation?.name ?? "");
 
@@ -316,14 +317,14 @@ export function ProductView({ slug, initialProduct, contactOptions }: { slug: st
       });
 
       if (res.status === 401) {
-        toast.error("রিভিউ দিতে প্রথমে আপনার একাউন্টে সাইন ইন করুন");
+        toast.error("Sign in to your account to leave a review.");
         return;
       }
       if (!res.ok) throw new Error("Review submission failed");
-      toast.success("রিভিউটি সফলভাবে জমা হয়েছে! অনুমোদনের পর প্রদর্শিত হবে।");
+      toast.success("Your review was submitted and will appear after approval.");
       setComment("");
 } catch {
-      toast.error("রিভিউ সাবমিট করা যায়নি");
+      toast.error("Could not submit your review.");
     } finally {
       setSubmittingReview(false);
     }
@@ -336,7 +337,7 @@ export function ProductView({ slug, initialProduct, contactOptions }: { slug: st
     if (!res || !res.ok) {
       setWishlisted((prev) => !prev);
       if (res && res.status === 401) {
-        toast("প্রোডাক্টটি উইশলিস্টে রাখতে সাইন ইন করুন");
+      toast("Sign in to save this product to your wishlist.");
         window.location.href = "/account";
       }
     }
@@ -425,8 +426,8 @@ export function ProductView({ slug, initialProduct, contactOptions }: { slug: st
           <h1>{product.name}</h1>
 
           <div className="price-tag">
-            {hasSale && <del>৳ {(isVariable ? Number(selectedVariation?.price ?? product.price) : Number(product.price)).toLocaleString("en-BD")}</del>}
-            <span>৳ {finalPrice.toLocaleString("en-BD")}</span>
+            {hasSale && <del>{formatMoney(isVariable ? Number(selectedVariation?.price ?? product.price) : Number(product.price))}</del>}
+            <span>{formatMoney(finalPrice)}</span>
           </div>
 
           {isVariable ? (
@@ -532,7 +533,7 @@ export function ProductView({ slug, initialProduct, contactOptions }: { slug: st
               isDisabled={isVariable ? !selectedVariation || !variationInStock : product.manageStock && !product.stock}
               onPress={() => addToCart(true)}
             >
-              এখনই কিনুন
+              Buy now
             </Button>
             <Button
               variant="flat"
@@ -541,7 +542,7 @@ export function ProductView({ slug, initialProduct, contactOptions }: { slug: st
               isDisabled={isVariable ? !selectedVariation || !variationInStock : product.manageStock && !product.stock}
               onPress={() => addToCart(false)}
             >
-              <FiShoppingBag /> ব্যাগে রাখুন
+              <FiShoppingBag /> Add to bag
             </Button>
             <Button
               variant="bordered"
@@ -556,8 +557,8 @@ export function ProductView({ slug, initialProduct, contactOptions }: { slug: st
 
           {(contactOptions?.callEnabled && callNumber || contactOptions?.whatsappEnabled && whatsappNumber) && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" style={{ marginTop: "-20px", marginBottom: "36px" }}>
-              {contactOptions?.callEnabled && callNumber && <a href={`tel:${callNumber}`} className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 font-bold text-white hover:bg-emerald-700"><FiPhone /> কল করুন</a>}
-              {contactOptions?.whatsappEnabled && whatsappNumber && <a href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-3 font-bold text-white hover:bg-green-700"><FiMessageCircle /> হোয়াটসঅ্যাপে অর্ডার করুন</a>}
+              {contactOptions?.callEnabled && callNumber && <a href={`tel:${callNumber}`} className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 font-bold text-white hover:bg-emerald-700"><FiPhone /> Call</a>}
+              {contactOptions?.whatsappEnabled && whatsappNumber && <a href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-3 font-bold text-white hover:bg-green-700"><FiMessageCircle /> Order on WhatsApp</a>}
             </div>
           )}
 
@@ -575,15 +576,15 @@ export function ProductView({ slug, initialProduct, contactOptions }: { slug: st
           >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <FiTruck style={{ color: "var(--primary)", fontSize: "1.2rem" }} />
-              <span>সারা বাংলাদেশে দ্রুত ডেলিভারি</span>
+              <span>Fast, reliable delivery</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <FiShield style={{ color: "var(--primary)", fontSize: "1.2rem" }} />
-              <span>১০০% অরিজিনাল পণ্যের নিশ্চয়তা</span>
+              <span>Quality products, guaranteed</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <FiCheckCircle style={{ color: "var(--primary)", fontSize: "1.2rem" }} />
-              <span>ক্যাশ অন ডেলিভারি সুবিধা উপলব্ধ</span>
+              <span>Cash on delivery available</span>
             </div>
           </div>
 
@@ -610,14 +611,14 @@ export function ProductView({ slug, initialProduct, contactOptions }: { slug: st
       {/* Customer Reviews Section */}
       <section className="product-reviews" style={{ marginTop: "22px", paddingTop: "18px", borderTop: "1px solid var(--border)" }}>
         <h2 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "1.8rem", marginBottom: "24px" }}>
-          ক্রেতাদের রিভিউ ({product.reviews?.length ?? 0})
+          Customer reviews ({product.reviews?.length ?? 0})
         </h2>
 
         <div className="reviews-grid">
           {/* Reviews List */}
           <div style={{ display: "grid", gap: "16px" }}>
             {!product.reviews?.length ? (
-              <p style={{ color: "var(--muted)" }}>এখনো কোনো রিভিউ নেই। প্রথম রিভিউ লিখুন!</p>
+              <p style={{ color: "var(--muted)" }}>No reviews yet. Be the first to write one!</p>
             ) : (
               product.reviews.map((rev) => (
                 <div
@@ -656,11 +657,11 @@ export function ProductView({ slug, initialProduct, contactOptions }: { slug: st
               height: "fit-content",
             }}
           >
-            <h3 style={{ margin: 0, fontFamily: "'Outfit', sans-serif" }}>রিভিউ লিখুন</h3>
+            <h3 style={{ margin: 0, fontFamily: "'Outfit', sans-serif" }}>Write a review</h3>
 
             <div>
               <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 700, marginBottom: "8px" }}>
-                রেটিং
+                Rating
               </label>
               <div style={{ display: "flex", gap: "8px" }}>
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -684,15 +685,15 @@ export function ProductView({ slug, initialProduct, contactOptions }: { slug: st
             </div>
 
             <Textarea
-              label="আপনার রিভিউ"
-              placeholder="এই পণ্য সম্পর্কে আপনার মতামত জানান..."
+              label="Your review"
+              placeholder="Share your thoughts about this product..."
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               minRows={3}
             />
 
             <Button type="submit" color="primary" isLoading={submittingReview} className="font-bold shadow-md">
-              রিভিউ জমা দিন
+              Submit review
             </Button>
           </form>
         </div>

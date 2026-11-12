@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { formatMoney } from "../../lib/money.js";
 import { prisma } from "./prisma";
 import { decrypt } from "./crypto";
 
@@ -7,7 +8,7 @@ export type SmtpConfig = { host: string; port: number; user: string; pass: strin
 const escapeHtml = (value: unknown) =>
   String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string);
 
-const money = (value: number | string) => "৳ " + (Number(value) || 0).toLocaleString("en-BD");
+const money = formatMoney;
 
 type Brand = { storeName: string; primary: string; primaryDark: string; primaryLight: string; fromEmail: string };
 

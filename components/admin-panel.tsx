@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "../lib/money";
 
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Select, SelectItem, Switch, Textarea } from "@heroui/react";
 import Link from "next/link";
@@ -257,7 +258,7 @@ type Order = {
   stripeSessionId?: string | null;
   stripePaymentIntentId?: string | null;
   customerId: string | null;
-  shippingDetails: { name?: string; phone?: string; email?: string; address?: string; district?: string; division?: string; shippingOptionName?: string; sfStatus?: string; sfSyncedAt?: string; sfConsignmentId?: string; sfTrackingCode?: string } | null;
+  shippingDetails: { name?: string; phone?: string; email?: string; addressLine1?: string; addressLine2?: string; city?: string; state?: string; postalCode?: string; country?: string; shippingOptionName?: string; sfStatus?: string; sfSyncedAt?: string; sfConsignmentId?: string; sfTrackingCode?: string } | null;
   orderItems?: { name: string; qty: number; price: number; sku?: string }[];
   subtotal?: string;
   shippingCharge?: string;
@@ -273,7 +274,7 @@ type Coupon = { id: string; code: string; type: string; value: string; minSpend?
 type Review = { id: string; rating: number; comment?: string; isApproved: boolean; product: { name: string }; user: { name: string; email: string } };
 type StaffUser = { id: string; name: string; email: string; staffType: string; allowedCategories?: string };
 
-const money = (value: number | string) => "৳ " + Number(value).toLocaleString("en-BD");
+const money = formatMoney;
 
 // The session now travels in an httpOnly cookie. The second argument is kept
 // (and ignored) so the hundreds of existing call sites stay unchanged.
@@ -669,11 +670,11 @@ function AdminOverview({ token, onNavigate }: { token: string; onNavigate: (sect
     try {
       const res = await api(`/api/admin/orders/${id}`, token, { method: "PATCH", body: JSON.stringify({ status, paymentStatus }) });
       if (res.ok) {
-        toast.success("অর্ডার স্ট্যাটাস আপডেট হয়েছে");
+        toast.success("Order status updated.");
         load();
       }
     } catch {
-      toast.error("আপডেট করা যায়নি");
+      toast.error("Could not update the order.");
     }
   }
 
@@ -716,18 +717,18 @@ function AdminOverview({ token, onNavigate }: { token: string; onNavigate: (sect
   const hotProducts = Object.entries(productsSold).sort((a,b) => b[1]-a[1]).slice(0, 5);
   const repeatCustomers = Object.values(customerStats).filter((c) => c.count > 1).sort((a,b) => b.count-a.count).slice(0, 5);
   const kpis = [
-    ["আজকের অর্ডার", `${todayOrders.length}`, `গতকাল ${yesterdayOrders.length}`], ["আজকের সেলস", money(todaySales), `গতকালের তুলনায় ${pctChange(todaySales, yesterdaySales)}`],
-    ["Pending অর্ডার", `${pendingOrders.count}টি`, money(pendingOrders.amount)], ["Avg Order Value", money(data?.averageOrderValue ?? 0), "সব অর্ডার"],
-    ["Paid Revenue", money(paidRevenue), `${range} দিনের মধ্যে`], ["Unpaid Revenue", money(unpaidRevenue), `${range} দিনের মধ্যে`],
+    ["Today's orders", `${todayOrders.length}`, `Yesterday: ${yesterdayOrders.length}`], ["Today's sales", money(todaySales), `Change from yesterday: ${pctChange(todaySales, yesterdaySales)}`],
+    ["Pending orders", `${pendingOrders.count}`, money(pendingOrders.amount)], ["Average order value", money(data?.averageOrderValue ?? 0), "All orders"],
+    ["Paid revenue", money(paidRevenue), `Last ${range} days`], ["Unpaid revenue", money(unpaidRevenue), `Last ${range} days`],
   ];
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="text-xl font-bold text-gray-900 dark:text-white">Store overview</h2><p className="text-xs text-gray-400">Live store performance and action items</p></div><div className="flex gap-2">{[["Add Product","products"],["Create Order","orders"],["Add Coupon","coupons"]].map(([label, target])=><Button key={label} size="sm" variant="flat" onPress={()=>onNavigate(target as Section)}>{label}</Button>)}<Button size="sm" variant="flat" onPress={syncSteadfastFromOverview} isLoading={syncingSteadfast}><FiRefreshCw className={syncingSteadfast ? "animate-spin" : ""} /> Sync Steadfast</Button></div></div>
       <div className="grid grid-cols-2 xl:grid-cols-3 gap-3">{kpis.map(([label,value,sub])=><div key={label} className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-4"><p className="text-xs text-gray-400">{label}</p><p className="mt-1 text-xl font-bold text-gray-900 dark:text-white">{value}</p><p className="mt-1 text-[11px] text-gray-400">{sub}</p></div>)}</div>
-      <div className="grid sm:grid-cols-2 gap-3"><div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-4"><p className="text-xs text-gray-400">Delivered COD outstanding</p><p className="mt-1 text-xl font-bold">{money(data?.codOutstanding.amount ?? 0)}</p><p className="text-[11px] text-gray-400">{data?.codOutstanding.count ?? 0} delivered unpaid orders</p></div><div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-4 flex items-center justify-between"><div><p className="text-xs text-gray-400">Steadfast balance</p><p className="mt-1 text-xl font-bold">{sfBalance === null ? "—" : sfBalanceVisible ? money(sfBalance) : "৳ •••"}</p></div><div className="flex items-center gap-1"><Button size="sm" variant="flat" onPress={loadSfBalance}>Refresh</Button><Button isIconOnly size="sm" variant="light" aria-label={sfBalanceVisible ? "Hide Steadfast balance" : "Show Steadfast balance"} title={sfBalanceVisible ? "Hide balance" : "Show balance"} onPress={()=>setSfBalanceVisible((visible)=>!visible)} className="min-w-9 text-gray-600 dark:text-slate-300"><span className="flex items-center justify-center">{sfBalanceVisible ? <FiEyeOff size={16} strokeWidth={2.5} /> : <FiEye size={16} strokeWidth={2.5} />}</span></Button></div></div></div>
+      <div className="grid sm:grid-cols-2 gap-3"><div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-4"><p className="text-xs text-gray-400">Delivered COD outstanding</p><p className="mt-1 text-xl font-bold">{money(data?.codOutstanding.amount ?? 0)}</p><p className="text-[11px] text-gray-400">{data?.codOutstanding.count ?? 0} delivered unpaid orders</p></div><div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-4 flex items-center justify-between"><div><p className="text-xs text-gray-400">Steadfast balance</p><p className="mt-1 text-xl font-bold">{sfBalance === null ? "—" : sfBalanceVisible ? money(sfBalance) : "••••••"}</p></div><div className="flex items-center gap-1"><Button size="sm" variant="flat" onPress={loadSfBalance}>Refresh</Button><Button isIconOnly size="sm" variant="light" aria-label={sfBalanceVisible ? "Hide Steadfast balance" : "Show Steadfast balance"} title={sfBalanceVisible ? "Hide balance" : "Show balance"} onPress={()=>setSfBalanceVisible((visible)=>!visible)} className="min-w-9 text-gray-600 dark:text-slate-300"><span className="flex items-center justify-center">{sfBalanceVisible ? <FiEyeOff size={16} strokeWidth={2.5} /> : <FiEye size={16} strokeWidth={2.5} />}</span></Button></div></div></div>
       <div className="grid xl:grid-cols-2 gap-4">
-        <div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><div className="flex flex-wrap justify-between items-center gap-2 mb-4"><h3 className="font-bold text-gray-900 dark:text-white">{salesMode === "paid" ? "Paid sales trend" : "All orders (Gross)"}</h3><div className="flex gap-1">{([7,30] as const).map(n=><Button key={n} size="sm" variant={range===n?"solid":"light"} onPress={()=>setRange(n)}>{n} days</Button>)}{(["paid","gross"] as const).map(m=><Button key={m} size="sm" variant={salesMode===m?"flat":"light"} onPress={()=>setSalesMode(m)}>{m === "paid" ? "Paid" : "All orders (Gross)"}</Button>)}</div></div><div className="flex h-36 items-end gap-1">{daily.map((d,i)=><div key={i} title={`${d.label}: ${money(d.value)}`} className={`flex-1 rounded-t ${d.value ? "bg-primary/70 hover:bg-primary" : "bg-gray-200 dark:bg-white/10"}`} style={{height:`${Math.max(3,d.value/maxDaily*100)}%`}} />)}</div><div className="mt-2 flex justify-between text-[10px] text-gray-400"><span>{daily[0]?.label}</span><span>{daily.at(-1)?.label}</span></div>{!daily.some((d)=>d.value>0)&&<p className="text-center text-xs text-gray-400 mt-2">এই সময়ে কোনো {salesMode === "paid" ? "paid sale" : "order"} নেই</p>}</div>
+        <div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><div className="flex flex-wrap justify-between items-center gap-2 mb-4"><h3 className="font-bold text-gray-900 dark:text-white">{salesMode === "paid" ? "Paid sales trend" : "All orders (Gross)"}</h3><div className="flex gap-1">{([7,30] as const).map(n=><Button key={n} size="sm" variant={range===n?"solid":"light"} onPress={()=>setRange(n)}>{n} days</Button>)}{(["paid","gross"] as const).map(m=><Button key={m} size="sm" variant={salesMode===m?"flat":"light"} onPress={()=>setSalesMode(m)}>{m === "paid" ? "Paid" : "All orders (Gross)"}</Button>)}</div></div><div className="flex h-36 items-end gap-1">{daily.map((d,i)=><div key={i} title={`${d.label}: ${money(d.value)}`} className={`flex-1 rounded-t ${d.value ? "bg-primary/70 hover:bg-primary" : "bg-gray-200 dark:bg-white/10"}`} style={{height:`${Math.max(3,d.value/maxDaily*100)}%`}} />)}</div><div className="mt-2 flex justify-between text-[10px] text-gray-400"><span>{daily[0]?.label}</span><span>{daily.at(-1)?.label}</span></div>{!daily.some((d)=>d.value>0)&&<p className="text-center text-xs text-gray-400 mt-2">No {salesMode === "paid" ? "paid sales" : "orders"} in this period.</p>}</div>
         <div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h3 className="font-bold text-gray-900 dark:text-white mb-4">Order status breakdown</h3><div className="space-y-3">{statuses.map(s=>{const n=statusCount(s);return <div key={s}><div className="flex justify-between text-xs mb-1"><span>{STATUS_LABEL[s]??s}</span><span>{n} · {orders.length?Math.round(n/orders.length*100):0}%</span></div><div className="h-2 rounded-full bg-gray-100 dark:bg-white/8"><div className={`h-full rounded-full ${STATUS_COLORS[s]??"bg-primary"}`} style={{width:`${orders.length?n/orders.length*100:0}%`}} /></div></div>})}</div></div>
       </div>
       <div className="grid xl:grid-cols-3 gap-4">
@@ -1067,7 +1068,7 @@ function MenuBuilder({ config, save, saving }: { config: Config; save: (payload:
         <>
           {!hasSavedMenu && (
             <p className="text-xs text-gray-400 dark:text-slate-500">
-              এগুলো বর্তমানে হোম পেজের হেডারে দেখানো হচ্ছে (অটো)। এডিট করে নিচের Save Menu-এ ক্লিক করুন।
+              These links appear in the storefront header automatically. Edit them and select Save Menu.
             </p>
           )}
           <ul className="space-y-1">{items.map((n) => renderItem(n, 0))}</ul>
@@ -1491,7 +1492,7 @@ function AdminProducts({ token }: { token: string }) {
     if (!selectedCategoryIds.length) return toast.error("Select at least one category");
     const rawSlug = String(form.get("slug") || "");
     const slug = slugFromName(rawSlug || name) || `product-${Date.now()}`;
-    const toBdtNumber = (raw: string | null) => {
+    const toPriceNumber = (raw: string | null) => {
       if (!raw) return undefined;
       const cleaned = raw.replace(/[^0-9.]/g, "").replace(/\.(?=.*\.)/g, "");
       return cleaned ? Number(cleaned) : undefined;
@@ -1535,8 +1536,8 @@ function AdminProducts({ token }: { token: string }) {
       }));
     const descriptionText = String(form.get("description") || "").trim();
     const longDescriptionText = form.get("longDescription") ? String(form.get("longDescription")) : undefined;
-    const price = toBdtNumber(String(form.get("price") ?? ""));
-    const salePrice = toBdtNumber(form.get("salePrice") ? String(form.get("salePrice")) : null);
+    const price = toPriceNumber(String(form.get("price") ?? ""));
+    const salePrice = toPriceNumber(form.get("salePrice") ? String(form.get("salePrice")) : null);
     const stock = manageStockQty ? Math.max(0, Math.floor(Number(form.get("stock") || 0))) : manualOutOfStock ? 0 : 1;
     const images = imageDetails.map((i) => i.url);
     const productTypeValue = productType;
@@ -1673,8 +1674,8 @@ function AdminProducts({ token }: { token: string }) {
                   <SelectItem key={category.id}>{category.parentId ? `↳  ${category.name}` : category.name}</SelectItem>
                 ))}
               </Select>
-              <Input label="Regular Price (BDT)" name="price" type="text" inputMode="decimal" isRequired placeholder="1500" value={basePrice} onValueChange={(value) => { setBasePrice(value); if (sameVariationPrice) setVariations((current) => current.map((variation) => ({ ...variation, price: value || "0" }))); }} />
-              <Input label="Sale Price (BDT)" name="salePrice" type="text" inputMode="decimal" placeholder="1200 (Optional)" defaultValue={editingProduct?.salePrice != null ? String(editingProduct.salePrice) : ""} />
+              <Input label="Regular price" name="price" type="text" inputMode="decimal" isRequired placeholder="50.00" value={basePrice} onValueChange={(value) => { setBasePrice(value); if (sameVariationPrice) setVariations((current) => current.map((variation) => ({ ...variation, price: value || "0" }))); }} />
+              <Input label="Sale price" name="salePrice" type="text" inputMode="decimal" placeholder="40.00 (optional)" defaultValue={editingProduct?.salePrice != null ? String(editingProduct.salePrice) : ""} />
               {productType === "SIMPLE" ? <div className="flex flex-col justify-center gap-3">
                 <div className="flex items-center justify-between gap-3">
                   <div>
@@ -1941,7 +1942,7 @@ function AdminProducts({ token }: { token: string }) {
                           <button
                             type="button"
                             onClick={() => {
-                              const price = window.prompt("Set price (BDT) for selected variations");
+                              const price = window.prompt("Set a price for selected variations");
                               if (price !== null) bulkApply("setPrice", Number(price));
                             }}
                             className="text-[11px] px-2.5 h-7 rounded-lg bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-slate-300 font-semibold hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
@@ -1951,7 +1952,7 @@ function AdminProducts({ token }: { token: string }) {
                           <button
                             type="button"
                             onClick={() => {
-                              const sale = window.prompt("Set sale price (BDT) for selected variations (blank to clear)");
+                              const sale = window.prompt("Set a sale price for selected variations (leave blank to clear)");
                               if (sale !== null) bulkApply("setSalePrice", sale ? Number(sale) : undefined);
                             }}
                             className="text-[11px] px-2.5 h-7 rounded-lg bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-slate-300 font-semibold hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
@@ -2028,9 +2029,9 @@ function AdminProducts({ token }: { token: string }) {
                                   </div>
                                   <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                                     <span className="text-[10px] text-gray-400 dark:text-slate-500">{v.sku || "— SKU —"}</span>
-                                    <span className="text-[10px] font-semibold text-gray-600 dark:text-slate-300">৳ {Number(v.price ?? 0).toLocaleString("en-BD")}</span>
+                                    <span className="text-[10px] font-semibold text-gray-600 dark:text-slate-300">{money(v.price ?? 0)}</span>
                                     {v.salePrice ? (
-                                      <span className="text-[10px] text-rose-500 line-through">৳ {Number(v.salePrice).toLocaleString("en-BD")}</span>
+                                      <span className="text-[10px] text-rose-500 line-through">{money(v.salePrice)}</span>
                                     ) : null}
                                     <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-semibold ${Number(v.stock) > 0 ? "bg-emerald-100/70 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" : "bg-rose-100/70 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400"}`}>
                                       {Number(v.stock) > 0 ? v.manageStock ? `${v.stock} in stock` : "Unlimited stock" : "Out of stock"}
@@ -2094,7 +2095,7 @@ function AdminProducts({ token }: { token: string }) {
                                       />
                                     </div>
                                     <div>
-                                      <label className="text-[10px] text-gray-400 dark:text-slate-500 mb-1 block">Price (BDT)</label>
+                                      <label className="text-[10px] text-gray-400 dark:text-slate-500 mb-1 block">Price</label>
                                       <input
                                         value={v.price}
                                         onChange={(e) => updateVariation(v.id, { price: e.target.value })}
@@ -2104,7 +2105,7 @@ function AdminProducts({ token }: { token: string }) {
                                       />
                                     </div>
                                     <div>
-                                      <label className="text-[10px] text-gray-400 dark:text-slate-500 mb-1 block">Sale price (BDT — blank = none)</label>
+                                      <label className="text-[10px] text-gray-400 dark:text-slate-500 mb-1 block">Sale price (blank = none)</label>
                                       <input
                                         value={v.salePrice ?? ""}
                                         onChange={(e) => updateVariation(v.id, { salePrice: e.target.value ? e.target.value : null })}
@@ -2931,9 +2932,9 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
   async function updateStatus(id: string, status: string, paymentStatus: string) {
     const res = await api(`/api/admin/orders/${id}`, token, { method: "PATCH", body: JSON.stringify({ status, paymentStatus }) });
     if (res.ok) {
-      toast.success("অর্ডার স্ট্যাটাস আপডেট হয়েছে");
+      toast.success("Order status updated.");
       load();
-    } else toast.error("আপডেট করা যায়নি");
+    } else toast.error("Could not update the order.");
   }
 
   async function deleteOrders(ids: string[]) {
@@ -2977,7 +2978,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
       if (res.ok) {
         toast.success(`#${o.id.slice(0, 6)} → Steadfast ${data.consignment?.tracking_code ?? ""}`);
         load();
-      } else toast.error(data.error || "Steadfast এ পাঠানো যায়নি");
+      } else toast.error(data.error || "Could not send the order to Steadfast.");
       return;
     }
     const tracking = o.courierTrackingId || `${courierPrefix[c.key] ?? "PC"}-${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
@@ -2985,7 +2986,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
     if (res.ok) {
       toast.success(`#${o.id.slice(0, 6)} → ${c.label}`);
       load();
-    } else toast.error("Sent করা যায়নি");
+    } else toast.error("Could not send the order.");
   }
 
   const columns = ["PENDING", "CONFIRMED", "IN_COURIER", "SHIPPED", "DELIVERED", "CANCELLED"];
@@ -3060,7 +3061,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
       if (res.ok) {
         toast.success(`Status: ${sfStatusLabel[data.delivery_status ?? ""] ?? data.delivery_status}`);
         load();
-      } else toast.error(data.error || "Sync করা যায়নি");
+      } else toast.error(data.error || "Could not sync the order.");
     } finally {
       setSyncing(null);
     }
@@ -3074,7 +3075,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
       if (res.ok) {
         toast.success(`${data.synced ?? 0} parcels synced`);
         load();
-      } else toast.error(data.error || "Sync করা যায়নি");
+      } else toast.error(data.error || "Could not sync orders.");
     } finally {
       setSyncingAll(false);
     }
@@ -3086,7 +3087,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
       const res = await api("/api/admin/steadfast/balance", token);
       const data = (await res.json().catch(() => ({}))) as { error?: string; balance?: number };
       if (res.ok && typeof data.balance === "number") setSfBalance(data.balance);
-      else toast.error(data.error || "Balance load করা যায়নি");
+      else toast.error(data.error || "Could not load the balance.");
     } finally {
       setLoadingBal(false);
     }
@@ -3096,7 +3097,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
     const sd = o.shippingDetails ?? {};
     const items = o.orderItems ?? [];
     const win = window.open("", "_blank", "width=480,height=640");
-    if (!win) return toast.error("Browser popup ব্লক করছে");
+    if (!win) return toast.error("The browser blocked the print window.");
     const row = (l: string, r: string) => `<tr><td style="padding:3px 0;color:#444">${l}</td><td style="padding:3px 0;text-align:right;font-weight:700">${r}</td></tr>`;
     const itemRows = items.map((it) => `<tr><td style="padding:2px 0;font-size:12px">${it.name}</td><td style="padding:2px 0;font-size:12px;text-align:right">${it.qty} x ${money(it.price)}</td></tr>`).join("");
     const isSf = o.courierName?.toLowerCase() === "steadfast";
@@ -3119,10 +3120,10 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
       <div class="dashed"></div>
       <table><tr><td style="padding:3px 0"></td><td style="padding:3px 0"></td></tr>${row("Subtotal", money(o.subtotal ?? o.totalAmount))}${Number(o.shippingCharge) ? row("Shipping", money(o.shippingCharge ?? 0)) : ""}${row("Total", money(o.totalAmount))}</table>
       <div class="dashed"></div>
-      <div style="text-align:center;font-size:11px">Address: ${sd.address ?? ""}, ${sd.district ?? ""}</div>
+      <div style="text-align:center;font-size:11px">Address: ${[sd.addressLine1, sd.addressLine2, sd.city, sd.state, sd.postalCode, sd.country].filter(Boolean).join(", ")}</div>
       ${o.courierName ? `<div class="dashed"></div><div style="text-align:center"><b>${o.courierName}</b></div>${invoiceRef.startsWith("SF-") ? `<div class="c" style="font-size:11px;margin-top:3px">Consignment ID: <span class="big">${sfRef}</span></div>` : ""}<div class="c" style="margin-top:2px"><span style="font-size:11px">Delivery Status: </span> <span class="big">${o.shippingDetails?.sfStatus ? courierStatusForOrder(o) : "—"}</span></div>` : ""}
       <div class="dashed"></div>
-      <div style="text-align:center">ধন্যবাদ!</div>
+      <div style="text-align:center">Thank you!</div>
     </body></html>`);
     win.document.close();
     win.focus();
@@ -3155,12 +3156,12 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
               <div
                 onClick={() => sfBalance === null && !loadingBal && fetchSfBalance()}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white dark:bg-white/4 border border-gray-100 dark:border-white/6 text-gray-600 dark:text-slate-300 cursor-pointer"
-                title="SteadFast একাউন্ট ব্যালেন্স (ক্লিক করে load করুন)"
+                title="Steadfast account balance (select to load)"
               >
                 <FiBox size={12} className="text-primary" />
                 <span>SF Balance</span>
                 <span className="font-mono font-bold text-gray-900 dark:text-white">
-                  {loadingBal ? <FiRefreshCw size={12} className="animate-spin" /> : sfBalance !== null ? (sfBalVisible ? money(sfBalance) : "৳ •••") : "—"}
+                  {loadingBal ? <FiRefreshCw size={12} className="animate-spin" /> : sfBalance !== null ? (sfBalVisible ? money(sfBalance) : "••••") : "—"}
                 </span>
                 <Button
                   isIconOnly
@@ -3567,7 +3568,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
                   <p className="flex items-start gap-2 text-gray-700 dark:text-slate-300">
                     <FiTruck className="text-primary mt-0.5 shrink-0" />
                     <span>
-                      {[detail.shippingDetails?.address, detail.shippingDetails?.district, detail.shippingDetails?.division].filter(Boolean).join(", ") || "—"}
+                      {[detail.shippingDetails?.addressLine1, detail.shippingDetails?.addressLine2, detail.shippingDetails?.city, detail.shippingDetails?.state, detail.shippingDetails?.postalCode, detail.shippingDetails?.country].filter(Boolean).join(", ") || "—"}
                     </span>
                   </p>
                 </div>
@@ -3722,10 +3723,10 @@ function AdminCoupons({ token }: { token: string }) {
           <Input label="Coupon Code" name="code" placeholder="SAVE20" isRequired />
           <Select label="Discount Type" name="type" defaultSelectedKeys={["PERCENTAGE"]}>
             <SelectItem key="PERCENTAGE">Percentage (%)</SelectItem>
-            <SelectItem key="FLAT">Flat Amount (BDT)</SelectItem>
+          <SelectItem key="FLAT">Flat amount</SelectItem>
           </Select>
           <Input label="Discount Value" name="value" type="number" isRequired placeholder="15" />
-          <Input label="Minimum Spend (BDT)" name="minSpend" type="number" placeholder="1000" />
+          <Input label="Minimum spend" name="minSpend" type="number" placeholder="100" />
           <Input label="Usage Limit" name="usageLimit" type="number" placeholder="100" />
           <button type="submit" className="sm:col-span-2 h-10 bg-primary text-white font-display font-bold rounded-xl hover:bg-primary-dark transition-colors">
             Save Coupon
@@ -3740,7 +3741,7 @@ function AdminCoupons({ token }: { token: string }) {
             <div>
               <strong className="font-mono font-bold text-sm text-gray-900 dark:text-white">{c.code}</strong>
               <div className="text-xs text-gray-400 dark:text-slate-500">
-                {c.type === "PERCENTAGE" ? `${c.value}% OFF` : `৳ ${c.value} OFF`} · Used: {c.usedCount} times
+                {c.type === "PERCENTAGE" ? `${c.value}% OFF` : `${money(c.value)} OFF`} · Used: {c.usedCount} times
               </div>
             </div>
             <button
@@ -3957,7 +3958,7 @@ function MarketingChatSettings({ config, save, saving }: { config: Config; save:
             </label>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input label="WhatsApp Number" name="waNumber" defaultValue={chat.whatsapp?.number} placeholder="8801712345678" description="যেকোনো ফরম্যাটে দিন (017..., +880..., 880...) — নিজেই সঠিক হবে" />
+            <Input label="WhatsApp number" name="waNumber" defaultValue={chat.whatsapp?.number} placeholder="+1 555 0100" description="Include your country code. Common international formats are accepted." />
             <Input label="WhatsApp Message Template" name="waTemplate" defaultValue={chat.whatsapp?.template} placeholder="Hello, I want to order..." />
             <Input label="Facebook Messenger Page URL" name="messengerUrl" defaultValue={chat.messenger?.url} placeholder="https://m.me/yourpage" />
             <Input label="Support Phone Number" name="phone" defaultValue={chat.phone} placeholder="01712345678" />
@@ -4553,8 +4554,8 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
           <summary className="cursor-pointer px-5 py-4 text-sm font-semibold text-gray-800 dark:text-slate-200">Popular products section</summary>
           <div className="space-y-4 px-5 pb-5 sm:px-6">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Input label="Eyebrow" placeholder="আমাদের জনপ্রিয় কালেকশন" value={popularProducts.eyebrow ?? ""} onValueChange={(value) => { setPopularProducts((current) => ({ ...current, eyebrow: value })); setPopularProductsDirty(true); }} />
-              <Input label="Heading" placeholder="স্টোরের সেরা পণ্য সমূহ" value={popularProducts.title ?? ""} onValueChange={(value) => { setPopularProducts((current) => ({ ...current, title: value })); setPopularProductsDirty(true); }} />
+              <Input label="Eyebrow" placeholder="Customer favorites" value={popularProducts.eyebrow ?? ""} onValueChange={(value) => { setPopularProducts((current) => ({ ...current, eyebrow: value })); setPopularProductsDirty(true); }} />
+              <Input label="Heading" placeholder="Shop our bestsellers" value={popularProducts.title ?? ""} onValueChange={(value) => { setPopularProducts((current) => ({ ...current, title: value })); setPopularProductsDirty(true); }} />
               <Input type="number" label="Products to show" min={1} max={50} value={String(popularProducts.limit ?? 8)} onValueChange={(value) => { setPopularProducts((current) => ({ ...current, limit: Math.max(1, Math.min(50, Math.floor(Number(value) || 1))) })); setPopularProductsDirty(true); }} />
               <Select label="Display style" selectedKeys={[popularProducts.mode ?? "slider"]} onSelectionChange={(keys) => { const mode = Array.from(keys as Set<string>)[0]; if (mode === "slider" || mode === "grid") { setPopularProducts((current) => ({ ...current, mode })); setPopularProductsDirty(true); } }}>
                 <SelectItem key="slider">Slider</SelectItem><SelectItem key="grid">Grid</SelectItem>
@@ -4762,11 +4763,11 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Input label="Badge" placeholder="বিশেষ কালেকশন" value={p.badge ?? ""} onValueChange={(v) => { setPromos((prev) => prev.map((b, bi) => (bi === i ? { ...b, badge: v } : b))); setPromosDirty(true); }} />
-              <Input label="Accent (highlighted text)" placeholder="ঐতিহ্যের ছোঁয়া" value={p.accent ?? ""} onValueChange={(v) => { setPromos((prev) => prev.map((b, bi) => (bi === i ? { ...b, accent: v } : b))); setPromosDirty(true); }} />
-              <Input label="Title" placeholder="ঈদে পরুন" value={p.title ?? ""} onValueChange={(v) => { setPromos((prev) => prev.map((b, bi) => (bi === i ? { ...b, title: v } : b))); setPromosDirty(true); }} className="sm:col-span-2" />
-              <Input label="Subtitle" placeholder="বিশেষ ডিজাইনের পণ্য এখন আপনার জন্য" value={p.subtitle ?? ""} onValueChange={(v) => { setPromos((prev) => prev.map((b, bi) => (bi === i ? { ...b, subtitle: v } : b))); setPromosDirty(true); }} className="sm:col-span-2" />
-              <Input label="Button label" placeholder="কালেকশন দেখুন →" value={p.buttonLabel ?? ""} onValueChange={(v) => { setPromos((prev) => prev.map((b, bi) => (bi === i ? { ...b, buttonLabel: v } : b))); setPromosDirty(true); }} />
+              <Input label="Badge" placeholder="Featured collection" value={p.badge ?? ""} onValueChange={(v) => { setPromos((prev) => prev.map((b, bi) => (bi === i ? { ...b, badge: v } : b))); setPromosDirty(true); }} />
+              <Input label="Accent (highlighted text)" placeholder="Everyday style" value={p.accent ?? ""} onValueChange={(v) => { setPromos((prev) => prev.map((b, bi) => (bi === i ? { ...b, accent: v } : b))); setPromosDirty(true); }} />
+              <Input label="Title" placeholder="Made for the season" value={p.title ?? ""} onValueChange={(v) => { setPromos((prev) => prev.map((b, bi) => (bi === i ? { ...b, title: v } : b))); setPromosDirty(true); }} className="sm:col-span-2" />
+              <Input label="Subtitle" placeholder="Thoughtful designs selected for you." value={p.subtitle ?? ""} onValueChange={(v) => { setPromos((prev) => prev.map((b, bi) => (bi === i ? { ...b, subtitle: v } : b))); setPromosDirty(true); }} className="sm:col-span-2" />
+              <Input label="Button label" placeholder="Explore collection →" value={p.buttonLabel ?? ""} onValueChange={(v) => { setPromos((prev) => prev.map((b, bi) => (bi === i ? { ...b, buttonLabel: v } : b))); setPromosDirty(true); }} />
               <Input label="Button link" placeholder="#shop" value={p.buttonLink ?? ""} onValueChange={(v) => { setPromos((prev) => prev.map((b, bi) => (bi === i ? { ...b, buttonLink: v } : b))); setPromosDirty(true); }} />
               <Input label="Image URL" placeholder="https://…" value={p.image ?? ""} onValueChange={(v) => { setPromos((prev) => prev.map((b, bi) => (bi === i ? { ...b, image: v } : b))); setPromosDirty(true); }} className="sm:col-span-2" />
               {p.image && (
@@ -4825,8 +4826,8 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
                 <SelectItem key="headset">Headset</SelectItem>
                 <SelectItem key="chat">Chat</SelectItem>
               </Select>
-              <Input label="Title" placeholder="নিরাপদ পেমেন্ট" value={t.title ?? ""} onValueChange={(v) => { setTrust((prev) => prev.map((b, bi) => (bi === i ? { ...b, title: v } : b))); setTrustDirty(true); }} />
-              <Input label="Subtitle" placeholder="ক্যাশ অন ডেলিভারি / বিকাশ / ব্যাংক" value={t.subtitle ?? ""} onValueChange={(v) => { setTrust((prev) => prev.map((b, bi) => (bi === i ? { ...b, subtitle: v } : b))); setTrustDirty(true); }} />
+              <Input label="Title" placeholder="Secure payments" value={t.title ?? ""} onValueChange={(v) => { setTrust((prev) => prev.map((b, bi) => (bi === i ? { ...b, title: v } : b))); setTrustDirty(true); }} />
+              <Input label="Subtitle" placeholder="Cash on delivery or card" value={t.subtitle ?? ""} onValueChange={(v) => { setTrust((prev) => prev.map((b, bi) => (bi === i ? { ...b, subtitle: v } : b))); setTrustDirty(true); }} />
             </div>
           </div>
         ))}
@@ -4925,7 +4926,7 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
               <Input label="Name" placeholder="Tasnim Mahbub" value={item.name ?? ""} onValueChange={(v) => { setTestimonials((t) => ({ ...t, items: (t.items ?? []).map((x, xi) => (xi === i ? { ...x, name: v } : x)) })); setTestimonialsDirty(true); }} />
               <Input label="Initials" placeholder="TM" value={item.init ?? ""} onValueChange={(v) => { setTestimonials((t) => ({ ...t, items: (t.items ?? []).map((x, xi) => (xi === i ? { ...x, init: v } : x)) })); setTestimonialsDirty(true); }} />
-              <Input label="Role" placeholder="Verified Buyer • Dhaka" value={item.role ?? ""} onValueChange={(v) => { setTestimonials((t) => ({ ...t, items: (t.items ?? []).map((x, xi) => (xi === i ? { ...x, role: v } : x)) })); setTestimonialsDirty(true); }} />
+              <Input label="Role" placeholder="Verified customer" value={item.role ?? ""} onValueChange={(v) => { setTestimonials((t) => ({ ...t, items: (t.items ?? []).map((x, xi) => (xi === i ? { ...x, role: v } : x)) })); setTestimonialsDirty(true); }} />
               <div className="min-w-0">
                 <label className="text-xs font-semibold text-gray-500 dark:text-slate-400 block mb-1.5">Rating (1–5)</label>
                 <input
@@ -4985,7 +4986,7 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
           <Input label="Brand name" placeholder={config.storeName} value={footer.brand ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, brand: v })); setFooterDirty(true); }} description="Leave empty to use the store name." />
           <Input label="Logo image URL" placeholder="https://…/logo.png" value={footer.logo ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, logo: v })); setFooterDirty(true); }} description="Leave empty to use the store logo." />
         </div>
-        <Input label="Slogan" placeholder="এখানে আপনার স্লোগান লিখুন — মান, বিশ্বাস আর সেবার প্রতিশ্রুতি।" value={footer.slogan ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, slogan: v })); setFooterDirty(true); }} />
+        <Input label="Slogan" placeholder="Your message about quality, trust, and service." value={footer.slogan ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, slogan: v })); setFooterDirty(true); }} />
 
         {/* Social */}
         <p className="text-xs font-bold uppercase tracking-wide text-gray-400 pt-1">Social links</p>
@@ -5007,12 +5008,12 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
         {footer.showCategories !== false && (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input label="Category heading" placeholder="ক্যাটাগরি" value={footer.categoryTitle ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, categoryTitle: v })); setFooterDirty(true); }} />
+              <Input label="Category heading" placeholder="Categories" value={footer.categoryTitle ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, categoryTitle: v })); setFooterDirty(true); }} />
               <Input type="number" label="Max categories" min={1} max={20} value={String(footer.categoryLimit ?? 6)} onValueChange={(v) => { setFooter((f) => ({ ...f, categoryLimit: Number(v) || 6 })); setFooterDirty(true); }} description="Used when no manual categories are set below (auto from store)." />
             </div>
             {(footer.categories ?? []).map((c, i) => (
               <div key={i} className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3">
-                <Input label="Category label" placeholder="ক্যাটাগরি ১" value={c.label ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, categories: (f.categories ?? []).map((x, xi) => (xi === i ? { ...x, label: v } : x)) })); setFooterDirty(true); }} />
+                <Input label="Category label" placeholder="Category 1" value={c.label ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, categories: (f.categories ?? []).map((x, xi) => (xi === i ? { ...x, label: v } : x)) })); setFooterDirty(true); }} />
                 <Input label="URL" placeholder="/categories/slug" value={c.url ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, categories: (f.categories ?? []).map((x, xi) => (xi === i ? { ...x, url: v } : x)) })); setFooterDirty(true); }} />
                 <div className="flex items-end pb-1">
                   <button type="button" onClick={() => { setFooter((f) => ({ ...f, categories: (f.categories ?? []).filter((_, bi) => bi !== i) })); setFooterDirty(true); }} className="text-xs text-red-500 font-semibold hover:underline">
@@ -5033,9 +5034,9 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
 
         {/* Contact */}
         <p className="text-xs font-bold uppercase tracking-wide text-gray-400 pt-1">Contact</p>
-        <Input label="Contact heading" placeholder="যোগাযোগ" value={footer.contactTitle ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, contactTitle: v })); setFooterDirty(true); }} />
+        <Input label="Contact heading" placeholder="Contact" value={footer.contactTitle ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, contactTitle: v })); setFooterDirty(true); }} />
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Input label="Address" placeholder="ঢাকা, বাংলাদেশ" value={footer.contact?.address ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, contact: { ...(f.contact ?? {}), address: v } })); setFooterDirty(true); }} />
+          <Input label="Address" placeholder="Street, city, country" value={footer.contact?.address ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, contact: { ...(f.contact ?? {}), address: v } })); setFooterDirty(true); }} />
           <Input label="Phone" placeholder="+880 1XXX-XXXXXX" value={footer.contact?.phone ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, contact: { ...(f.contact ?? {}), phone: v } })); setFooterDirty(true); }} />
           <Input label="Email" placeholder="info@example.com" value={footer.contact?.email ?? ""} onValueChange={(v) => { setFooter((f) => ({ ...f, contact: { ...(f.contact ?? {}), email: v } })); setFooterDirty(true); }} />
         </div>
@@ -5402,7 +5403,7 @@ function BannerSettings({ save, saving, config, token }: { save: (payload: objec
           </div>
           <Switch isSelected={enabled} onValueChange={setEnabled} color="primary" />
         </div>
-        <Input label="Top announcement text" placeholder="e.g. ঈদ ও উৎসব কালেকশন…" value={announceText} onValueChange={setAnnounceText} description="The message shown above the header." />
+        <Input label="Top announcement text" placeholder="e.g. Free shipping on orders over $50" value={announceText} onValueChange={setAnnounceText} description="The message shown above the header." />
         {announceText && (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
             <Input label="Badge pill text" placeholder="Festive Drop 2026" value={announceBadge} onValueChange={setAnnounceBadge} />
@@ -5488,7 +5489,7 @@ function BannerSettings({ save, saving, config, token }: { save: (payload: objec
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input label="Badge" placeholder="e.g. নতুন কালেকশন" value={slide.badge} onValueChange={(v) => updateSlide(slide.id, { badge: v })} />
+            <Input label="Badge" placeholder="e.g. New collection" value={slide.badge} onValueChange={(v) => updateSlide(slide.id, { badge: v })} />
             <Input label="Title (first line)" placeholder="Objects for" value={slide.title} onValueChange={(v) => updateSlide(slide.id, { title: v })} />
             <Input className="sm:col-span-2" label="Title (accent line)" placeholder="a softer daily life." value={slide.accent} onValueChange={(v) => updateSlide(slide.id, { accent: v })} />
             <Textarea className="sm:col-span-2" label="Subtitle" minRows={2} placeholder="Thoughtfully curated premium pieces…" value={slide.subtitle} onValueChange={(v) => updateSlide(slide.id, { subtitle: v })} />
@@ -5637,8 +5638,8 @@ function DeliverySettings({ save, saving, config, token }: { save: (payload: obj
         <p className="text-xs text-gray-400 dark:text-slate-500 mb-5">Add named delivery choices and charges for customers to select at checkout.</p>
         <div className="space-y-3 mb-5">
           {shippingOptions.map((option, index) => <div key={option.id} className="grid grid-cols-1 sm:grid-cols-[1fr_160px_auto] gap-3 items-end">
-            <Input label="Option name shown at checkout" placeholder="Inside Dhaka" value={option.name} onValueChange={(name) => setShippingOptions((prev) => prev.map((item, i) => i === index ? { ...item, name } : item))} />
-            <Input type="number" min={0} label="Charge (৳)" value={option.charge} onValueChange={(charge) => setShippingOptions((prev) => prev.map((item, i) => i === index ? { ...item, charge } : item))} />
+            <Input label="Option name shown at checkout" placeholder="Standard delivery" value={option.name} onValueChange={(name) => setShippingOptions((prev) => prev.map((item, i) => i === index ? { ...item, name } : item))} />
+            <Input type="number" min={0} label="Shipping charge" value={option.charge} onValueChange={(charge) => setShippingOptions((prev) => prev.map((item, i) => i === index ? { ...item, charge } : item))} />
             <button type="button" onClick={() => setShippingOptions((prev) => prev.filter((_, i) => i !== index))} className="h-10 px-3 text-sm font-semibold text-danger hover:bg-danger/5 rounded-xl">Remove</button>
           </div>)}
           <button type="button" onClick={() => setShippingOptions((prev) => [...prev, { id: `shipping-${Date.now()}`, name: "", charge: "" }])} className="inline-flex items-center gap-1.5 px-4 h-9 text-sm font-semibold text-primary border border-primary/30 rounded-xl hover:bg-primary/5 transition">+ Add Shipping Option</button>
@@ -5890,13 +5891,16 @@ function StorageSettings({ save, saving, configured, storage }: {
 type CheckoutFieldEditor = { enabled: boolean; required: boolean; label: string; placeholder: string };
 const DEFAULT_CHECKOUT_FORM: Record<string, CheckoutFieldEditor> = {
   name: { enabled: true, required: true, label: "Full name", placeholder: "Rahim Ahmed" },
-  phone: { enabled: true, required: true, label: "Mobile number", placeholder: "01712345678" },
+  phone: { enabled: true, required: true, label: "Phone number", placeholder: "+1 555 0100" },
   email: { enabled: false, required: false, label: "Email address (optional)", placeholder: "you@example.com" },
-  address: { enabled: true, required: true, label: "Delivery address", placeholder: "House 12, Road 5, Block B" },
-  district: { enabled: true, required: true, label: "District", placeholder: "Dhaka" },
-  division: { enabled: true, required: true, label: "Division", placeholder: "Dhaka" },
+  addressLine1: { enabled: true, required: true, label: "Address line 1", placeholder: "Street address" },
+  addressLine2: { enabled: true, required: false, label: "Address line 2", placeholder: "Apartment, suite, unit (optional)" },
+  city: { enabled: true, required: true, label: "City", placeholder: "City" },
+  state: { enabled: true, required: true, label: "State / Region", placeholder: "State or region" },
+  postalCode: { enabled: true, required: true, label: "Postal code", placeholder: "Postal code" },
+  country: { enabled: true, required: true, label: "Country", placeholder: "Country" },
 };
-const CHECKOUT_KEYS = ["name", "phone", "email", "address", "district", "division"];
+const CHECKOUT_KEYS = ["name", "phone", "email", "addressLine1", "addressLine2", "city", "state", "postalCode", "country"];
 const CHECKOUT_HINTS: Record<string, string> = {
   email: "Shown only when enabled. Customers receive an order confirmation email (requires SMTP).",
 };

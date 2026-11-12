@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "../../lib/money";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -18,9 +19,12 @@ type DeliveryDetails = {
   name?: string;
   phone?: string;
   email?: string;
-  address?: string;
-  district?: string;
-  division?: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  country?: string;
 };
 
 type LastOrder = {
@@ -35,7 +39,7 @@ type LastOrder = {
   orderItems?: OrderItem[] | null;
 };
 
-const money = (value?: number) => "৳ " + (Number(value) || 0).toLocaleString("en-BD");
+const money = formatMoney;
 
 export default function OrderSuccessPage() {
   const [order, setOrder] = useState<LastOrder | null>(null);
@@ -86,11 +90,11 @@ export default function OrderSuccessPage() {
             <FiCheckCircle size={38} />
           </div>
           <span className="eyebrow">THANK YOU</span>
-          <h1>ধন্যবাদ, {customerName}!</h1>
+          <h1>Thank you, {customerName}!</h1>
           <p className="order-success-sub">
-            আপনার অর্ডার{' '}
+            Your order{' '}
             <strong className="order-id">#{order?.id?.slice(0, 8).toUpperCase() ?? ""}</strong>{' '}
-            সফলভাবে রিসিভ করা হয়েছে। আমাদের টিম শিগগিরই ডেলিভারির জন্য আপনার সাথে যোগাযোগ করবে।
+            has been received. Our team will contact you soon about delivery.
           </p>
 
           {order && (
@@ -157,13 +161,13 @@ export default function OrderSuccessPage() {
               <span><FiUser /> {customerName}</span>
               <span><FiPhone /> {details.phone ?? "—"}</span>
               {details.email ? <span><FiMail /> {details.email}</span> : null}
-              <span><FiMapPin /> {[details.address, details.district, details.division].filter(Boolean).join(", ") || "—"}</span>
+              <span><FiMapPin /> {[details.addressLine1, details.addressLine2, details.city, details.state, details.postalCode, details.country].filter(Boolean).join(", ") || "—"}</span>
             </div>
           </div>
 
           <div className="order-success-note">
             <FiUser />
-            <span>আপনার অর্ডার যেকোনো সময় প্রোফাইল থেকে ট্র্যাক করতে পারবেন।</span>
+            <span>You can track your order anytime from your account.</span>
           </div>
 
           <div className="order-success-actions">

@@ -1,4 +1,5 @@
 "use client";
+import { formatMoney } from "../lib/money";
 
 import { Button } from "@heroui/react";
 import Image from "next/image";
@@ -235,20 +236,18 @@ type HeroSlide = {
 };
 
 const DEFAULT_HERO: Required<Pick<HeroBannerConfig, "badge" | "title" | "accent" | "subtitle" | "buttonLabel" | "buttonLink" | "secondaryLabel" | "secondaryLink" | "announceText">> = {
-  badge: "ঈদ ও উৎসব কালেকশন ২০২৬",
+  badge: "New season collection",
   title: "Objects for",
   accent: "a softer daily life.",
   subtitle:
-    "Thoughtfully curated premium pieces designed to work beautifully every single day — from Dhaka to Dhaka, delivered everywhere in between.",
+    "Thoughtfully curated pieces designed for everyday life, delivered wherever you are.",
   buttonLabel: "Explore Collection",
   buttonLink: "/shop",
   secondaryLabel: "Shop by Category",
   secondaryLink: "#categories",
-  announceText: "ঈদ ও উৎসব কালেকশন: ৳৩,০০০+ অর্ডারে ঢাকা ও চট্টগ্রামে ফ্রি এক্সপ্রেস ডেলিভারি",
+  announceText: "Free express delivery on orders over $50",
 };
 
-const currency = process.env.NEXT_PUBLIC_CURRENCY || "BDT";
-const money = (v: number | string) => new Intl.NumberFormat(undefined, { style: "currency", currency }).format(Number(v));
 
 const TRUST_ICONS: Record<string, React.ComponentType<{ size?: number }>> = {
   shield: FiShield,
@@ -263,8 +262,8 @@ const TRUST_ICONS: Record<string, React.ComponentType<{ size?: number }>> = {
 
 const DEFAULT_TRUST_BADGES: TrustBadgeConfig[] = [
   { enabled: true, icon: "shield", title: "100% Genuine", subtitle: "Origin-checked quality" },
-  { enabled: true, icon: "truck", title: "Express BD Delivery", subtitle: "All 64 districts in 2–4 days" },
-  { enabled: true, icon: "check", title: "Flexible Payment", subtitle: "COD, bKash, Nagad, Cards" },
+  { enabled: true, icon: "truck", title: "Reliable delivery", subtitle: "Fast, tracked shipping" },
+  { enabled: true, icon: "check", title: "Flexible payment", subtitle: "Cash on delivery and cards" },
   { enabled: true, icon: "refresh", title: "Easy Exchange", subtitle: "7-day hassle-free returns" },
 ];
 
@@ -1478,7 +1477,7 @@ export function MiniProductCard({
         />
         {hasSale && (
           <span className="absolute left-3 top-3 rounded-full border border-rose-500/30 bg-rose-500/90 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-white backdrop-blur-md">
-            {discountPercent}% ছাড়
+            {discountPercent}% off
           </span>
         )}
         <button
