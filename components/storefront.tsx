@@ -412,11 +412,16 @@ export function Storefront({
         if (auth.ok) {
           setAuthenticated(true);
           const local = JSON.parse(localStorage.getItem("epic-cart") ?? "[]") as CartItem[];
+          const failed: CartItem[] = [];
           for (const item of local) {
             const [productId, variationId] = item.id.split("__");
-            if (productId && item.qty > 0) await fetch("/api/cart/items", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ productId, variationId: variationId || undefined, quantity: item.qty }) });
+            if (productId && item.qty > 0) {
+              const merged = await fetch("/api/cart/items", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ productId, variationId: variationId || undefined, quantity: item.qty }) });
+              if (!merged.ok) failed.push(item);
+            }
           }
-          localStorage.removeItem("epic-cart");
+          if (failed.length) localStorage.setItem("epic-cart", JSON.stringify(failed));
+          else localStorage.removeItem("epic-cart");
           const response = await fetch("/api/cart");
           const data = await response.json();
           const remote = (data.items ?? []).map((item: { id: string; productId: string; variationId?: string; name: string; price: number; qty: number; categoryId: string; categoryIds: string[]; images: string[]; sku?: string }) => ({ ...item, id: item.variationId ? `${item.productId}__${item.variationId}` : item.productId }));

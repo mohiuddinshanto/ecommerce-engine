@@ -1242,14 +1242,19 @@ app.patch("/api/admin/orders/:id", requireAuth, requireRole("ADMIN", "STAFF"), r
   if (!prior) return res.status(404).json({ error: "Order not found" });
   if (req.user && !staffCanAccessOrderItems(req.user, prior.orderItems)) return res.status(403).json({ error: "Not authorized for this order" });
   const updated = await prisma.$transaction(async (tx) => {
-    if (data.data.status === "CANCELLED" && prior.status !== "CANCELLED" && prior.stockAdjusted) {
+    if (data.data.status === "CANCELLED") {
+      const claimed = prior.stockAdjusted ? await tx.order.updateMany({ where: { id: String(req.params.id), deletedAt: null, status: { not: "CANCELLED" }, stockAdjusted: true }, data: { ...data.data, stockAdjusted: false } }) : { count: 0 };
+      if (!claimed.count) await tx.order.updateMany({ where: { id: String(req.params.id), deletedAt: null, status: { not: "CANCELLED" }, stockAdjusted: false }, data: { ...data.data, stockAdjusted: false } });
+      if (claimed.count) {
       for (const item of prior.orderItems as Array<{ productId?: string; variationId?: string; qty?: number }>) {
         if (!item.productId || !item.qty) continue;
         if (item.variationId) await tx.productVariation.updateMany({ where: { id: item.variationId, manageStock: true }, data: { stock: { increment: item.qty } } });
         else await tx.product.updateMany({ where: { id: item.productId, manageStock: true }, data: { stock: { increment: item.qty } } });
       }
+      }
+      return tx.order.findUniqueOrThrow({ where: { id: String(req.params.id) } });
     }
-    return tx.order.update({ where: { id: String(req.params.id), deletedAt: null }, data: { ...data.data, ...(data.data.status === "CANCELLED" ? { stockAdjusted: false } : {}) } });
+    return tx.order.update({ where: { id: String(req.params.id), deletedAt: null }, data: data.data });
   });
   if (data.data.status && prior && prior.status !== data.data.status) {
     const details = (prior.shippingDetails as Record<string, unknown>) ?? {};

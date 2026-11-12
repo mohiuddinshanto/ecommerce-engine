@@ -119,11 +119,16 @@ export default function CheckoutPage() {
         if (auth.ok) {
           setAuthenticated(true);
           const local = JSON.parse(localStorage.getItem("epic-cart") ?? "[]") as Array<{ id: string; qty: number }>;
+          const failed: typeof local = [];
           for (const item of local) {
             const [productId, variationId] = item.id.split("__");
-            if (productId && Number.isInteger(item.qty) && item.qty > 0) await fetch("/api/cart/items", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ productId, variationId: variationId || undefined, quantity: item.qty }) });
+            if (productId && Number.isInteger(item.qty) && item.qty > 0) {
+              const merged = await fetch("/api/cart/items", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ productId, variationId: variationId || undefined, quantity: item.qty }) });
+              if (!merged.ok) failed.push(item);
+            }
           }
-          localStorage.removeItem("epic-cart");
+          if (failed.length) localStorage.setItem("epic-cart", JSON.stringify(failed));
+          else localStorage.removeItem("epic-cart");
           const response = await fetch("/api/cart");
           const data = await response.json();
           setCart((data.items ?? []).map((item: CartItem & { productId: string; images?: string[]; categoryIds?: string[] }) => ({ ...item, id: item.variationId ? `${item.productId}__${item.variationId}` : item.productId, images: item.images ?? [] })));
