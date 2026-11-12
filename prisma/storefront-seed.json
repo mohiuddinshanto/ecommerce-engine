@@ -1,0 +1,1981 @@
+{
+  "generatedAt": "2026-10-04T13:57:05.602Z",
+  "categories": [
+    {
+      "name": "ক্লাসিক পাঞ্জাবি",
+      "slug": "classic-panjabi",
+      "image": null,
+      "parentSlug": null,
+      "attributeSchema": null
+    },
+    {
+      "name": "ক্যাজুয়াল পাঞ্জাবি",
+      "slug": "casual-panjabi",
+      "image": null,
+      "parentSlug": null,
+      "attributeSchema": null
+    },
+    {
+      "name": "প্রিমিয়াম এমব্রয়ডারি",
+      "slug": "premium-panjabi",
+      "image": null,
+      "parentSlug": null,
+      "attributeSchema": null
+    },
+    {
+      "name": "ঈদ কালেকশন",
+      "slug": "eid-collection",
+      "image": null,
+      "parentSlug": null,
+      "attributeSchema": null
+    },
+    {
+      "name": "ফতুয়া ও কাবলি",
+      "slug": "fatua-kabuli",
+      "image": null,
+      "parentSlug": null,
+      "attributeSchema": null
+    },
+    {
+      "name": "চায়না স্টিজ",
+      "slug": "china-stich",
+      "image": null,
+      "parentSlug": null,
+      "attributeSchema": null
+    }
+  ],
+  "products": [
+    {
+      "name": "ক্লাসিক সবুজ মসলিন পাঞ্জাবি",
+      "slug": "classic-green-muslin-panjabi",
+      "description": "ঐতিহ্যবাহী সবুজ মসলিন কাপড়ে তৈরি ক্লাসিক পাঞ্জাবি, যা ঈদ ও যেকোনো অনুষ্ঠানে আপনাকে দেবে নিখুঁত সাজ।",
+      "longDescription": "ঐতিহ্যবাহী সবুজ মসলিন কাপড়ে তৈরি ক্লাসিক পাঞ্জাবি, যা ঈদ ও যেকোনো অনুষ্ঠানে আপনাকে দেবে নিখুঁত সাজ। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
+      "categorySlug": "classic-panjabi",
+      "price": "1950",
+      "salePrice": "1650",
+      "stock": 20,
+      "sku": null,
+      "productType": "VARIABLE",
+      "images": [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuChv94gnoDLWMMzvuVEUdXkPZBYfsOn4WGIZW813y2kVQee-iC0XXYg3rXFi3HxVvZ86QCHJ_ZLFQwnV586HgADkV4VIZY0IQ_beno4Ob_GakA6i4wxQGKVFBXBeBcObi4wMin5QgnSr4u12PtiuXCPyNycY-3FrdoaV98xTT_HYBsDlgFK49kBUBE1I3rMzS1C3kHC2B0cW9hVqaAJb8AL_VuCv6MDWEg4Evko1bkbZqhLGgUO9Tou-Q"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": true,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuChv94gnoDLWMMzvuVEUdXkPZBYfsOn4WGIZW813y2kVQee-iC0XXYg3rXFi3HxVvZ86QCHJ_ZLFQwnV586HgADkV4VIZY0IQ_beno4Ob_GakA6i4wxQGKVFBXBeBcObi4wMin5QgnSr",
+          "altText": null,
+          "title": null,
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "value": "L",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "M",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "S",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XXL",
+              "colorSwatch": null,
+              "image": null
+            }
+          ]
+        }
+      ],
+      "variations": [
+        {
+          "name": "CLASSIC_GREEN_MUSLIN_PANJABI — S",
+          "sku": "CLASSIC_GREEN_MUSLIN_PANJABI-S",
+          "price": "1950",
+          "salePrice": "1650",
+          "stock": 20,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "S"
+            }
+          ]
+        },
+        {
+          "name": "CLASSIC_GREEN_MUSLIN_PANJABI — M",
+          "sku": "CLASSIC_GREEN_MUSLIN_PANJABI-M",
+          "price": "2000",
+          "salePrice": "1700",
+          "stock": 22,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "M"
+            }
+          ]
+        },
+        {
+          "name": "CLASSIC_GREEN_MUSLIN_PANJABI — L",
+          "sku": "CLASSIC_GREEN_MUSLIN_PANJABI-L",
+          "price": "2050",
+          "salePrice": "1750",
+          "stock": 24,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "L"
+            }
+          ]
+        },
+        {
+          "name": "CLASSIC_GREEN_MUSLIN_PANJABI — XL",
+          "sku": "CLASSIC_GREEN_MUSLIN_PANJABI-XL",
+          "price": "2100",
+          "salePrice": "1800",
+          "stock": 26,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XL"
+            }
+          ]
+        },
+        {
+          "name": "CLASSIC_GREEN_MUSLIN_PANJABI — XXL",
+          "sku": "CLASSIC_GREEN_MUSLIN_PANJABI-XXL",
+          "price": "2150",
+          "salePrice": "1850",
+          "stock": 28,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XXL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ক্রিম প্রিমিয়াম কটন পাঞ্জাবি",
+      "slug": "cream-premium-cotton-panjabi",
+      "description": "সফট হ্যান্ড ফিল প্রিমিয়াম কটনে বানানো ক্রিম রঙের পাঞ্জাবি, অফিস ও পারিবারিক অনুষ্ঠানের জন্য পারফেক্ট।",
+      "longDescription": "সফট হ্যান্ড ফিল প্রিমিয়াম কটনে বানানো ক্রিম রঙের পাঞ্জাবি, অফিস ও পারিবারিক অনুষ্ঠানের জন্য পারফেক্ট। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
+      "categorySlug": "classic-panjabi",
+      "price": "2200",
+      "salePrice": "1850",
+      "stock": 18,
+      "sku": null,
+      "productType": "VARIABLE",
+      "images": [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuAZQSpJWXqGBzUHGbFAKqfWQu6LE-ZSWv4YrG4YJdMC8yy77gdA9LiiPUlAIuCE2hGaQbPeexJTq_80RAEoXQOwwy4nsWc8uCsbwNEzwuFUEZdltz3QK6gyzYZNRTyFtlvBpZiFX4jI4vmP2mwTs2BpoMNRX5tz35Q9lM0wNzSpTi6jUYgdiQZtTLgmD2JMtD9m1QNFLSQb0CZRP0VyZygD7NPNeqt9oD3p1ab-YIXaDOALPRvuxgtlKA"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": true,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuAZQSpJWXqGBzUHGbFAKqfWQu6LE-ZSWv4YrG4YJdMC8yy77gdA9LiiPUlAIuCE2hGaQbPeexJTq_80RAEoXQOwwy4nsWc8uCsbwNEzwuFUEZdltz3QK6gyzYZNRTyFtlvBpZiFX4jI4",
+          "altText": null,
+          "title": null,
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "value": "S",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XXL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "L",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "M",
+              "colorSwatch": null,
+              "image": null
+            }
+          ]
+        }
+      ],
+      "variations": [
+        {
+          "name": "CREAM_PREMIUM_COTTON_PANJABI — S",
+          "sku": "CREAM_PREMIUM_COTTON_PANJABI-S",
+          "price": "2200",
+          "salePrice": "1850",
+          "stock": 18,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "S"
+            }
+          ]
+        },
+        {
+          "name": "CREAM_PREMIUM_COTTON_PANJABI — M",
+          "sku": "CREAM_PREMIUM_COTTON_PANJABI-M",
+          "price": "2250",
+          "salePrice": "1900",
+          "stock": 20,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "M"
+            }
+          ]
+        },
+        {
+          "name": "CREAM_PREMIUM_COTTON_PANJABI — L",
+          "sku": "CREAM_PREMIUM_COTTON_PANJABI-L",
+          "price": "2300",
+          "salePrice": "1950",
+          "stock": 21,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "L"
+            }
+          ]
+        },
+        {
+          "name": "CREAM_PREMIUM_COTTON_PANJABI — XL",
+          "sku": "CREAM_PREMIUM_COTTON_PANJABI-XL",
+          "price": "2350",
+          "salePrice": "2000",
+          "stock": 24,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XL"
+            }
+          ]
+        },
+        {
+          "name": "CREAM_PREMIUM_COTTON_PANJABI — XXL",
+          "sku": "CREAM_PREMIUM_COTTON_PANJABI-XXL",
+          "price": "2400",
+          "salePrice": "2050",
+          "stock": 26,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XXL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "নেভি ব্লু ক্যাজুয়াল পাঞ্জাবি",
+      "slug": "navy-blue-casual-panjabi",
+      "description": "রেগুলার ফিট নেভি ব্লু পাঞ্জাবি, গরমেও আরামদায়ক — প্রতিদিনের জন্য সর্বোত্তম পছন্দ।",
+      "longDescription": "রেগুলার ফিট নেভি ব্লু পাঞ্জাবি, গরমেও আরামদায়ক — প্রতিদিনের জন্য সর্বোত্তম পছন্দ। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
+      "categorySlug": "casual-panjabi",
+      "price": "1450",
+      "salePrice": "1190",
+      "stock": 30,
+      "sku": null,
+      "productType": "VARIABLE",
+      "images": [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuBk6SJCzG1cQQ2dMdZCQU8aRuI4swWRiq-jKaHuGIeA-4L_Yvu27jephlqcCKhUpvvYFRONCJ9V4KBjCiAXH4bEYb1-2IOSTLsxqy2-zvxhpnWbpI8G0Z8uAsJXH2iRCXHz4dDO7bFfx_94NybVHj5l6FJkIytNqv6B-N59NLnPJkLsAxlDdz1FiUO3xdrY-GMOxYU4EMWeuIHeAEnTDudQtgCtVzpZYt4I97Qtd4oAdLiy2zgO2TVHeA"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": true,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuBk6SJCzG1cQQ2dMdZCQU8aRuI4swWRiq-jKaHuGIeA-4L_Yvu27jephlqcCKhUpvvYFRONCJ9V4KBjCiAXH4bEYb1-2IOSTLsxqy2-zvxhpnWbpI8G0Z8uAsJXH2iRCXHz4dDO7bFfx",
+          "altText": null,
+          "title": null,
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "value": "XL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XXL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "M",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "L",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "S",
+              "colorSwatch": null,
+              "image": null
+            }
+          ]
+        }
+      ],
+      "variations": [
+        {
+          "name": "NAVY_BLUE_CASUAL_PANJABI — S",
+          "sku": "NAVY_BLUE_CASUAL_PANJABI-S",
+          "price": "1450",
+          "salePrice": "1190",
+          "stock": 29,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "S"
+            }
+          ]
+        },
+        {
+          "name": "NAVY_BLUE_CASUAL_PANJABI — M",
+          "sku": "NAVY_BLUE_CASUAL_PANJABI-M",
+          "price": "1500",
+          "salePrice": "1240",
+          "stock": 32,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "M"
+            }
+          ]
+        },
+        {
+          "name": "NAVY_BLUE_CASUAL_PANJABI — L",
+          "sku": "NAVY_BLUE_CASUAL_PANJABI-L",
+          "price": "1550",
+          "salePrice": "1290",
+          "stock": 34,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "L"
+            }
+          ]
+        },
+        {
+          "name": "NAVY_BLUE_CASUAL_PANJABI — XL",
+          "sku": "NAVY_BLUE_CASUAL_PANJABI-XL",
+          "price": "1600",
+          "salePrice": "1340",
+          "stock": 36,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XL"
+            }
+          ]
+        },
+        {
+          "name": "NAVY_BLUE_CASUAL_PANJABI — XXL",
+          "sku": "NAVY_BLUE_CASUAL_PANJABI-XXL",
+          "price": "1650",
+          "salePrice": "1390",
+          "stock": 38,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XXL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "সাদা ইভরি ক্যাজুয়াল পাঞ্জাবি",
+      "slug": "ivory-white-casual-panjabi",
+      "description": "শুভ্র ইভরি সাদা কটন পাঞ্জাবি, হালকা ও দুর্দান্ত ফিনিশিং — জুম্মার নামাজ থেকে বন্ধুর আড্ডা সবখানে মানানসই।",
+      "longDescription": "শুভ্র ইভরি সাদা কটন পাঞ্জাবি, হালকা ও দুর্দান্ত ফিনিশিং — জুম্মার নামাজ থেকে বন্ধুর আড্ডা সবখানে মানানসই। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
+      "categorySlug": "casual-panjabi",
+      "price": "1500",
+      "salePrice": "1250",
+      "stock": 25,
+      "sku": null,
+      "productType": "VARIABLE",
+      "images": [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuDi0odunAZbIkun7zwpCV9bioBWsgfNSMSlLSiLvCzb98W4v9ZlvpgzuF_MZu14AIA1ndYTozgGd2Ek9tx5R7K3KJGt9DGJvr0Sz5Hm9IKx2wDso_dxtnatDo73NsBvBH5hvq8OI2IS8Ox5WC0vsdbrO4nQFUs2cAfh9jFJmD6OUN897AGh7OB5yuESQDiMQAw0fM8eTkQa2LKVdq24xesQbZ4tDalJs2ejTYs5lVCZrNUPyDgyfH-FYQ"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuDi0odunAZbIkun7zwpCV9bioBWsgfNSMSlLSiLvCzb98W4v9ZlvpgzuF_MZu14AIA1ndYTozgGd2Ek9tx5R7K3KJGt9DGJvr0Sz5Hm9IKx2wDso_dxtnatDo73NsBvBH5hvq8OI2IS8",
+          "altText": null,
+          "title": null,
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "value": "S",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XXL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "L",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "M",
+              "colorSwatch": null,
+              "image": null
+            }
+          ]
+        }
+      ],
+      "variations": [
+        {
+          "name": "IVORY_WHITE_CASUAL_PANJABI — S",
+          "sku": "IVORY_WHITE_CASUAL_PANJABI-S",
+          "price": "1500",
+          "salePrice": "1250",
+          "stock": 25,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "S"
+            }
+          ]
+        },
+        {
+          "name": "IVORY_WHITE_CASUAL_PANJABI — M",
+          "sku": "IVORY_WHITE_CASUAL_PANJABI-M",
+          "price": "1550",
+          "salePrice": "1300",
+          "stock": 27,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "M"
+            }
+          ]
+        },
+        {
+          "name": "IVORY_WHITE_CASUAL_PANJABI — L",
+          "sku": "IVORY_WHITE_CASUAL_PANJABI-L",
+          "price": "1600",
+          "salePrice": "1350",
+          "stock": 29,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "L"
+            }
+          ]
+        },
+        {
+          "name": "IVORY_WHITE_CASUAL_PANJABI — XL",
+          "sku": "IVORY_WHITE_CASUAL_PANJABI-XL",
+          "price": "1650",
+          "salePrice": "1400",
+          "stock": 31,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XL"
+            }
+          ]
+        },
+        {
+          "name": "IVORY_WHITE_CASUAL_PANJABI — XXL",
+          "sku": "IVORY_WHITE_CASUAL_PANJABI-XXL",
+          "price": "1700",
+          "salePrice": "1450",
+          "stock": 33,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XXL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "মেরুন রয়্যাল পাঞ্জাবি",
+      "slug": "maroon-royal-panjabi",
+      "description": "গাঢ় মেরুন রঙে প্রিমিয়াম ফেব্রিক ও সূক্ষ্ম ডিজাইনের রয়্যাল পাঞ্জাবি, বর ও কনের জমকালো অনুষ্ঠানের জন্য।",
+      "longDescription": "গাঢ় মেরুন রঙে প্রিমিয়াম ফেব্রিক ও সূক্ষ্ম ডিজাইনের রয়্যাল পাঞ্জাবি, বর ও কনের জমকালো অনুষ্ঠানের জন্য। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
+      "categorySlug": "premium-panjabi",
+      "price": "3200",
+      "salePrice": "2790",
+      "stock": 12,
+      "sku": null,
+      "productType": "VARIABLE",
+      "images": [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuDVkB19q4X9VGVsGZofkSwSYBH8lsngexL_vaym9V8RIa7Xl8JIWkmBk7qhejCCmmTvKds2rdBoC3IxRtIJsGHwuQaelDkabQeZ4Ju-Bz2Nx6OQJS4zEWIL5WZVjTWw1Lvze9KbNS9Ti6fsHkPj_-aI8LX0wUiZo50Km91X9tkLXiI23qMhCGkzPp7TvIJK2Gv4a4Ocs8Z-0Zy2JRhnN_z4aThtYda0FHBemFF5qVgZi2raYYdBKMNmJg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": true,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuDVkB19q4X9VGVsGZofkSwSYBH8lsngexL_vaym9V8RIa7Xl8JIWkmBk7qhejCCmmTvKds2rdBoC3IxRtIJsGHwuQaelDkabQeZ4Ju-Bz2Nx6OQJS4zEWIL5WZVjTWw1Lvze9KbNS9Ti",
+          "altText": null,
+          "title": null,
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "value": "XL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "S",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XXL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "L",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "M",
+              "colorSwatch": null,
+              "image": null
+            }
+          ]
+        }
+      ],
+      "variations": [
+        {
+          "name": "MAROON_ROYAL_PANJABI — S",
+          "sku": "MAROON_ROYAL_PANJABI-S",
+          "price": "3200",
+          "salePrice": "2790",
+          "stock": 12,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "S"
+            }
+          ]
+        },
+        {
+          "name": "MAROON_ROYAL_PANJABI — M",
+          "sku": "MAROON_ROYAL_PANJABI-M",
+          "price": "3250",
+          "salePrice": "2840",
+          "stock": 14,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "M"
+            }
+          ]
+        },
+        {
+          "name": "MAROON_ROYAL_PANJABI — L",
+          "sku": "MAROON_ROYAL_PANJABI-L",
+          "price": "3300",
+          "salePrice": "2890",
+          "stock": 16,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "L"
+            }
+          ]
+        },
+        {
+          "name": "MAROON_ROYAL_PANJABI — XL",
+          "sku": "MAROON_ROYAL_PANJABI-XL",
+          "price": "3350",
+          "salePrice": "2940",
+          "stock": 18,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XL"
+            }
+          ]
+        },
+        {
+          "name": "MAROON_ROYAL_PANJABI — XXL",
+          "sku": "MAROON_ROYAL_PANJABI-XXL",
+          "price": "3400",
+          "salePrice": "2990",
+          "stock": 20,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XXL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ব্ল্যাক এমব্রয়ডারি প্রিমিয়াম পাঞ্জাবি",
+      "slug": "black-embroidered-premium-panjabi",
+      "description": "রেশমি ব্ল্যাক পাঞ্জাবি মসৃণ এমব্রয়ডারি ও কাফ লিংকসহ, খাস রুচির অধিকারীদের জন্য।",
+      "longDescription": "রেশমি ব্ল্যাক পাঞ্জাবি মসৃণ এমব্রয়ডারি ও কাফ লিংকসহ, খাস রুচির অধিকারীদের জন্য। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
+      "categorySlug": "premium-panjabi",
+      "price": "3800",
+      "salePrice": "3100",
+      "stock": 10,
+      "sku": null,
+      "productType": "VARIABLE",
+      "images": [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuBxMnzTWbFwhpm49fZRysM0BcpzY9SY186hfTY2z5FdYEz0sUYVW5quw2Yk1KW_5iyBklYOLV_eg46_u2i7gDmjL-p5mzh9QOzb-oWJERz8LHDfg1lEcTo5iyiH1u8oUk4E2EZXZuTH90OGX2Yt4UFa7HWKXN9cyHBsGnVpVB8mOWsdbI0xOB5spuVn4D-mQDnoIouItp67zEovfQGkaZJXOdprUr0NQVRtUzl9XJPwy_C6ZGAFD9_zxA"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": true,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuBxMnzTWbFwhpm49fZRysM0BcpzY9SY186hfTY2z5FdYEz0sUYVW5quw2Yk1KW_5iyBklYOLV_eg46_u2i7gDmjL-p5mzh9QOzb-oWJERz8LHDfg1lEcTo5iyiH1u8oUk4E2EZXZuTH9",
+          "altText": null,
+          "title": null,
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "value": "S",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XXL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "M",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "L",
+              "colorSwatch": null,
+              "image": null
+            }
+          ]
+        }
+      ],
+      "variations": [
+        {
+          "name": "BLACK_EMBROIDERED_PREMIUM_PANJABI — S",
+          "sku": "BLACK_EMBROIDERED_PREMIUM_PANJABI-S",
+          "price": "3800",
+          "salePrice": "3100",
+          "stock": 10,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "S"
+            }
+          ]
+        },
+        {
+          "name": "BLACK_EMBROIDERED_PREMIUM_PANJABI — M",
+          "sku": "BLACK_EMBROIDERED_PREMIUM_PANJABI-M",
+          "price": "3850",
+          "salePrice": "3150",
+          "stock": 12,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "M"
+            }
+          ]
+        },
+        {
+          "name": "BLACK_EMBROIDERED_PREMIUM_PANJABI — L",
+          "sku": "BLACK_EMBROIDERED_PREMIUM_PANJABI-L",
+          "price": "3900",
+          "salePrice": "3200",
+          "stock": 14,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "L"
+            }
+          ]
+        },
+        {
+          "name": "BLACK_EMBROIDERED_PREMIUM_PANJABI — XL",
+          "sku": "BLACK_EMBROIDERED_PREMIUM_PANJABI-XL",
+          "price": "3950",
+          "salePrice": "3250",
+          "stock": 16,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XL"
+            }
+          ]
+        },
+        {
+          "name": "BLACK_EMBROIDERED_PREMIUM_PANJABI — XXL",
+          "sku": "BLACK_EMBROIDERED_PREMIUM_PANJABI-XXL",
+          "price": "4000",
+          "salePrice": "3300",
+          "stock": 18,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XXL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "অলিভ গ্রিন এমব্রয়ডারি পাঞ্জাবি",
+      "slug": "olive-green-embroidered-panjabi",
+      "description": "আধুনিক অলিভ শেডে হাতে করা এমব্রয়ডারি প্রিমিয়াম পাঞ্জাবি, যা পরিচ্ছন্ন ও ভদ্র ইমেজ তৈরি করে।",
+      "longDescription": "আধুনিক অলিভ শেডে হাতে করা এমব্রয়ডারি প্রিমিয়াম পাঞ্জাবি, যা পরিচ্ছন্ন ও ভদ্র ইমেজ তৈরি করে। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
+      "categorySlug": "premium-panjabi",
+      "price": "3400",
+      "salePrice": "2850",
+      "stock": 14,
+      "sku": null,
+      "productType": "VARIABLE",
+      "images": [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuC9UhiX9mdKbZ9hZxxrDgCTg6YRPWTQJUHUut4LYh-Oy_b9mGJ6us_djviehTQemqANmHAh_xBhPLrCiGQmeAqxhj_jy5RkBxV5HyjyJkC3lTI-6JiMckrJbzgYGy9mgR01EYO1GEvFBhC2bjKhq8_s3fiSMj0R-sT75lfXnjABKk1v_AVpo08A-48vrfz3yiBXlA26wTv2iH46Tl-UhIDyhxZvRPY6mVJvwK_WOapFqwGYHNv4DOnf9g"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuC9UhiX9mdKbZ9hZxxrDgCTg6YRPWTQJUHUut4LYh-Oy_b9mGJ6us_djviehTQemqANmHAh_xBhPLrCiGQmeAqxhj_jy5RkBxV5HyjyJkC3lTI-6JiMckrJbzgYGy9mgR01EYO1GEvFB",
+          "altText": null,
+          "title": null,
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "value": "M",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XXL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "S",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "L",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XL",
+              "colorSwatch": null,
+              "image": null
+            }
+          ]
+        }
+      ],
+      "variations": [
+        {
+          "name": "OLIVE_GREEN_EMBROIDERED_PANJABI — S",
+          "sku": "OLIVE_GREEN_EMBROIDERED_PANJABI-S",
+          "price": "3400",
+          "salePrice": "2850",
+          "stock": 14,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "S"
+            }
+          ]
+        },
+        {
+          "name": "OLIVE_GREEN_EMBROIDERED_PANJABI — M",
+          "sku": "OLIVE_GREEN_EMBROIDERED_PANJABI-M",
+          "price": "3450",
+          "salePrice": "2900",
+          "stock": 16,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "M"
+            }
+          ]
+        },
+        {
+          "name": "OLIVE_GREEN_EMBROIDERED_PANJABI — L",
+          "sku": "OLIVE_GREEN_EMBROIDERED_PANJABI-L",
+          "price": "3500",
+          "salePrice": "2950",
+          "stock": 18,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "L"
+            }
+          ]
+        },
+        {
+          "name": "OLIVE_GREEN_EMBROIDERED_PANJABI — XL",
+          "sku": "OLIVE_GREEN_EMBROIDERED_PANJABI-XL",
+          "price": "3550",
+          "salePrice": "3000",
+          "stock": 19,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XL"
+            }
+          ]
+        },
+        {
+          "name": "OLIVE_GREEN_EMBROIDERED_PANJABI — XXL",
+          "sku": "OLIVE_GREEN_EMBROIDERED_PANJABI-XXL",
+          "price": "3600",
+          "salePrice": "3050",
+          "stock": 22,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XXL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ঈদ কালেকশন পাঞ্জাবি ও পায়জামা সেট",
+      "slug": "eid-panjabi-pajama-set",
+      "description": "ঈদের বিশেষ কালেকশন — গাঢ় অলিভ পাঞ্জাবির সাথে ম্যাচিং পায়জামা। সম্পূর্ণ পরিবারের জন্য সাইজ পাওয়া যায়।",
+      "longDescription": "ঈদের বিশেষ কালেকশন — গাঢ় অলিভ পাঞ্জাবির সাথে ম্যাচিং পায়জামা। সম্পূর্ণ পরিবারের জন্য সাইজ পাওয়া যায়। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
+      "categorySlug": "eid-collection",
+      "price": "2850",
+      "salePrice": "2490",
+      "stock": 22,
+      "sku": null,
+      "productType": "VARIABLE",
+      "images": [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuCKntylRj4Cq41oDUg1VIDBkGDdjXw55io5Zf4k2FGgmW9cf6SvizZXeuzyz0Eww_uyU-krHTGrKE081h3EI_GJPoWkf-XEdRNxsIWyOvsejvlT19iZzxKzai1raRlKO9_0S2d2gdR6KNY8V2kxNaEbcQV4y7A3shQSLrFKRnKALYPX0lF5pLG3zsbpACT3ZkWgH3r8hPlQNwvxuO0Vc7EatnUMpimRjT8dgyLkuXgUsAZcSLLw7mLBVw"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": true,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuCKntylRj4Cq41oDUg1VIDBkGDdjXw55io5Zf4k2FGgmW9cf6SvizZXeuzyz0Eww_uyU-krHTGrKE081h3EI_GJPoWkf-XEdRNxsIWyOvsejvlT19iZzxKzai1raRlKO9_0S2d2gdR6K",
+          "altText": null,
+          "title": null,
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "value": "XXL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "M",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "S",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "L",
+              "colorSwatch": null,
+              "image": null
+            }
+          ]
+        }
+      ],
+      "variations": [
+        {
+          "name": "EID_PANJABI_PAJAMA_SET — S",
+          "sku": "EID_PANJABI_PAJAMA_SET-S",
+          "price": "2850",
+          "salePrice": "2490",
+          "stock": 22,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "S"
+            }
+          ]
+        },
+        {
+          "name": "EID_PANJABI_PAJAMA_SET — M",
+          "sku": "EID_PANJABI_PAJAMA_SET-M",
+          "price": "2900",
+          "salePrice": "2540",
+          "stock": 24,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "M"
+            }
+          ]
+        },
+        {
+          "name": "EID_PANJABI_PAJAMA_SET — L",
+          "sku": "EID_PANJABI_PAJAMA_SET-L",
+          "price": "2950",
+          "salePrice": "2590",
+          "stock": 26,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "L"
+            }
+          ]
+        },
+        {
+          "name": "EID_PANJABI_PAJAMA_SET — XL",
+          "sku": "EID_PANJABI_PAJAMA_SET-XL",
+          "price": "3000",
+          "salePrice": "2640",
+          "stock": 28,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XL"
+            }
+          ]
+        },
+        {
+          "name": "EID_PANJABI_PAJAMA_SET — XXL",
+          "sku": "EID_PANJABI_PAJAMA_SET-XXL",
+          "price": "3050",
+          "salePrice": "2690",
+          "stock": 30,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XXL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "বেইজ গোল্ড ঈদ স্পেশাল পাঞ্জাবি",
+      "slug": "beige-gold-eid-panjabi",
+      "description": "সোনালি লাইনের সূচিকর্মে সাজানো বেইজ ঈদ স্পেশাল পাঞ্জাবি, ঈদের দিন আপনার লুক সম্পূর্ণ করতে।",
+      "longDescription": "সোনালি লাইনের সূচিকর্মে সাজানো বেইজ ঈদ স্পেশাল পাঞ্জাবি, ঈদের দিন আপনার লুক সম্পূর্ণ করতে। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
+      "categorySlug": "eid-collection",
+      "price": "2600",
+      "salePrice": "2190",
+      "stock": 20,
+      "sku": null,
+      "productType": "VARIABLE",
+      "images": [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuCCA-fd7Nve3-4zM66x3B9AMMc5YhNU2ZxrT9jfhd0dp976J81VRYNXj34fFgVJVb3lg7C8rXZoxByTeGBjGttm_urOxBrMcqfZAoyxJbSGmeotac4Vd7KHUxd-jQWIGs-L4AajOXPMV6rSDhQtBTNWbENweOxCCJS9A-Ln6Q75sKRQHerZNBJb_QGfInHW1_XL7vJgAamF1wPnmaakMv6laKTfzIp_Q2RPTu9WotA_H7hdB5_EQq8OnA"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": true,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuCCA-fd7Nve3-4zM66x3B9AMMc5YhNU2ZxrT9jfhd0dp976J81VRYNXj34fFgVJVb3lg7C8rXZoxByTeGBjGttm_urOxBrMcqfZAoyxJbSGmeotac4Vd7KHUxd-jQWIGs-L4AajOXPMV",
+          "altText": null,
+          "title": null,
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "value": "XXL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "M",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "S",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "L",
+              "colorSwatch": null,
+              "image": null
+            }
+          ]
+        }
+      ],
+      "variations": [
+        {
+          "name": "BEIGE_GOLD_EID_PANJABI — S",
+          "sku": "BEIGE_GOLD_EID_PANJABI-S",
+          "price": "2600",
+          "salePrice": "2190",
+          "stock": 20,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "S"
+            }
+          ]
+        },
+        {
+          "name": "BEIGE_GOLD_EID_PANJABI — M",
+          "sku": "BEIGE_GOLD_EID_PANJABI-M",
+          "price": "2650",
+          "salePrice": "2240",
+          "stock": 22,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "M"
+            }
+          ]
+        },
+        {
+          "name": "BEIGE_GOLD_EID_PANJABI — L",
+          "sku": "BEIGE_GOLD_EID_PANJABI-L",
+          "price": "2700",
+          "salePrice": "2290",
+          "stock": 23,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "L"
+            }
+          ]
+        },
+        {
+          "name": "BEIGE_GOLD_EID_PANJABI — XL",
+          "sku": "BEIGE_GOLD_EID_PANJABI-XL",
+          "price": "2750",
+          "salePrice": "2340",
+          "stock": 25,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XL"
+            }
+          ]
+        },
+        {
+          "name": "BEIGE_GOLD_EID_PANJABI — XXL",
+          "sku": "BEIGE_GOLD_EID_PANJABI-XXL",
+          "price": "2800",
+          "salePrice": "2390",
+          "stock": 28,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XXL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ইমারেল্ড ঈদ কালেকশন পাঞ্জাবি",
+      "slug": "emerald-eid-collection-panjabi",
+      "description": "জমকালো ইমারেল্ড গ্রিন পাঞ্জাবি, মোচা কিংবা গুব্বেত বোতাম ডিজাইনে — ঈদের সবচেয়ে চাওয়া আইটেম।",
+      "longDescription": "জমকালো ইমারেল্ড গ্রিন পাঞ্জাবি, মোচা কিংবা গুব্বেত বোতাম ডিজাইনে — ঈদের সবচেয়ে চাওয়া আইটেম। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
+      "categorySlug": "eid-collection",
+      "price": "2400",
+      "salePrice": "1990",
+      "stock": 24,
+      "sku": null,
+      "productType": "VARIABLE",
+      "images": [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuC9YEe7BzS2MH0RSw6Ifvz0BsujOeXXwehTmalsa0DhOtTNOaisiQql8Wy1zEG3kLEVi1PmPQgTD0tpgGZz1bmgfv6uPwATDGGrRAynTs1fykkNW4k3-hDgBPrb1vl698h9mGBk3bVtGUnqPLB-DEj9LbqgEZIKPjoVVpSl1DgeFPJIYcmWWAkhKtnOzrVI91ei06c9EGQjtn8WUfbM5O92IGCdQtJ7vZPS8lpw7UEF259a9HYZg2ysug"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuC9YEe7BzS2MH0RSw6Ifvz0BsujOeXXwehTmalsa0DhOtTNOaisiQql8Wy1zEG3kLEVi1PmPQgTD0tpgGZz1bmgfv6uPwATDGGrRAynTs1fykkNW4k3-hDgBPrb1vl698h9mGBk3bVtG",
+          "altText": null,
+          "title": null,
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "value": "S",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XXL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "M",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "L",
+              "colorSwatch": null,
+              "image": null
+            }
+          ]
+        }
+      ],
+      "variations": [
+        {
+          "name": "EMERALD_EID_COLLECTION_PANJABI — S",
+          "sku": "EMERALD_EID_COLLECTION_PANJABI-S",
+          "price": "2400",
+          "salePrice": "1990",
+          "stock": 24,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "S"
+            }
+          ]
+        },
+        {
+          "name": "EMERALD_EID_COLLECTION_PANJABI — M",
+          "sku": "EMERALD_EID_COLLECTION_PANJABI-M",
+          "price": "2450",
+          "salePrice": "2040",
+          "stock": 26,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "M"
+            }
+          ]
+        },
+        {
+          "name": "EMERALD_EID_COLLECTION_PANJABI — L",
+          "sku": "EMERALD_EID_COLLECTION_PANJABI-L",
+          "price": "2500",
+          "salePrice": "2090",
+          "stock": 28,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "L"
+            }
+          ]
+        },
+        {
+          "name": "EMERALD_EID_COLLECTION_PANJABI — XL",
+          "sku": "EMERALD_EID_COLLECTION_PANJABI-XL",
+          "price": "2550",
+          "salePrice": "2140",
+          "stock": 30,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XL"
+            }
+          ]
+        },
+        {
+          "name": "EMERALD_EID_COLLECTION_PANJABI — XXL",
+          "sku": "EMERALD_EID_COLLECTION_PANJABI-XXL",
+          "price": "2600",
+          "salePrice": "2190",
+          "stock": 32,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XXL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ব্লু ক্যাজুয়াল ডেনিম পাঞ্জাবি",
+      "slug": "blue-casual-denim-panjabi",
+      "description": "ডেনিম টাচের ব্লু পাঞ্জাবি/কাবলি, আপনারগুলো ম্যাচ ও জিনসের মতোই স্টাইলিশ লুক দেয়।",
+      "longDescription": "ডেনিম টাচের ব্লু পাঞ্জাবি/কাবলি, আপনারগুলো ম্যাচ ও জিনসের মতোই স্টাইলিশ লুক দেয়। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
+      "categorySlug": "fatua-kabuli",
+      "price": "1350",
+      "salePrice": "1090",
+      "stock": 28,
+      "sku": null,
+      "productType": "VARIABLE",
+      "images": [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuDQLPchc2pwWZtu0KAewZ2IMEu4EOgnwf6ZkUs81k0Qwpvv7Ppl9gJkuPKiQxUFZV0Zd_iXbMieS4WC9-MfspIegH-u2NOG8T2N4g21hZyNJU_ODp_sUutla7Y3LOFrItun-evTXg0V1GL7pne1X0ogmrNWRrBJGJnZpYZFtoYmVkVzSAIlJV0LFX7DS4iOcFdiepSif7ya95mLvx72KRdWvPZio4xc5hJgfeZdamniRxo3yb6Pz04LhA"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuDQLPchc2pwWZtu0KAewZ2IMEu4EOgnwf6ZkUs81k0Qwpvv7Ppl9gJkuPKiQxUFZV0Zd_iXbMieS4WC9-MfspIegH-u2NOG8T2N4g21hZyNJU_ODp_sUutla7Y3LOFrItun-evTXg0V1",
+          "altText": null,
+          "title": null,
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "value": "XXL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "M",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "S",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "L",
+              "colorSwatch": null,
+              "image": null
+            }
+          ]
+        }
+      ],
+      "variations": [
+        {
+          "name": "BLUE_CASUAL_DENIM_PANJABI — S",
+          "sku": "BLUE_CASUAL_DENIM_PANJABI-S",
+          "price": "1350",
+          "salePrice": "1090",
+          "stock": 28,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "S"
+            }
+          ]
+        },
+        {
+          "name": "BLUE_CASUAL_DENIM_PANJABI — M",
+          "sku": "BLUE_CASUAL_DENIM_PANJABI-M",
+          "price": "1400",
+          "salePrice": "1140",
+          "stock": 29,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "M"
+            }
+          ]
+        },
+        {
+          "name": "BLUE_CASUAL_DENIM_PANJABI — L",
+          "sku": "BLUE_CASUAL_DENIM_PANJABI-L",
+          "price": "1450",
+          "salePrice": "1190",
+          "stock": 32,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "L"
+            }
+          ]
+        },
+        {
+          "name": "BLUE_CASUAL_DENIM_PANJABI — XL",
+          "sku": "BLUE_CASUAL_DENIM_PANJABI-XL",
+          "price": "1500",
+          "salePrice": "1240",
+          "stock": 34,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XL"
+            }
+          ]
+        },
+        {
+          "name": "BLUE_CASUAL_DENIM_PANJABI — XXL",
+          "sku": "BLUE_CASUAL_DENIM_PANJABI-XXL",
+          "price": "1550",
+          "salePrice": "1290",
+          "stock": 36,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XXL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "বেইজ কাবলি ফতুয়া",
+      "slug": "beige-kabuli-fatua",
+      "description": "হালকা বেইজ কাবলি/ফতুয়া, দোতলা ঢাকাই কাপড়ের স্মার্ট কাট — শান্ত ও স্টাইলিশ লুকের জন্য।",
+      "longDescription": "হালকা বেইজ কাবলি/ফতুয়া, দোতলা ঢাকাই কাপড়ের স্মার্ট কাট — শান্ত ও স্টাইলিশ লুকের জন্য। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
+      "categorySlug": "fatua-kabuli",
+      "price": "1150",
+      "salePrice": "950",
+      "stock": 32,
+      "sku": null,
+      "productType": "VARIABLE",
+      "images": [
+        "https://lh3.googleusercontent.com/aida-public/AB6AXuATnmjWCOj7f1qRBPfAGoGo0cNsQ9MXnBtHqphIGgm2tz2xzhqo8QRHYpc7HL47OrXuMLmiVcK_yMSx6TnMoRWM_r6jhvqtZk__K6GXUcyGbUj2PFM0u20aXRsEc-grqLdqT6vnxjKXs8fgv_DJSSFZY0IxKm-tnOUdbq4kUmV1m46EpabeXlyEpmlb79t8ImzgsNKbyMMRMeXcnrtcROnxJ2CUve3cZd4rtnJKMsc_1GwZ-FkPWaFZ5A"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuATnmjWCOj7f1qRBPfAGoGo0cNsQ9MXnBtHqphIGgm2tz2xzhqo8QRHYpc7HL47OrXuMLmiVcK_yMSx6TnMoRWM_r6jhvqtZk__K6GXUcyGbUj2PFM0u20aXRsEc-grqLdqT6vnxjKXs",
+          "altText": null,
+          "title": null,
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "value": "S",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XXL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "L",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "XL",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "M",
+              "colorSwatch": null,
+              "image": null
+            }
+          ]
+        }
+      ],
+      "variations": [
+        {
+          "name": "BEIGE_KABULI_FATUA — S",
+          "sku": "BEIGE_KABULI_FATUA-S",
+          "price": "1150",
+          "salePrice": "950",
+          "stock": 32,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "S"
+            }
+          ]
+        },
+        {
+          "name": "BEIGE_KABULI_FATUA — M",
+          "sku": "BEIGE_KABULI_FATUA-M",
+          "price": "1200",
+          "salePrice": "1000",
+          "stock": 32,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "M"
+            }
+          ]
+        },
+        {
+          "name": "BEIGE_KABULI_FATUA — L",
+          "sku": "BEIGE_KABULI_FATUA-L",
+          "price": "1250",
+          "salePrice": "1050",
+          "stock": 36,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "L"
+            }
+          ]
+        },
+        {
+          "name": "BEIGE_KABULI_FATUA — XL",
+          "sku": "BEIGE_KABULI_FATUA-XL",
+          "price": "1300",
+          "salePrice": "1100",
+          "stock": 36,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XL"
+            }
+          ]
+        },
+        {
+          "name": "BEIGE_KABULI_FATUA — XXL",
+          "sku": "BEIGE_KABULI_FATUA-XXL",
+          "price": "1350",
+          "salePrice": "1150",
+          "stock": 39,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": null,
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "XXL"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
