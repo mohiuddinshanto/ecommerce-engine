@@ -23,6 +23,7 @@
     "migrate:deploy": "node scripts/migrate-deploy.mjs",
     "db:backup": "node scripts/backup-db.mjs",
     "smoke": "node scripts/smoke.mjs",
+    "smoke:checkout": "tsx scripts/smoke-checkout.ts",
     "prisma:studio": "prisma studio",
     "optimize:images": "tsx scripts/optimize-existing-images.ts",
     "postinstall": "prisma generate"

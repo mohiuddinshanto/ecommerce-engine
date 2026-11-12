@@ -273,6 +273,10 @@ Copy the `whsec_...` value printed by `stripe listen` into `STRIPE_WEBHOOK_SECRE
 - Place a COD order and confirm stock decreases and the cart clears.
 - Cancel a stocked order from the admin panel and confirm stock is restored once.
 
+### Automated local smoke check
+
+With `.env` pointing to a disposable MySQL database on `localhost`, run `npm run smoke:checkout`. The script refuses non-local `DATABASE_URL` hosts, creates and cleans up temporary records, and signs a mock Stripe webhook locally with `stripe.webhooks.generateTestHeaderString`; it makes no Stripe network requests.
+
 ### API endpoints
 
 | Method and path | Purpose |
