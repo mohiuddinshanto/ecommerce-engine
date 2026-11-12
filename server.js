@@ -88,6 +88,13 @@ async function main() {
   const api = loadApiApp();
 
   app.use(api);
+  // The API Express app uses Helmet's default CSP. Its middleware also runs
+  // for requests that fall through to Next, where that policy blocks the
+  // inline scripts Next uses to reveal streamed React content.
+  app.use((req, res, next) => {
+    res.removeHeader("Content-Security-Policy");
+    next();
+  });
   app.use((req, res) => handle(req, res));
 
   await nextApp.prepare();
