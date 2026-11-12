@@ -176,12 +176,6 @@ const paymentSettingsSchema = z.object({
 });
 type PaymentSettings = z.infer<typeof paymentSettingsSchema>;
 
-// Gateways that have a real payment flow (init + callback + verification)
-// implemented. Anything not listed here is hidden from checkout even if it is
-// enabled in the admin payment settings, so customers can never pick a method
-// that would silently leave the order unpaid.
-const ACTIVE_PAYMENT_GATEWAYS = new Set<string>([]);
-
 const DEFAULT_SHIPPING_CENTS = Math.round(Number(process.env.DEFAULT_SHIPPING_CHARGE ?? 80) * 100);
 
 export type ShippingZone = { name?: string; charge?: number; districts?: string[] };
@@ -281,17 +275,13 @@ app.get("/api/store/checkout-options", async (_req, res) => {
   const payload = await cached("store:checkout-options", 60_000, async () => {
     const config = await prisma.storeConfig.findUnique({
       where: { id: "store-config-singleton" },
-      select: { featureFlags: true, paymentConfig: true, checkoutForm: true, shippingConfig: true },
+      select: { featureFlags: true, checkoutForm: true, shippingConfig: true },
     });
     const flags = { ...defaultFeatureFlags, ...((config?.featureFlags as Record<string, boolean> | null) ?? {}) };
-    const encrypted = config?.paymentConfig as { encrypted?: string } | null;
-    const payments = encrypted?.encrypted ? (decrypt<PaymentSettings>(encrypted.encrypted) ?? {}) : {};
+    const stripeConfigured = Boolean(process.env.STRIPE_SECRET_KEY && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
     const methods = [
-      ...(flags.cod ? [{ id: "COD", label: "Cash on delivery" }] : []),
-      ...(process.env.STRIPE_SECRET_KEY ? [{ id: "STRIPE", label: "Pay with Card (Stripe)" }] : []),
-      ...(payments.bkash?.enabled && ACTIVE_PAYMENT_GATEWAYS.has("bKash") ? [{ id: "bKash", label: "bKash" }] : []),
-      ...(payments.nagad?.enabled && ACTIVE_PAYMENT_GATEWAYS.has("Nagad") ? [{ id: "Nagad", label: "Nagad" }] : []),
-      ...(payments.sslcommerz?.enabled && ACTIVE_PAYMENT_GATEWAYS.has("SSLCommerz") ? [{ id: "SSLCommerz", label: "Card / Mobile Banking" }] : []),
+      { id: "COD", label: "Cash on Delivery", enabled: flags.cod },
+      { id: "STRIPE", label: "Pay with Card (Stripe)", enabled: stripeConfigured, note: stripeConfigured ? undefined : "Stripe test keys not configured" },
     ];
     const saved = (config?.checkoutForm as Record<string, Record<string, unknown>> | null) ?? {};
     const form = Object.fromEntries(
@@ -299,7 +289,7 @@ app.get("/api/store/checkout-options", async (_req, res) => {
     );
     const emailEnabled = Boolean((form as Record<string, { enabled?: boolean }>).email?.enabled);
     const shippingConfig = (config?.shippingConfig ?? null) as ShippingConfig | null;
-    return { methods, codEnabled: flags.cod, requiresEmail: flags.checkoutEmail === true || emailEnabled, form, shippingConfig };
+    return { methods, codEnabled: flags.cod, stripeConfigured, requiresEmail: flags.checkoutEmail === true || emailEnabled, form, shippingConfig };
   });
   applyPublicCache(res);
   res.json(payload);
@@ -747,6 +737,7 @@ app.post("/api/checkout/abandoned", rateLimit({ windowMs: 10 * 60_000, max: 60 }
 });
 
 app.post("/api/checkout/stripe", requireAuth, rateLimit({ windowMs: 10 * 60_000, max: 20 }), async (req, res) => {
+  if (!process.env.STRIPE_SECRET_KEY || !process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) return res.status(503).json({ error: "Stripe test keys not configured" });
   const parsed = z.object({ shippingDetails: z.record(z.string(), z.unknown()), couponId: z.string().optional() }).safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid checkout details" });
   const cart = await prisma.cart.findUnique({ where: { userId: req.user!.id }, include: { items: { include: { product: { include: { categoryLinks: true } }, variation: true } } } });
@@ -2443,6 +2434,8 @@ app.get("/api/admin/config", requireAuth, requireRole("ADMIN"), async (_req, res
     courierConfigured: Boolean(config.courierConfig),
     storageConfigured: Boolean(config.storageConfig),
     aiConfigured: Boolean(config.aiConfig),
+    stripeConfigured: Boolean(process.env.STRIPE_SECRET_KEY && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY),
+    stripeTestMode: Boolean(process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_")),
   });
 });
 

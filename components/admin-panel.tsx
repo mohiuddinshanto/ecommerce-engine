@@ -112,6 +112,8 @@ type Config = {
   emailConfigured: boolean;
   courierConfigured: boolean;
   storageConfigured: boolean;
+  stripeConfigured: boolean;
+  stripeTestMode: boolean;
   storageConfig?: {
     provider: "local" | "hostinger-object-storage";
     folderPath?: string;
@@ -251,6 +253,9 @@ type Order = {
   totalAmount: string;
   createdAt: string;
   paymentStatus: string;
+  paymentMethod: string;
+  stripeSessionId?: string | null;
+  stripePaymentIntentId?: string | null;
   customerId: string | null;
   shippingDetails: { name?: string; phone?: string; email?: string; address?: string; district?: string; division?: string; shippingOptionName?: string; sfStatus?: string; sfSyncedAt?: string; sfConsignmentId?: string; sfTrackingCode?: string } | null;
   orderItems?: { name: string; qty: number; price: number; sku?: string }[];
@@ -3424,7 +3429,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
               <thead className="bg-gray-50 dark:bg-white/3 border-b border-gray-100 dark:border-white/8">
                 <tr>
                   {isAdmin && <th className="px-3"><input aria-label="Select all visible orders" type="checkbox" checked={orders.length > 0 && selectedOrderIds.length === orders.length} onChange={(e)=>setSelectedOrderIds(e.target.checked?orders.map(o=>o.id):[])} /></th>}
-                  {["Order ID", "Customer", "Date", "Total", "Payment", "Status", "Courier", ""].map((h) => (
+                  {["Order ID", "Customer", "Date", "Total", "Payment method / status", "Status", "Courier", ""].map((h) => (
                     <th key={h} className="py-3 px-4 text-left text-xs font-semibold text-gray-400 dark:text-slate-500 uppercase tracking-wider whitespace-nowrap">
                       {h}
                     </th>
@@ -3447,9 +3452,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
                     <td className="py-3 px-4 text-gray-400 dark:text-slate-500 text-xs whitespace-nowrap">{new Date(o.createdAt).toLocaleDateString()}</td>
                     <td className="py-3 px-4 font-bold text-xs text-gray-800 dark:text-slate-200">{money(o.totalAmount)}</td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${o.paymentStatus === "PAID" ? "bg-emerald/10 text-emerald" : "bg-amber/10 text-amber"}`}>
-                        {o.paymentStatus}
-                      </span>
+                      <div className="flex flex-col items-start gap-1"><span className="text-xs text-gray-600 dark:text-slate-300">{o.paymentMethod}</span><span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${o.paymentStatus === "PAID" ? "bg-emerald/10 text-emerald" : o.paymentStatus === "FAILED" ? "bg-rose-100 text-rose-600" : "bg-amber/10 text-amber"}`}>{o.paymentStatus}</span></div>
                     </td>
                     <td className="py-3 px-4">
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${statusPill(o.status)}`}>{STATUS_LABEL[o.status] ?? o.status}</span>
@@ -3546,6 +3549,13 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
                     {detail.courierName}{detail.courierTrackingId ? ` · ${detail.courierTrackingId}` : ""}
                   </span>
                 )}
+              </div>
+
+              <div className="rounded-xl border border-gray-100 dark:border-white/6 p-4 space-y-2 text-xs">
+                <p><span className="text-gray-400">Payment method:</span> {detail.paymentMethod}</p>
+                <p><span className="text-gray-400">Payment status:</span> {detail.paymentStatus}</p>
+                {detail.stripeSessionId && <p className="break-all"><span className="text-gray-400">Stripe session:</span> {detail.stripeSessionId}</p>}
+                {detail.stripePaymentIntentId && <p className="break-all"><span className="text-gray-400">Stripe payment intent:</span> {detail.stripePaymentIntentId}</p>}
               </div>
 
               <div className="rounded-xl border border-gray-100 dark:border-white/6 p-4">
@@ -5171,76 +5181,35 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
 
 /* ==================== PAYMENTS ==================== */
 function PaymentSettings({ save, saving, config }: { save: (payload: object) => Promise<void>; saving: boolean; config: Config }) {
-  const [bkash, setBkash] = useState(Boolean(config.paymentConfig?.bkash?.enabled));
-  const [nagad, setNagad] = useState(Boolean(config.paymentConfig?.nagad?.enabled));
-  const [ssl, setSsl] = useState(Boolean(config.paymentConfig?.sslcommerz?.enabled));
+  const [codEnabled, setCodEnabled] = useState(config.featureFlags.cod);
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const f = new FormData(event.currentTarget);
-    save({
-      paymentConfig: {
-        bkash: { enabled: bkash, mode: f.get("bkashMode") || "sandbox", callbackUrl: f.get("bkashCallback") || undefined, appKey: f.get("bkashKey") || undefined, appSecret: f.get("bkashSecret") || undefined, username: f.get("bkashUser") || undefined, password: f.get("bkashPassword") || undefined },
-        nagad: { enabled: nagad, mode: f.get("nagadMode") || "sandbox", callbackUrl: f.get("nagadCallback") || undefined, merchantId: f.get("nagadMerchant") || undefined, merchantNumber: f.get("nagadNumber") || undefined, privateKey: f.get("nagadKey") || undefined },
-        sslcommerz: { enabled: ssl, mode: f.get("sslMode") || "sandbox", callbackUrl: f.get("sslCallback") || undefined, sandbox: (f.get("sslMode") || "sandbox") === "sandbox", storeId: f.get("sslStore") || undefined, storePassword: f.get("sslPassword") || undefined },
-      },
-    });
-  }
-
-  function GatewayCard({ title, desc, enabled, setEnabled, children }: { title: string; desc: string; enabled: boolean; setEnabled: (v: boolean) => void; children?: React.ReactNode }) {
-    return (
-      <div className="bg-white dark:bg-white/4 rounded-2xl border border-gray-100 dark:border-white/6 p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <p className="text-sm font-medium text-gray-800 dark:text-slate-200">{title}</p>
-            <p className="text-xs text-gray-400 dark:text-slate-500">{desc}</p>
-          </div>
-          <Switch isSelected={enabled} onValueChange={setEnabled} color="primary" />
-        </div>
-        {enabled && children}
-      </div>
-    );
+    save({ featureFlags: { ...config.featureFlags, cod: codEnabled } });
   }
 
   return (
     <form onSubmit={submit} className="space-y-6 max-w-3xl">
-      <GatewayCard title="bKash Merchant Payment" desc="Accept direct bKash digital payment." enabled={bkash} setEnabled={setBkash}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Select label="Mode" name="bkashMode" defaultSelectedKeys={[config.paymentConfig?.bkash?.mode === "live" ? "live" : "sandbox"]}>
-            <SelectItem key="sandbox">Sandbox (Test)</SelectItem>
-            <SelectItem key="live">Live (Production)</SelectItem>
-          </Select>
-          <Input className="sm:col-span-2" name="bkashCallback" label="Callback URL" placeholder="https://store.com/api/payment/bkash/callback" defaultValue={config.paymentConfig?.bkash?.callbackUrl ?? ""} />
-          <Input name="bkashKey" label="App Key" defaultValue={config.paymentConfig?.bkash?.appKey ?? ""} />
-          <Input name="bkashSecret" label="App Secret" type="password" defaultValue={config.paymentConfig?.bkash?.appSecret ?? ""} />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="bg-white dark:bg-white/4 rounded-2xl border border-gray-100 dark:border-white/6 p-6">
+          <div className="flex items-center justify-between gap-4">
+            <div><p className="text-sm font-medium text-gray-800 dark:text-slate-200">Cash on Delivery</p><p className="text-xs text-gray-400 dark:text-slate-500">Allow customers to pay on delivery.</p></div>
+            <Switch aria-label="Enable Cash on Delivery" isSelected={codEnabled} onValueChange={setCodEnabled} color="primary" />
+          </div>
+          <p className="mt-4 text-xs text-gray-500">{codEnabled ? "Enabled" : "Disabled"}</p>
         </div>
-      </GatewayCard>
-
-      <GatewayCard title="Nagad Merchant Payment" desc="Accept Nagad mobile banking payments." enabled={nagad} setEnabled={setNagad}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Select label="Mode" name="nagadMode" defaultSelectedKeys={[config.paymentConfig?.nagad?.mode === "live" ? "live" : "sandbox"]}>
-            <SelectItem key="sandbox">Sandbox (Test)</SelectItem>
-            <SelectItem key="live">Live (Production)</SelectItem>
-          </Select>
-          <Input className="sm:col-span-2" name="nagadCallback" label="Callback URL" defaultValue={config.paymentConfig?.nagad?.callbackUrl ?? ""} />
-          <Input name="nagadMerchant" label="Merchant ID" defaultValue={config.paymentConfig?.nagad?.merchantId ?? ""} />
-          <Input name="nagadNumber" label="Merchant Number" defaultValue={config.paymentConfig?.nagad?.merchantNumber ?? ""} />
+        <div className="bg-white dark:bg-white/4 rounded-2xl border border-gray-100 dark:border-white/6 p-6">
+          <p className="text-sm font-medium text-gray-800 dark:text-slate-200">Stripe</p>
+          <dl className="mt-4 space-y-2 text-xs text-gray-500">
+            <div className="flex justify-between gap-4"><dt>Configured</dt><dd>{config.stripeConfigured ? "Yes" : "No"}</dd></div>
+            <div className="flex justify-between gap-4"><dt>Test mode</dt><dd>{config.stripeTestMode ? "Yes" : "No"}</dd></div>
+            <div className="flex justify-between gap-4"><dt>Webhook URL</dt><dd>/api/webhooks/stripe</dd></div>
+          </dl>
+          {!config.stripeConfigured && <p className="mt-3 text-xs text-amber-600">Configure Stripe test keys in the server environment.</p>}
         </div>
-      </GatewayCard>
-
-      <GatewayCard title="SSLCommerz Gateway" desc="Accept Visa/Mastercard, Amex, and internet banking." enabled={ssl} setEnabled={setSsl}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Select label="Mode" name="sslMode" defaultSelectedKeys={[config.paymentConfig?.sslcommerz?.mode === "live" ? "live" : "sandbox"]}>
-            <SelectItem key="sandbox">Sandbox (Test)</SelectItem>
-            <SelectItem key="live">Live (Production)</SelectItem>
-          </Select>
-          <Input name="sslStore" label="Store ID" defaultValue={config.paymentConfig?.sslcommerz?.storeId ?? ""} />
-          <Input name="sslPassword" type="password" label="Store Password" defaultValue={config.paymentConfig?.sslcommerz?.storePassword ?? ""} />
-        </div>
-      </GatewayCard>
-
-      <button type="submit" className="px-5 h-10 bg-primary text-white text-sm font-bold font-display rounded-xl hover:bg-primary-dark transition-colors">
-        {saving ? "Saving…" : "Save Payment Settings"}
+      </div>
+      <button type="submit" disabled={saving} className="px-5 h-10 bg-primary text-white text-sm font-bold font-display rounded-xl hover:bg-primary-dark transition-colors disabled:opacity-60">
+        {saving ? "Saving?" : "Save Payment Settings"}
       </button>
     </form>
   );

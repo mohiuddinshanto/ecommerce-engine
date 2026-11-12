@@ -32,7 +32,7 @@ type CartItem = {
   sku?: string;
 };
 
-type Method = { id: string; label: string };
+type Method = { id: "COD" | "STRIPE"; label: string; enabled: boolean; note?: string };
 
 type CheckoutField = { enabled: boolean; required: boolean; label: string; placeholder: string };
 type CheckoutForm = Record<string, CheckoutField>;
@@ -145,7 +145,7 @@ export default function CheckoutPage() {
         const fetchedMethods = data.methods ?? [];
         if (fetchedMethods.length) {
           setMethods(fetchedMethods);
-          setSelectedMethod(fetchedMethods[0].id);
+          setSelectedMethod(fetchedMethods.find((method: Method) => method.enabled)?.id ?? "");
         } else {
           setMethods([]);
           setSelectedMethod("");
@@ -345,11 +345,12 @@ export default function CheckoutPage() {
                 {methods.map((method) => (
                   <div
                     key={method.id}
-                    className={`payment-card ${selectedMethod === method.id ? "selected" : ""}`}
-                    onClick={() => setSelectedMethod(method.id)}
+                    className={`payment-card ${selectedMethod === method.id ? "selected" : ""} ${method.enabled ? "" : "opacity-60 cursor-not-allowed"}`}
+                    onClick={() => method.enabled && setSelectedMethod(method.id)}
+                    aria-disabled={!method.enabled}
                   >
                     <FiCreditCard />
-                    <span>{method.label}</span>
+                    <span>{method.label}{method.note && <small className="block text-xs text-gray-500">{method.note}</small>}</span>
                   </div>
                 ))}
               </div>
