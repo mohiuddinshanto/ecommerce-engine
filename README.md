@@ -245,7 +245,11 @@ the root of `server.js`, the path is already the public path — the browser cal
    npm run dev
    ```
 
-   Browse to http://localhost:3000. Complete `/onboarding` to create the store admin. For a disposable test admin only, `npm run test:admin` prints the temporary credentials; remove it afterward with `npm run test:admin -- --delete`.
+   Browse to http://localhost:3000. `npm run seed` only seeds demo products and categories; it does not create an admin account.
+
+### Create the first admin
+
+After migrations are applied and `npm run dev` is running, open <http://localhost:3000/onboarding>. Enter the store name, admin name, admin email, a unique password (at least eight characters), and the required theme colors/font, then submit the form. This creates the first `ADMIN` user and completes store onboarding. Sign in at `/account`, then use `/admin` to manage the store. There is no seeded default admin login. Keep the onboarding details private and use only local database credentials during local setup.
 
 ### Stripe sandbox
 
