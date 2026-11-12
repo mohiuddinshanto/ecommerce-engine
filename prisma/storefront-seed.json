@@ -1,1526 +1,77 @@
 {
-  "generatedAt": "2026-10-04T13:57:05.602Z",
   "categories": [
     {
-      "name": "ক্লাসিক পাঞ্জাবি",
-      "slug": "classic-panjabi",
-      "image": null,
+      "name": "Apparel",
+      "slug": "apparel",
+      "image": "/product-placeholder.svg",
       "parentSlug": null,
       "attributeSchema": null
     },
     {
-      "name": "ক্যাজুয়াল পাঞ্জাবি",
-      "slug": "casual-panjabi",
-      "image": null,
+      "name": "Accessories",
+      "slug": "accessories",
+      "image": "/product-placeholder.svg",
       "parentSlug": null,
       "attributeSchema": null
     },
     {
-      "name": "প্রিমিয়াম এমব্রয়ডারি",
-      "slug": "premium-panjabi",
-      "image": null,
+      "name": "Footwear",
+      "slug": "footwear",
+      "image": "/product-placeholder.svg",
       "parentSlug": null,
       "attributeSchema": null
     },
     {
-      "name": "ঈদ কালেকশন",
-      "slug": "eid-collection",
-      "image": null,
+      "name": "Home & Living",
+      "slug": "home-living",
+      "image": "/product-placeholder.svg",
       "parentSlug": null,
       "attributeSchema": null
     },
     {
-      "name": "ফতুয়া ও কাবলি",
-      "slug": "fatua-kabuli",
-      "image": null,
+      "name": "Beauty & Care",
+      "slug": "beauty-care",
+      "image": "/product-placeholder.svg",
       "parentSlug": null,
       "attributeSchema": null
     },
     {
-      "name": "চায়না স্টিজ",
-      "slug": "china-stich",
-      "image": null,
+      "name": "Tech & Everyday",
+      "slug": "tech-everyday",
+      "image": "/product-placeholder.svg",
       "parentSlug": null,
       "attributeSchema": null
     }
   ],
   "products": [
     {
-      "name": "ক্লাসিক সবুজ মসলিন পাঞ্জাবি",
-      "slug": "classic-green-muslin-panjabi",
-      "description": "ঐতিহ্যবাহী সবুজ মসলিন কাপড়ে তৈরি ক্লাসিক পাঞ্জাবি, যা ঈদ ও যেকোনো অনুষ্ঠানে আপনাকে দেবে নিখুঁত সাজ।",
-      "longDescription": "ঐতিহ্যবাহী সবুজ মসলিন কাপড়ে তৈরি ক্লাসিক পাঞ্জাবি, যা ঈদ ও যেকোনো অনুষ্ঠানে আপনাকে দেবে নিখুঁত সাজ। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
-      "categorySlug": "classic-panjabi",
-      "price": "1950",
-      "salePrice": "1650",
-      "stock": 20,
-      "sku": null,
-      "productType": "VARIABLE",
-      "images": [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuChv94gnoDLWMMzvuVEUdXkPZBYfsOn4WGIZW813y2kVQee-iC0XXYg3rXFi3HxVvZ86QCHJ_ZLFQwnV586HgADkV4VIZY0IQ_beno4Ob_GakA6i4wxQGKVFBXBeBcObi4wMin5QgnSr4u12PtiuXCPyNycY-3FrdoaV98xTT_HYBsDlgFK49kBUBE1I3rMzS1C3kHC2B0cW9hVqaAJb8AL_VuCv6MDWEg4Evko1bkbZqhLGgUO9Tou-Q"
-      ],
-      "productAttributes": null,
-      "variants": null,
-      "variationImages": null,
-      "isPerishable": false,
-      "isActive": true,
-      "showOnHome": true,
-      "seoTitle": null,
-      "seoDescription": null,
-      "imagesDetails": [
-        {
-          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuChv94gnoDLWMMzvuVEUdXkPZBYfsOn4WGIZW813y2kVQee-iC0XXYg3rXFi3HxVvZ86QCHJ_ZLFQwnV586HgADkV4VIZY0IQ_beno4Ob_GakA6i4wxQGKVFBXBeBcObi4wMin5QgnSr",
-          "altText": null,
-          "title": null,
-          "sortOrder": 0,
-          "isFeatured": true
-        }
-      ],
-      "attributes": [
-        {
-          "name": "Size",
-          "values": [
-            {
-              "value": "L",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "M",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "S",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XXL",
-              "colorSwatch": null,
-              "image": null
-            }
-          ]
-        }
-      ],
-      "variations": [
-        {
-          "name": "CLASSIC_GREEN_MUSLIN_PANJABI — S",
-          "sku": "CLASSIC_GREEN_MUSLIN_PANJABI-S",
-          "price": "1950",
-          "salePrice": "1650",
-          "stock": 20,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "S"
-            }
-          ]
-        },
-        {
-          "name": "CLASSIC_GREEN_MUSLIN_PANJABI — M",
-          "sku": "CLASSIC_GREEN_MUSLIN_PANJABI-M",
-          "price": "2000",
-          "salePrice": "1700",
-          "stock": 22,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "M"
-            }
-          ]
-        },
-        {
-          "name": "CLASSIC_GREEN_MUSLIN_PANJABI — L",
-          "sku": "CLASSIC_GREEN_MUSLIN_PANJABI-L",
-          "price": "2050",
-          "salePrice": "1750",
-          "stock": 24,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "L"
-            }
-          ]
-        },
-        {
-          "name": "CLASSIC_GREEN_MUSLIN_PANJABI — XL",
-          "sku": "CLASSIC_GREEN_MUSLIN_PANJABI-XL",
-          "price": "2100",
-          "salePrice": "1800",
-          "stock": 26,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XL"
-            }
-          ]
-        },
-        {
-          "name": "CLASSIC_GREEN_MUSLIN_PANJABI — XXL",
-          "sku": "CLASSIC_GREEN_MUSLIN_PANJABI-XXL",
-          "price": "2150",
-          "salePrice": "1850",
-          "stock": 28,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XXL"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "ক্রিম প্রিমিয়াম কটন পাঞ্জাবি",
-      "slug": "cream-premium-cotton-panjabi",
-      "description": "সফট হ্যান্ড ফিল প্রিমিয়াম কটনে বানানো ক্রিম রঙের পাঞ্জাবি, অফিস ও পারিবারিক অনুষ্ঠানের জন্য পারফেক্ট।",
-      "longDescription": "সফট হ্যান্ড ফিল প্রিমিয়াম কটনে বানানো ক্রিম রঙের পাঞ্জাবি, অফিস ও পারিবারিক অনুষ্ঠানের জন্য পারফেক্ট। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
-      "categorySlug": "classic-panjabi",
-      "price": "2200",
-      "salePrice": "1850",
-      "stock": 18,
-      "sku": null,
-      "productType": "VARIABLE",
-      "images": [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuAZQSpJWXqGBzUHGbFAKqfWQu6LE-ZSWv4YrG4YJdMC8yy77gdA9LiiPUlAIuCE2hGaQbPeexJTq_80RAEoXQOwwy4nsWc8uCsbwNEzwuFUEZdltz3QK6gyzYZNRTyFtlvBpZiFX4jI4vmP2mwTs2BpoMNRX5tz35Q9lM0wNzSpTi6jUYgdiQZtTLgmD2JMtD9m1QNFLSQb0CZRP0VyZygD7NPNeqt9oD3p1ab-YIXaDOALPRvuxgtlKA"
-      ],
-      "productAttributes": null,
-      "variants": null,
-      "variationImages": null,
-      "isPerishable": false,
-      "isActive": true,
-      "showOnHome": true,
-      "seoTitle": null,
-      "seoDescription": null,
-      "imagesDetails": [
-        {
-          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuAZQSpJWXqGBzUHGbFAKqfWQu6LE-ZSWv4YrG4YJdMC8yy77gdA9LiiPUlAIuCE2hGaQbPeexJTq_80RAEoXQOwwy4nsWc8uCsbwNEzwuFUEZdltz3QK6gyzYZNRTyFtlvBpZiFX4jI4",
-          "altText": null,
-          "title": null,
-          "sortOrder": 0,
-          "isFeatured": true
-        }
-      ],
-      "attributes": [
-        {
-          "name": "Size",
-          "values": [
-            {
-              "value": "S",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XXL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "L",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "M",
-              "colorSwatch": null,
-              "image": null
-            }
-          ]
-        }
-      ],
-      "variations": [
-        {
-          "name": "CREAM_PREMIUM_COTTON_PANJABI — S",
-          "sku": "CREAM_PREMIUM_COTTON_PANJABI-S",
-          "price": "2200",
-          "salePrice": "1850",
-          "stock": 18,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "S"
-            }
-          ]
-        },
-        {
-          "name": "CREAM_PREMIUM_COTTON_PANJABI — M",
-          "sku": "CREAM_PREMIUM_COTTON_PANJABI-M",
-          "price": "2250",
-          "salePrice": "1900",
-          "stock": 20,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "M"
-            }
-          ]
-        },
-        {
-          "name": "CREAM_PREMIUM_COTTON_PANJABI — L",
-          "sku": "CREAM_PREMIUM_COTTON_PANJABI-L",
-          "price": "2300",
-          "salePrice": "1950",
-          "stock": 21,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "L"
-            }
-          ]
-        },
-        {
-          "name": "CREAM_PREMIUM_COTTON_PANJABI — XL",
-          "sku": "CREAM_PREMIUM_COTTON_PANJABI-XL",
-          "price": "2350",
-          "salePrice": "2000",
-          "stock": 24,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XL"
-            }
-          ]
-        },
-        {
-          "name": "CREAM_PREMIUM_COTTON_PANJABI — XXL",
-          "sku": "CREAM_PREMIUM_COTTON_PANJABI-XXL",
-          "price": "2400",
-          "salePrice": "2050",
-          "stock": 26,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XXL"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "নেভি ব্লু ক্যাজুয়াল পাঞ্জাবি",
-      "slug": "navy-blue-casual-panjabi",
-      "description": "রেগুলার ফিট নেভি ব্লু পাঞ্জাবি, গরমেও আরামদায়ক — প্রতিদিনের জন্য সর্বোত্তম পছন্দ।",
-      "longDescription": "রেগুলার ফিট নেভি ব্লু পাঞ্জাবি, গরমেও আরামদায়ক — প্রতিদিনের জন্য সর্বোত্তম পছন্দ। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
-      "categorySlug": "casual-panjabi",
-      "price": "1450",
-      "salePrice": "1190",
-      "stock": 30,
-      "sku": null,
-      "productType": "VARIABLE",
-      "images": [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuBk6SJCzG1cQQ2dMdZCQU8aRuI4swWRiq-jKaHuGIeA-4L_Yvu27jephlqcCKhUpvvYFRONCJ9V4KBjCiAXH4bEYb1-2IOSTLsxqy2-zvxhpnWbpI8G0Z8uAsJXH2iRCXHz4dDO7bFfx_94NybVHj5l6FJkIytNqv6B-N59NLnPJkLsAxlDdz1FiUO3xdrY-GMOxYU4EMWeuIHeAEnTDudQtgCtVzpZYt4I97Qtd4oAdLiy2zgO2TVHeA"
-      ],
-      "productAttributes": null,
-      "variants": null,
-      "variationImages": null,
-      "isPerishable": false,
-      "isActive": true,
-      "showOnHome": true,
-      "seoTitle": null,
-      "seoDescription": null,
-      "imagesDetails": [
-        {
-          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuBk6SJCzG1cQQ2dMdZCQU8aRuI4swWRiq-jKaHuGIeA-4L_Yvu27jephlqcCKhUpvvYFRONCJ9V4KBjCiAXH4bEYb1-2IOSTLsxqy2-zvxhpnWbpI8G0Z8uAsJXH2iRCXHz4dDO7bFfx",
-          "altText": null,
-          "title": null,
-          "sortOrder": 0,
-          "isFeatured": true
-        }
-      ],
-      "attributes": [
-        {
-          "name": "Size",
-          "values": [
-            {
-              "value": "XL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XXL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "M",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "L",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "S",
-              "colorSwatch": null,
-              "image": null
-            }
-          ]
-        }
-      ],
-      "variations": [
-        {
-          "name": "NAVY_BLUE_CASUAL_PANJABI — S",
-          "sku": "NAVY_BLUE_CASUAL_PANJABI-S",
-          "price": "1450",
-          "salePrice": "1190",
-          "stock": 29,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "S"
-            }
-          ]
-        },
-        {
-          "name": "NAVY_BLUE_CASUAL_PANJABI — M",
-          "sku": "NAVY_BLUE_CASUAL_PANJABI-M",
-          "price": "1500",
-          "salePrice": "1240",
-          "stock": 32,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "M"
-            }
-          ]
-        },
-        {
-          "name": "NAVY_BLUE_CASUAL_PANJABI — L",
-          "sku": "NAVY_BLUE_CASUAL_PANJABI-L",
-          "price": "1550",
-          "salePrice": "1290",
-          "stock": 34,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "L"
-            }
-          ]
-        },
-        {
-          "name": "NAVY_BLUE_CASUAL_PANJABI — XL",
-          "sku": "NAVY_BLUE_CASUAL_PANJABI-XL",
-          "price": "1600",
-          "salePrice": "1340",
-          "stock": 36,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XL"
-            }
-          ]
-        },
-        {
-          "name": "NAVY_BLUE_CASUAL_PANJABI — XXL",
-          "sku": "NAVY_BLUE_CASUAL_PANJABI-XXL",
-          "price": "1650",
-          "salePrice": "1390",
-          "stock": 38,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XXL"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "সাদা ইভরি ক্যাজুয়াল পাঞ্জাবি",
-      "slug": "ivory-white-casual-panjabi",
-      "description": "শুভ্র ইভরি সাদা কটন পাঞ্জাবি, হালকা ও দুর্দান্ত ফিনিশিং — জুম্মার নামাজ থেকে বন্ধুর আড্ডা সবখানে মানানসই।",
-      "longDescription": "শুভ্র ইভরি সাদা কটন পাঞ্জাবি, হালকা ও দুর্দান্ত ফিনিশিং — জুম্মার নামাজ থেকে বন্ধুর আড্ডা সবখানে মানানসই। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
-      "categorySlug": "casual-panjabi",
-      "price": "1500",
-      "salePrice": "1250",
-      "stock": 25,
-      "sku": null,
-      "productType": "VARIABLE",
-      "images": [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDi0odunAZbIkun7zwpCV9bioBWsgfNSMSlLSiLvCzb98W4v9ZlvpgzuF_MZu14AIA1ndYTozgGd2Ek9tx5R7K3KJGt9DGJvr0Sz5Hm9IKx2wDso_dxtnatDo73NsBvBH5hvq8OI2IS8Ox5WC0vsdbrO4nQFUs2cAfh9jFJmD6OUN897AGh7OB5yuESQDiMQAw0fM8eTkQa2LKVdq24xesQbZ4tDalJs2ejTYs5lVCZrNUPyDgyfH-FYQ"
-      ],
-      "productAttributes": null,
-      "variants": null,
-      "variationImages": null,
-      "isPerishable": false,
-      "isActive": true,
-      "showOnHome": false,
-      "seoTitle": null,
-      "seoDescription": null,
-      "imagesDetails": [
-        {
-          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuDi0odunAZbIkun7zwpCV9bioBWsgfNSMSlLSiLvCzb98W4v9ZlvpgzuF_MZu14AIA1ndYTozgGd2Ek9tx5R7K3KJGt9DGJvr0Sz5Hm9IKx2wDso_dxtnatDo73NsBvBH5hvq8OI2IS8",
-          "altText": null,
-          "title": null,
-          "sortOrder": 0,
-          "isFeatured": true
-        }
-      ],
-      "attributes": [
-        {
-          "name": "Size",
-          "values": [
-            {
-              "value": "S",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XXL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "L",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "M",
-              "colorSwatch": null,
-              "image": null
-            }
-          ]
-        }
-      ],
-      "variations": [
-        {
-          "name": "IVORY_WHITE_CASUAL_PANJABI — S",
-          "sku": "IVORY_WHITE_CASUAL_PANJABI-S",
-          "price": "1500",
-          "salePrice": "1250",
-          "stock": 25,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "S"
-            }
-          ]
-        },
-        {
-          "name": "IVORY_WHITE_CASUAL_PANJABI — M",
-          "sku": "IVORY_WHITE_CASUAL_PANJABI-M",
-          "price": "1550",
-          "salePrice": "1300",
-          "stock": 27,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "M"
-            }
-          ]
-        },
-        {
-          "name": "IVORY_WHITE_CASUAL_PANJABI — L",
-          "sku": "IVORY_WHITE_CASUAL_PANJABI-L",
-          "price": "1600",
-          "salePrice": "1350",
-          "stock": 29,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "L"
-            }
-          ]
-        },
-        {
-          "name": "IVORY_WHITE_CASUAL_PANJABI — XL",
-          "sku": "IVORY_WHITE_CASUAL_PANJABI-XL",
-          "price": "1650",
-          "salePrice": "1400",
-          "stock": 31,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XL"
-            }
-          ]
-        },
-        {
-          "name": "IVORY_WHITE_CASUAL_PANJABI — XXL",
-          "sku": "IVORY_WHITE_CASUAL_PANJABI-XXL",
-          "price": "1700",
-          "salePrice": "1450",
-          "stock": 33,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XXL"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "মেরুন রয়্যাল পাঞ্জাবি",
-      "slug": "maroon-royal-panjabi",
-      "description": "গাঢ় মেরুন রঙে প্রিমিয়াম ফেব্রিক ও সূক্ষ্ম ডিজাইনের রয়্যাল পাঞ্জাবি, বর ও কনের জমকালো অনুষ্ঠানের জন্য।",
-      "longDescription": "গাঢ় মেরুন রঙে প্রিমিয়াম ফেব্রিক ও সূক্ষ্ম ডিজাইনের রয়্যাল পাঞ্জাবি, বর ও কনের জমকালো অনুষ্ঠানের জন্য। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
-      "categorySlug": "premium-panjabi",
-      "price": "3200",
-      "salePrice": "2790",
-      "stock": 12,
-      "sku": null,
-      "productType": "VARIABLE",
-      "images": [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDVkB19q4X9VGVsGZofkSwSYBH8lsngexL_vaym9V8RIa7Xl8JIWkmBk7qhejCCmmTvKds2rdBoC3IxRtIJsGHwuQaelDkabQeZ4Ju-Bz2Nx6OQJS4zEWIL5WZVjTWw1Lvze9KbNS9Ti6fsHkPj_-aI8LX0wUiZo50Km91X9tkLXiI23qMhCGkzPp7TvIJK2Gv4a4Ocs8Z-0Zy2JRhnN_z4aThtYda0FHBemFF5qVgZi2raYYdBKMNmJg"
-      ],
-      "productAttributes": null,
-      "variants": null,
-      "variationImages": null,
-      "isPerishable": false,
-      "isActive": true,
-      "showOnHome": true,
-      "seoTitle": null,
-      "seoDescription": null,
-      "imagesDetails": [
-        {
-          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuDVkB19q4X9VGVsGZofkSwSYBH8lsngexL_vaym9V8RIa7Xl8JIWkmBk7qhejCCmmTvKds2rdBoC3IxRtIJsGHwuQaelDkabQeZ4Ju-Bz2Nx6OQJS4zEWIL5WZVjTWw1Lvze9KbNS9Ti",
-          "altText": null,
-          "title": null,
-          "sortOrder": 0,
-          "isFeatured": true
-        }
-      ],
-      "attributes": [
-        {
-          "name": "Size",
-          "values": [
-            {
-              "value": "XL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "S",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XXL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "L",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "M",
-              "colorSwatch": null,
-              "image": null
-            }
-          ]
-        }
-      ],
-      "variations": [
-        {
-          "name": "MAROON_ROYAL_PANJABI — S",
-          "sku": "MAROON_ROYAL_PANJABI-S",
-          "price": "3200",
-          "salePrice": "2790",
-          "stock": 12,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "S"
-            }
-          ]
-        },
-        {
-          "name": "MAROON_ROYAL_PANJABI — M",
-          "sku": "MAROON_ROYAL_PANJABI-M",
-          "price": "3250",
-          "salePrice": "2840",
-          "stock": 14,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "M"
-            }
-          ]
-        },
-        {
-          "name": "MAROON_ROYAL_PANJABI — L",
-          "sku": "MAROON_ROYAL_PANJABI-L",
-          "price": "3300",
-          "salePrice": "2890",
-          "stock": 16,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "L"
-            }
-          ]
-        },
-        {
-          "name": "MAROON_ROYAL_PANJABI — XL",
-          "sku": "MAROON_ROYAL_PANJABI-XL",
-          "price": "3350",
-          "salePrice": "2940",
-          "stock": 18,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XL"
-            }
-          ]
-        },
-        {
-          "name": "MAROON_ROYAL_PANJABI — XXL",
-          "sku": "MAROON_ROYAL_PANJABI-XXL",
-          "price": "3400",
-          "salePrice": "2990",
-          "stock": 20,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XXL"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "ব্ল্যাক এমব্রয়ডারি প্রিমিয়াম পাঞ্জাবি",
-      "slug": "black-embroidered-premium-panjabi",
-      "description": "রেশমি ব্ল্যাক পাঞ্জাবি মসৃণ এমব্রয়ডারি ও কাফ লিংকসহ, খাস রুচির অধিকারীদের জন্য।",
-      "longDescription": "রেশমি ব্ল্যাক পাঞ্জাবি মসৃণ এমব্রয়ডারি ও কাফ লিংকসহ, খাস রুচির অধিকারীদের জন্য। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
-      "categorySlug": "premium-panjabi",
-      "price": "3800",
-      "salePrice": "3100",
-      "stock": 10,
-      "sku": null,
-      "productType": "VARIABLE",
-      "images": [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuBxMnzTWbFwhpm49fZRysM0BcpzY9SY186hfTY2z5FdYEz0sUYVW5quw2Yk1KW_5iyBklYOLV_eg46_u2i7gDmjL-p5mzh9QOzb-oWJERz8LHDfg1lEcTo5iyiH1u8oUk4E2EZXZuTH90OGX2Yt4UFa7HWKXN9cyHBsGnVpVB8mOWsdbI0xOB5spuVn4D-mQDnoIouItp67zEovfQGkaZJXOdprUr0NQVRtUzl9XJPwy_C6ZGAFD9_zxA"
-      ],
-      "productAttributes": null,
-      "variants": null,
-      "variationImages": null,
-      "isPerishable": false,
-      "isActive": true,
-      "showOnHome": true,
-      "seoTitle": null,
-      "seoDescription": null,
-      "imagesDetails": [
-        {
-          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuBxMnzTWbFwhpm49fZRysM0BcpzY9SY186hfTY2z5FdYEz0sUYVW5quw2Yk1KW_5iyBklYOLV_eg46_u2i7gDmjL-p5mzh9QOzb-oWJERz8LHDfg1lEcTo5iyiH1u8oUk4E2EZXZuTH9",
-          "altText": null,
-          "title": null,
-          "sortOrder": 0,
-          "isFeatured": true
-        }
-      ],
-      "attributes": [
-        {
-          "name": "Size",
-          "values": [
-            {
-              "value": "S",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XXL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "M",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "L",
-              "colorSwatch": null,
-              "image": null
-            }
-          ]
-        }
-      ],
-      "variations": [
-        {
-          "name": "BLACK_EMBROIDERED_PREMIUM_PANJABI — S",
-          "sku": "BLACK_EMBROIDERED_PREMIUM_PANJABI-S",
-          "price": "3800",
-          "salePrice": "3100",
-          "stock": 10,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "S"
-            }
-          ]
-        },
-        {
-          "name": "BLACK_EMBROIDERED_PREMIUM_PANJABI — M",
-          "sku": "BLACK_EMBROIDERED_PREMIUM_PANJABI-M",
-          "price": "3850",
-          "salePrice": "3150",
-          "stock": 12,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "M"
-            }
-          ]
-        },
-        {
-          "name": "BLACK_EMBROIDERED_PREMIUM_PANJABI — L",
-          "sku": "BLACK_EMBROIDERED_PREMIUM_PANJABI-L",
-          "price": "3900",
-          "salePrice": "3200",
-          "stock": 14,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "L"
-            }
-          ]
-        },
-        {
-          "name": "BLACK_EMBROIDERED_PREMIUM_PANJABI — XL",
-          "sku": "BLACK_EMBROIDERED_PREMIUM_PANJABI-XL",
-          "price": "3950",
-          "salePrice": "3250",
-          "stock": 16,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XL"
-            }
-          ]
-        },
-        {
-          "name": "BLACK_EMBROIDERED_PREMIUM_PANJABI — XXL",
-          "sku": "BLACK_EMBROIDERED_PREMIUM_PANJABI-XXL",
-          "price": "4000",
-          "salePrice": "3300",
-          "stock": 18,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XXL"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "অলিভ গ্রিন এমব্রয়ডারি পাঞ্জাবি",
-      "slug": "olive-green-embroidered-panjabi",
-      "description": "আধুনিক অলিভ শেডে হাতে করা এমব্রয়ডারি প্রিমিয়াম পাঞ্জাবি, যা পরিচ্ছন্ন ও ভদ্র ইমেজ তৈরি করে।",
-      "longDescription": "আধুনিক অলিভ শেডে হাতে করা এমব্রয়ডারি প্রিমিয়াম পাঞ্জাবি, যা পরিচ্ছন্ন ও ভদ্র ইমেজ তৈরি করে। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
-      "categorySlug": "premium-panjabi",
-      "price": "3400",
-      "salePrice": "2850",
-      "stock": 14,
-      "sku": null,
-      "productType": "VARIABLE",
-      "images": [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuC9UhiX9mdKbZ9hZxxrDgCTg6YRPWTQJUHUut4LYh-Oy_b9mGJ6us_djviehTQemqANmHAh_xBhPLrCiGQmeAqxhj_jy5RkBxV5HyjyJkC3lTI-6JiMckrJbzgYGy9mgR01EYO1GEvFBhC2bjKhq8_s3fiSMj0R-sT75lfXnjABKk1v_AVpo08A-48vrfz3yiBXlA26wTv2iH46Tl-UhIDyhxZvRPY6mVJvwK_WOapFqwGYHNv4DOnf9g"
-      ],
-      "productAttributes": null,
-      "variants": null,
-      "variationImages": null,
-      "isPerishable": false,
-      "isActive": true,
-      "showOnHome": false,
-      "seoTitle": null,
-      "seoDescription": null,
-      "imagesDetails": [
-        {
-          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuC9UhiX9mdKbZ9hZxxrDgCTg6YRPWTQJUHUut4LYh-Oy_b9mGJ6us_djviehTQemqANmHAh_xBhPLrCiGQmeAqxhj_jy5RkBxV5HyjyJkC3lTI-6JiMckrJbzgYGy9mgR01EYO1GEvFB",
-          "altText": null,
-          "title": null,
-          "sortOrder": 0,
-          "isFeatured": true
-        }
-      ],
-      "attributes": [
-        {
-          "name": "Size",
-          "values": [
-            {
-              "value": "M",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XXL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "S",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "L",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XL",
-              "colorSwatch": null,
-              "image": null
-            }
-          ]
-        }
-      ],
-      "variations": [
-        {
-          "name": "OLIVE_GREEN_EMBROIDERED_PANJABI — S",
-          "sku": "OLIVE_GREEN_EMBROIDERED_PANJABI-S",
-          "price": "3400",
-          "salePrice": "2850",
-          "stock": 14,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "S"
-            }
-          ]
-        },
-        {
-          "name": "OLIVE_GREEN_EMBROIDERED_PANJABI — M",
-          "sku": "OLIVE_GREEN_EMBROIDERED_PANJABI-M",
-          "price": "3450",
-          "salePrice": "2900",
-          "stock": 16,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "M"
-            }
-          ]
-        },
-        {
-          "name": "OLIVE_GREEN_EMBROIDERED_PANJABI — L",
-          "sku": "OLIVE_GREEN_EMBROIDERED_PANJABI-L",
-          "price": "3500",
-          "salePrice": "2950",
-          "stock": 18,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "L"
-            }
-          ]
-        },
-        {
-          "name": "OLIVE_GREEN_EMBROIDERED_PANJABI — XL",
-          "sku": "OLIVE_GREEN_EMBROIDERED_PANJABI-XL",
-          "price": "3550",
-          "salePrice": "3000",
-          "stock": 19,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XL"
-            }
-          ]
-        },
-        {
-          "name": "OLIVE_GREEN_EMBROIDERED_PANJABI — XXL",
-          "sku": "OLIVE_GREEN_EMBROIDERED_PANJABI-XXL",
-          "price": "3600",
-          "salePrice": "3050",
-          "stock": 22,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XXL"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "ঈদ কালেকশন পাঞ্জাবি ও পায়জামা সেট",
-      "slug": "eid-panjabi-pajama-set",
-      "description": "ঈদের বিশেষ কালেকশন — গাঢ় অলিভ পাঞ্জাবির সাথে ম্যাচিং পায়জামা। সম্পূর্ণ পরিবারের জন্য সাইজ পাওয়া যায়।",
-      "longDescription": "ঈদের বিশেষ কালেকশন — গাঢ় অলিভ পাঞ্জাবির সাথে ম্যাচিং পায়জামা। সম্পূর্ণ পরিবারের জন্য সাইজ পাওয়া যায়। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
-      "categorySlug": "eid-collection",
-      "price": "2850",
-      "salePrice": "2490",
-      "stock": 22,
-      "sku": null,
-      "productType": "VARIABLE",
-      "images": [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuCKntylRj4Cq41oDUg1VIDBkGDdjXw55io5Zf4k2FGgmW9cf6SvizZXeuzyz0Eww_uyU-krHTGrKE081h3EI_GJPoWkf-XEdRNxsIWyOvsejvlT19iZzxKzai1raRlKO9_0S2d2gdR6KNY8V2kxNaEbcQV4y7A3shQSLrFKRnKALYPX0lF5pLG3zsbpACT3ZkWgH3r8hPlQNwvxuO0Vc7EatnUMpimRjT8dgyLkuXgUsAZcSLLw7mLBVw"
-      ],
-      "productAttributes": null,
-      "variants": null,
-      "variationImages": null,
-      "isPerishable": false,
-      "isActive": true,
-      "showOnHome": true,
-      "seoTitle": null,
-      "seoDescription": null,
-      "imagesDetails": [
-        {
-          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuCKntylRj4Cq41oDUg1VIDBkGDdjXw55io5Zf4k2FGgmW9cf6SvizZXeuzyz0Eww_uyU-krHTGrKE081h3EI_GJPoWkf-XEdRNxsIWyOvsejvlT19iZzxKzai1raRlKO9_0S2d2gdR6K",
-          "altText": null,
-          "title": null,
-          "sortOrder": 0,
-          "isFeatured": true
-        }
-      ],
-      "attributes": [
-        {
-          "name": "Size",
-          "values": [
-            {
-              "value": "XXL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "M",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "S",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "L",
-              "colorSwatch": null,
-              "image": null
-            }
-          ]
-        }
-      ],
-      "variations": [
-        {
-          "name": "EID_PANJABI_PAJAMA_SET — S",
-          "sku": "EID_PANJABI_PAJAMA_SET-S",
-          "price": "2850",
-          "salePrice": "2490",
-          "stock": 22,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "S"
-            }
-          ]
-        },
-        {
-          "name": "EID_PANJABI_PAJAMA_SET — M",
-          "sku": "EID_PANJABI_PAJAMA_SET-M",
-          "price": "2900",
-          "salePrice": "2540",
-          "stock": 24,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "M"
-            }
-          ]
-        },
-        {
-          "name": "EID_PANJABI_PAJAMA_SET — L",
-          "sku": "EID_PANJABI_PAJAMA_SET-L",
-          "price": "2950",
-          "salePrice": "2590",
-          "stock": 26,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "L"
-            }
-          ]
-        },
-        {
-          "name": "EID_PANJABI_PAJAMA_SET — XL",
-          "sku": "EID_PANJABI_PAJAMA_SET-XL",
-          "price": "3000",
-          "salePrice": "2640",
-          "stock": 28,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XL"
-            }
-          ]
-        },
-        {
-          "name": "EID_PANJABI_PAJAMA_SET — XXL",
-          "sku": "EID_PANJABI_PAJAMA_SET-XXL",
-          "price": "3050",
-          "salePrice": "2690",
-          "stock": 30,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XXL"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "বেইজ গোল্ড ঈদ স্পেশাল পাঞ্জাবি",
-      "slug": "beige-gold-eid-panjabi",
-      "description": "সোনালি লাইনের সূচিকর্মে সাজানো বেইজ ঈদ স্পেশাল পাঞ্জাবি, ঈদের দিন আপনার লুক সম্পূর্ণ করতে।",
-      "longDescription": "সোনালি লাইনের সূচিকর্মে সাজানো বেইজ ঈদ স্পেশাল পাঞ্জাবি, ঈদের দিন আপনার লুক সম্পূর্ণ করতে। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
-      "categorySlug": "eid-collection",
-      "price": "2600",
-      "salePrice": "2190",
-      "stock": 20,
-      "sku": null,
-      "productType": "VARIABLE",
-      "images": [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuCCA-fd7Nve3-4zM66x3B9AMMc5YhNU2ZxrT9jfhd0dp976J81VRYNXj34fFgVJVb3lg7C8rXZoxByTeGBjGttm_urOxBrMcqfZAoyxJbSGmeotac4Vd7KHUxd-jQWIGs-L4AajOXPMV6rSDhQtBTNWbENweOxCCJS9A-Ln6Q75sKRQHerZNBJb_QGfInHW1_XL7vJgAamF1wPnmaakMv6laKTfzIp_Q2RPTu9WotA_H7hdB5_EQq8OnA"
-      ],
-      "productAttributes": null,
-      "variants": null,
-      "variationImages": null,
-      "isPerishable": false,
-      "isActive": true,
-      "showOnHome": true,
-      "seoTitle": null,
-      "seoDescription": null,
-      "imagesDetails": [
-        {
-          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuCCA-fd7Nve3-4zM66x3B9AMMc5YhNU2ZxrT9jfhd0dp976J81VRYNXj34fFgVJVb3lg7C8rXZoxByTeGBjGttm_urOxBrMcqfZAoyxJbSGmeotac4Vd7KHUxd-jQWIGs-L4AajOXPMV",
-          "altText": null,
-          "title": null,
-          "sortOrder": 0,
-          "isFeatured": true
-        }
-      ],
-      "attributes": [
-        {
-          "name": "Size",
-          "values": [
-            {
-              "value": "XXL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "M",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "S",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "L",
-              "colorSwatch": null,
-              "image": null
-            }
-          ]
-        }
-      ],
-      "variations": [
-        {
-          "name": "BEIGE_GOLD_EID_PANJABI — S",
-          "sku": "BEIGE_GOLD_EID_PANJABI-S",
-          "price": "2600",
-          "salePrice": "2190",
-          "stock": 20,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "S"
-            }
-          ]
-        },
-        {
-          "name": "BEIGE_GOLD_EID_PANJABI — M",
-          "sku": "BEIGE_GOLD_EID_PANJABI-M",
-          "price": "2650",
-          "salePrice": "2240",
-          "stock": 22,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "M"
-            }
-          ]
-        },
-        {
-          "name": "BEIGE_GOLD_EID_PANJABI — L",
-          "sku": "BEIGE_GOLD_EID_PANJABI-L",
-          "price": "2700",
-          "salePrice": "2290",
-          "stock": 23,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "L"
-            }
-          ]
-        },
-        {
-          "name": "BEIGE_GOLD_EID_PANJABI — XL",
-          "sku": "BEIGE_GOLD_EID_PANJABI-XL",
-          "price": "2750",
-          "salePrice": "2340",
-          "stock": 25,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XL"
-            }
-          ]
-        },
-        {
-          "name": "BEIGE_GOLD_EID_PANJABI — XXL",
-          "sku": "BEIGE_GOLD_EID_PANJABI-XXL",
-          "price": "2800",
-          "salePrice": "2390",
-          "stock": 28,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XXL"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "ইমারেল্ড ঈদ কালেকশন পাঞ্জাবি",
-      "slug": "emerald-eid-collection-panjabi",
-      "description": "জমকালো ইমারেল্ড গ্রিন পাঞ্জাবি, মোচা কিংবা গুব্বেত বোতাম ডিজাইনে — ঈদের সবচেয়ে চাওয়া আইটেম।",
-      "longDescription": "জমকালো ইমারেল্ড গ্রিন পাঞ্জাবি, মোচা কিংবা গুব্বেত বোতাম ডিজাইনে — ঈদের সবচেয়ে চাওয়া আইটেম। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
-      "categorySlug": "eid-collection",
-      "price": "2400",
-      "salePrice": "1990",
+      "name": "Classic Linen Shirt",
+      "slug": "classic-linen-shirt",
+      "description": "Classic Linen Shirt pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the classic linen shirt features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "apparel",
+      "categorySlugs": [],
+      "price": "48",
+      "salePrice": "38",
       "stock": 24,
-      "sku": null,
+      "sku": "DEMO-001",
       "productType": "VARIABLE",
       "images": [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuC9YEe7BzS2MH0RSw6Ifvz0BsujOeXXwehTmalsa0DhOtTNOaisiQql8Wy1zEG3kLEVi1PmPQgTD0tpgGZz1bmgfv6uPwATDGGrRAynTs1fykkNW4k3-hDgBPrb1vl698h9mGBk3bVtGUnqPLB-DEj9LbqgEZIKPjoVVpSl1DgeFPJIYcmWWAkhKtnOzrVI91ei06c9EGQjtn8WUfbM5O92IGCdQtJ7vZPS8lpw7UEF259a9HYZg2ysug"
+        "/product-placeholder.svg"
       ],
       "productAttributes": null,
       "variants": null,
       "variationImages": null,
       "isPerishable": false,
       "isActive": true,
-      "showOnHome": false,
+      "showOnHome": true,
       "seoTitle": null,
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuC9YEe7BzS2MH0RSw6Ifvz0BsujOeXXwehTmalsa0DhOtTNOaisiQql8Wy1zEG3kLEVi1PmPQgTD0tpgGZz1bmgfv6uPwATDGGrRAynTs1fykkNW4k3-hDgBPrb1vl698h9mGBk3bVtG",
-          "altText": null,
-          "title": null,
+          "url": "/product-placeholder.svg",
+          "altText": "Classic Linen Shirt",
+          "title": "Classic Linen Shirt",
           "sortOrder": 0,
           "isFeatured": true
         }
@@ -1531,16 +82,6 @@
           "values": [
             {
               "value": "S",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XXL",
               "colorSwatch": null,
               "image": null
             },
@@ -1559,15 +100,15 @@
       ],
       "variations": [
         {
-          "name": "EMERALD_EID_COLLECTION_PANJABI — S",
-          "sku": "EMERALD_EID_COLLECTION_PANJABI-S",
-          "price": "2400",
-          "salePrice": "1990",
-          "stock": 24,
+          "name": "Size S",
+          "sku": "DEMO-01-S",
+          "price": "48",
+          "salePrice": "38",
+          "stock": 8,
           "manageStock": true,
           "weight": null,
           "image": null,
-          "gallery": null,
+          "gallery": [],
           "description": null,
           "status": "active",
           "attributes": [
@@ -1578,15 +119,15 @@
           ]
         },
         {
-          "name": "EMERALD_EID_COLLECTION_PANJABI — M",
-          "sku": "EMERALD_EID_COLLECTION_PANJABI-M",
-          "price": "2450",
-          "salePrice": "2040",
-          "stock": 26,
+          "name": "Size M",
+          "sku": "DEMO-01-M",
+          "price": "48",
+          "salePrice": "38",
+          "stock": 8,
           "manageStock": true,
           "weight": null,
           "image": null,
-          "gallery": null,
+          "gallery": [],
           "description": null,
           "status": "active",
           "attributes": [
@@ -1597,15 +138,15 @@
           ]
         },
         {
-          "name": "EMERALD_EID_COLLECTION_PANJABI — L",
-          "sku": "EMERALD_EID_COLLECTION_PANJABI-L",
-          "price": "2500",
-          "salePrice": "2090",
-          "stock": 28,
+          "name": "Size L",
+          "sku": "DEMO-01-L",
+          "price": "48",
+          "salePrice": "38",
+          "stock": 8,
           "manageStock": true,
           "weight": null,
           "image": null,
-          "gallery": null,
+          "gallery": [],
           "description": null,
           "status": "active",
           "attributes": [
@@ -1614,60 +155,1056 @@
               "value": "L"
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "name": "Everyday Cotton Tee",
+      "slug": "everyday-cotton-tee",
+      "description": "Everyday Cotton Tee pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the everyday cotton tee features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "apparel",
+      "categorySlugs": [],
+      "price": "22",
+      "salePrice": null,
+      "stock": 36,
+      "sku": "DEMO-002",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": true,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
         {
-          "name": "EMERALD_EID_COLLECTION_PANJABI — XL",
-          "sku": "EMERALD_EID_COLLECTION_PANJABI-XL",
-          "price": "2550",
-          "salePrice": "2140",
-          "stock": 30,
+          "url": "/product-placeholder.svg",
+          "altText": "Everyday Cotton Tee",
+          "title": "Everyday Cotton Tee",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Relaxed Fit Chinos",
+      "slug": "relaxed-fit-chinos",
+      "description": "Relaxed Fit Chinos pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the relaxed fit chinos features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "apparel",
+      "categorySlugs": [],
+      "price": "54",
+      "salePrice": "46",
+      "stock": 18,
+      "sku": "DEMO-003",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": true,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Relaxed Fit Chinos",
+          "title": "Relaxed Fit Chinos",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Lightweight Knit Sweater",
+      "slug": "lightweight-knit-sweater",
+      "description": "Lightweight Knit Sweater pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the lightweight knit sweater features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "apparel",
+      "categorySlugs": [],
+      "price": "62",
+      "salePrice": null,
+      "stock": 12,
+      "sku": "DEMO-004",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": true,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Lightweight Knit Sweater",
+          "title": "Lightweight Knit Sweater",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Modern Overshirt",
+      "slug": "modern-overshirt",
+      "description": "Modern Overshirt pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the modern overshirt features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "apparel",
+      "categorySlugs": [],
+      "price": "58",
+      "salePrice": "49",
+      "stock": 0,
+      "sku": "DEMO-005",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": true,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Modern Overshirt",
+          "title": "Modern Overshirt",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Canvas Weekend Tote",
+      "slug": "canvas-weekend-tote",
+      "description": "Canvas Weekend Tote pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the canvas weekend tote features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "accessories",
+      "categorySlugs": [],
+      "price": "28",
+      "salePrice": null,
+      "stock": 42,
+      "sku": "DEMO-006",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": true,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Canvas Weekend Tote",
+          "title": "Canvas Weekend Tote",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Minimal Leather Wallet",
+      "slug": "minimal-leather-wallet",
+      "description": "Minimal Leather Wallet pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the minimal leather wallet features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "accessories",
+      "categorySlugs": [],
+      "price": "36",
+      "salePrice": "30",
+      "stock": 22,
+      "sku": "DEMO-007",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": true,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Minimal Leather Wallet",
+          "title": "Minimal Leather Wallet",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Everyday Crossbody Bag",
+      "slug": "everyday-crossbody-bag",
+      "description": "Everyday Crossbody Bag pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the everyday crossbody bag features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "accessories",
+      "categorySlugs": [],
+      "price": "64",
+      "salePrice": null,
+      "stock": 15,
+      "sku": "DEMO-008",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": true,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Everyday Crossbody Bag",
+          "title": "Everyday Crossbody Bag",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Classic Metal Watch",
+      "slug": "classic-metal-watch",
+      "description": "Classic Metal Watch pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the classic metal watch features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "accessories",
+      "categorySlugs": [],
+      "price": "89",
+      "salePrice": "75",
+      "stock": 11,
+      "sku": "DEMO-009",
+      "productType": "VARIABLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Classic Metal Watch",
+          "title": "Classic Metal Watch",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "value": "S",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "M",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "L",
+              "colorSwatch": null,
+              "image": null
+            }
+          ]
+        }
+      ],
+      "variations": [
+        {
+          "name": "Size S",
+          "sku": "DEMO-09-S",
+          "price": "89",
+          "salePrice": "75",
+          "stock": 3,
           "manageStock": true,
           "weight": null,
           "image": null,
-          "gallery": null,
+          "gallery": [],
           "description": null,
           "status": "active",
           "attributes": [
             {
               "attribute": "Size",
-              "value": "XL"
+              "value": "S"
             }
           ]
         },
         {
-          "name": "EMERALD_EID_COLLECTION_PANJABI — XXL",
-          "sku": "EMERALD_EID_COLLECTION_PANJABI-XXL",
-          "price": "2600",
-          "salePrice": "2190",
-          "stock": 32,
+          "name": "Size M",
+          "sku": "DEMO-09-M",
+          "price": "89",
+          "salePrice": "75",
+          "stock": 3,
           "manageStock": true,
           "weight": null,
           "image": null,
-          "gallery": null,
+          "gallery": [],
           "description": null,
           "status": "active",
           "attributes": [
             {
               "attribute": "Size",
-              "value": "XXL"
+              "value": "M"
+            }
+          ]
+        },
+        {
+          "name": "Size L",
+          "sku": "DEMO-09-L",
+          "price": "89",
+          "salePrice": "75",
+          "stock": 3,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": [],
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "L"
             }
           ]
         }
       ]
     },
     {
-      "name": "ব্লু ক্যাজুয়াল ডেনিম পাঞ্জাবি",
-      "slug": "blue-casual-denim-panjabi",
-      "description": "ডেনিম টাচের ব্লু পাঞ্জাবি/কাবলি, আপনারগুলো ম্যাচ ও জিনসের মতোই স্টাইলিশ লুক দেয়।",
-      "longDescription": "ডেনিম টাচের ব্লু পাঞ্জাবি/কাবলি, আপনারগুলো ম্যাচ ও জিনসের মতোই স্টাইলিশ লুক দেয়। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
-      "categorySlug": "fatua-kabuli",
-      "price": "1350",
-      "salePrice": "1090",
+      "name": "Polarized Sunglasses",
+      "slug": "polarized-sunglasses",
+      "description": "Polarized Sunglasses pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the polarized sunglasses features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "accessories",
+      "categorySlugs": [],
+      "price": "42",
+      "salePrice": null,
+      "stock": 29,
+      "sku": "DEMO-010",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Polarized Sunglasses",
+          "title": "Polarized Sunglasses",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Cloud Walk Sneakers",
+      "slug": "cloud-walk-sneakers",
+      "description": "Cloud Walk Sneakers pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the cloud walk sneakers features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "footwear",
+      "categorySlugs": [],
+      "price": "78",
+      "salePrice": "68",
+      "stock": 17,
+      "sku": "DEMO-011",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Cloud Walk Sneakers",
+          "title": "Cloud Walk Sneakers",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Leather Court Shoes",
+      "slug": "leather-court-shoes",
+      "description": "Leather Court Shoes pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the leather court shoes features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "footwear",
+      "categorySlugs": [],
+      "price": "96",
+      "salePrice": null,
+      "stock": 9,
+      "sku": "DEMO-012",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Leather Court Shoes",
+          "title": "Leather Court Shoes",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Trail Ready Trainers",
+      "slug": "trail-ready-trainers",
+      "description": "Trail Ready Trainers pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the trail ready trainers features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "footwear",
+      "categorySlugs": [],
+      "price": "84",
+      "salePrice": "72",
+      "stock": 0,
+      "sku": "DEMO-013",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Trail Ready Trainers",
+          "title": "Trail Ready Trainers",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Everyday Slip-ons",
+      "slug": "everyday-slip-ons",
+      "description": "Everyday Slip-ons pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the everyday slip-ons features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "footwear",
+      "categorySlugs": [],
+      "price": "52",
+      "salePrice": null,
+      "stock": 31,
+      "sku": "DEMO-014",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Everyday Slip-ons",
+          "title": "Everyday Slip-ons",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Soft Step Sandals",
+      "slug": "soft-step-sandals",
+      "description": "Soft Step Sandals pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the soft step sandals features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "footwear",
+      "categorySlugs": [],
+      "price": "39",
+      "salePrice": "34",
+      "stock": 27,
+      "sku": "DEMO-015",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Soft Step Sandals",
+          "title": "Soft Step Sandals",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Stoneware Coffee Mug",
+      "slug": "stoneware-coffee-mug",
+      "description": "Stoneware Coffee Mug pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the stoneware coffee mug features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "home-living",
+      "categorySlugs": [],
+      "price": "18",
+      "salePrice": null,
+      "stock": 50,
+      "sku": "DEMO-016",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Stoneware Coffee Mug",
+          "title": "Stoneware Coffee Mug",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Amber Glass Candle",
+      "slug": "amber-glass-candle",
+      "description": "Amber Glass Candle pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the amber glass candle features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "home-living",
+      "categorySlugs": [],
+      "price": "24",
+      "salePrice": "20",
+      "stock": 33,
+      "sku": "DEMO-017",
+      "productType": "VARIABLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Amber Glass Candle",
+          "title": "Amber Glass Candle",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Size",
+          "values": [
+            {
+              "value": "S",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "M",
+              "colorSwatch": null,
+              "image": null
+            },
+            {
+              "value": "L",
+              "colorSwatch": null,
+              "image": null
+            }
+          ]
+        }
+      ],
+      "variations": [
+        {
+          "name": "Size S",
+          "sku": "DEMO-17-S",
+          "price": "24",
+          "salePrice": "20",
+          "stock": 11,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": [],
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "S"
+            }
+          ]
+        },
+        {
+          "name": "Size M",
+          "sku": "DEMO-17-M",
+          "price": "24",
+          "salePrice": "20",
+          "stock": 11,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": [],
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "M"
+            }
+          ]
+        },
+        {
+          "name": "Size L",
+          "sku": "DEMO-17-L",
+          "price": "24",
+          "salePrice": "20",
+          "stock": 11,
+          "manageStock": true,
+          "weight": null,
+          "image": null,
+          "gallery": [],
+          "description": null,
+          "status": "active",
+          "attributes": [
+            {
+              "attribute": "Size",
+              "value": "L"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Linen Cushion Cover",
+      "slug": "linen-cushion-cover",
+      "description": "Linen Cushion Cover pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the linen cushion cover features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "home-living",
+      "categorySlugs": [],
+      "price": "29",
+      "salePrice": null,
+      "stock": 20,
+      "sku": "DEMO-018",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Linen Cushion Cover",
+          "title": "Linen Cushion Cover",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Woven Storage Basket",
+      "slug": "woven-storage-basket",
+      "description": "Woven Storage Basket pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the woven storage basket features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "home-living",
+      "categorySlugs": [],
+      "price": "34",
+      "salePrice": "29",
+      "stock": 14,
+      "sku": "DEMO-019",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Woven Storage Basket",
+          "title": "Woven Storage Basket",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Soft Cotton Throw",
+      "slug": "soft-cotton-throw",
+      "description": "Soft Cotton Throw pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the soft cotton throw features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "home-living",
+      "categorySlugs": [],
+      "price": "68",
+      "salePrice": null,
+      "stock": 8,
+      "sku": "DEMO-020",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Soft Cotton Throw",
+          "title": "Soft Cotton Throw",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Daily Hydration Serum",
+      "slug": "daily-hydration-serum",
+      "description": "Daily Hydration Serum pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the daily hydration serum features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "beauty-care",
+      "categorySlugs": [],
+      "price": "32",
+      "salePrice": null,
+      "stock": 25,
+      "sku": "DEMO-021",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Daily Hydration Serum",
+          "title": "Daily Hydration Serum",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Gentle Face Cleanser",
+      "slug": "gentle-face-cleanser",
+      "description": "Gentle Face Cleanser pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the gentle face cleanser features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "beauty-care",
+      "categorySlugs": [],
+      "price": "21",
+      "salePrice": "18",
+      "stock": 38,
+      "sku": "DEMO-022",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Gentle Face Cleanser",
+          "title": "Gentle Face Cleanser",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Botanical Hand Cream",
+      "slug": "botanical-hand-cream",
+      "description": "Botanical Hand Cream pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the botanical hand cream features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "beauty-care",
+      "categorySlugs": [],
+      "price": "16",
+      "salePrice": null,
+      "stock": 47,
+      "sku": "DEMO-023",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Botanical Hand Cream",
+          "title": "Botanical Hand Cream",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Travel Care Set",
+      "slug": "travel-care-set",
+      "description": "Travel Care Set pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the travel care set features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "beauty-care",
+      "categorySlugs": [],
+      "price": "44",
+      "salePrice": "39",
+      "stock": 16,
+      "sku": "DEMO-024",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Travel Care Set",
+          "title": "Travel Care Set",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Reusable Skin Tool Set",
+      "slug": "reusable-skin-tool-set",
+      "description": "Reusable Skin Tool Set pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the reusable skin tool set features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "beauty-care",
+      "categorySlugs": [],
+      "price": "26",
+      "salePrice": null,
+      "stock": 0,
+      "sku": "DEMO-025",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Reusable Skin Tool Set",
+          "title": "Reusable Skin Tool Set",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Wireless Earbuds",
+      "slug": "wireless-earbuds",
+      "description": "Wireless Earbuds pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the wireless earbuds features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "tech-everyday",
+      "categorySlugs": [],
+      "price": "79",
+      "salePrice": "69",
+      "stock": 13,
+      "sku": "DEMO-026",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
+        {
+          "url": "/product-placeholder.svg",
+          "altText": "Wireless Earbuds",
+          "title": "Wireless Earbuds",
+          "sortOrder": 0,
+          "isFeatured": true
+        }
+      ],
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Compact Power Bank",
+      "slug": "compact-power-bank",
+      "description": "Compact Power Bank pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the compact power bank features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "tech-everyday",
+      "categorySlugs": [],
+      "price": "45",
+      "salePrice": null,
       "stock": 28,
-      "sku": null,
-      "productType": "VARIABLE",
+      "sku": "DEMO-027",
+      "productType": "SIMPLE",
       "images": [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDQLPchc2pwWZtu0KAewZ2IMEu4EOgnwf6ZkUs81k0Qwpvv7Ppl9gJkuPKiQxUFZV0Zd_iXbMieS4WC9-MfspIegH-u2NOG8T2N4g21hZyNJU_ODp_sUutla7Y3LOFrItun-evTXg0V1GL7pne1X0ogmrNWRrBJGJnZpYZFtoYmVkVzSAIlJV0LFX7DS4iOcFdiepSif7ya95mLvx72KRdWvPZio4xc5hJgfeZdamniRxo3yb6Pz04LhA"
+        "/product-placeholder.svg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -1679,156 +1216,30 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuDQLPchc2pwWZtu0KAewZ2IMEu4EOgnwf6ZkUs81k0Qwpvv7Ppl9gJkuPKiQxUFZV0Zd_iXbMieS4WC9-MfspIegH-u2NOG8T2N4g21hZyNJU_ODp_sUutla7Y3LOFrItun-evTXg0V1",
-          "altText": null,
-          "title": null,
+          "url": "/product-placeholder.svg",
+          "altText": "Compact Power Bank",
+          "title": "Compact Power Bank",
           "sortOrder": 0,
           "isFeatured": true
         }
       ],
-      "attributes": [
-        {
-          "name": "Size",
-          "values": [
-            {
-              "value": "XXL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "M",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "S",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "L",
-              "colorSwatch": null,
-              "image": null
-            }
-          ]
-        }
-      ],
-      "variations": [
-        {
-          "name": "BLUE_CASUAL_DENIM_PANJABI — S",
-          "sku": "BLUE_CASUAL_DENIM_PANJABI-S",
-          "price": "1350",
-          "salePrice": "1090",
-          "stock": 28,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "S"
-            }
-          ]
-        },
-        {
-          "name": "BLUE_CASUAL_DENIM_PANJABI — M",
-          "sku": "BLUE_CASUAL_DENIM_PANJABI-M",
-          "price": "1400",
-          "salePrice": "1140",
-          "stock": 29,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "M"
-            }
-          ]
-        },
-        {
-          "name": "BLUE_CASUAL_DENIM_PANJABI — L",
-          "sku": "BLUE_CASUAL_DENIM_PANJABI-L",
-          "price": "1450",
-          "salePrice": "1190",
-          "stock": 32,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "L"
-            }
-          ]
-        },
-        {
-          "name": "BLUE_CASUAL_DENIM_PANJABI — XL",
-          "sku": "BLUE_CASUAL_DENIM_PANJABI-XL",
-          "price": "1500",
-          "salePrice": "1240",
-          "stock": 34,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XL"
-            }
-          ]
-        },
-        {
-          "name": "BLUE_CASUAL_DENIM_PANJABI — XXL",
-          "sku": "BLUE_CASUAL_DENIM_PANJABI-XXL",
-          "price": "1550",
-          "salePrice": "1290",
-          "stock": 36,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XXL"
-            }
-          ]
-        }
-      ]
+      "attributes": [],
+      "variations": []
     },
     {
-      "name": "বেইজ কাবলি ফতুয়া",
-      "slug": "beige-kabuli-fatua",
-      "description": "হালকা বেইজ কাবলি/ফতুয়া, দোতলা ঢাকাই কাপড়ের স্মার্ট কাট — শান্ত ও স্টাইলিশ লুকের জন্য।",
-      "longDescription": "হালকা বেইজ কাবলি/ফতুয়া, দোতলা ঢাকাই কাপড়ের স্মার্ট কাট — শান্ত ও স্টাইলিশ লুকের জন্য। আন্তর্জাতিক মানের ফেব্রিক, টেকসই সেলাই ও নিখুঁত ফিনিশিং। ধোয়ার পরও রঙ ও আকার অটুট থাকে।",
-      "categorySlug": "fatua-kabuli",
-      "price": "1150",
-      "salePrice": "950",
-      "stock": 32,
-      "sku": null,
-      "productType": "VARIABLE",
+      "name": "Braided USB-C Cable",
+      "slug": "braided-usb-c-cable",
+      "description": "Braided USB-C Cable pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the braided usb-c cable features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "tech-everyday",
+      "categorySlugs": [],
+      "price": "14",
+      "salePrice": "12",
+      "stock": 60,
+      "sku": "DEMO-028",
+      "productType": "SIMPLE",
       "images": [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuATnmjWCOj7f1qRBPfAGoGo0cNsQ9MXnBtHqphIGgm2tz2xzhqo8QRHYpc7HL47OrXuMLmiVcK_yMSx6TnMoRWM_r6jhvqtZk__K6GXUcyGbUj2PFM0u20aXRsEc-grqLdqT6vnxjKXs8fgv_DJSSFZY0IxKm-tnOUdbq4kUmV1m46EpabeXlyEpmlb79t8ImzgsNKbyMMRMeXcnrtcROnxJ2CUve3cZd4rtnJKMsc_1GwZ-FkPWaFZ5A"
+        "/product-placeholder.svg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -1840,142 +1251,85 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "https://lh3.googleusercontent.com/aida-public/AB6AXuATnmjWCOj7f1qRBPfAGoGo0cNsQ9MXnBtHqphIGgm2tz2xzhqo8QRHYpc7HL47OrXuMLmiVcK_yMSx6TnMoRWM_r6jhvqtZk__K6GXUcyGbUj2PFM0u20aXRsEc-grqLdqT6vnxjKXs",
-          "altText": null,
-          "title": null,
+          "url": "/product-placeholder.svg",
+          "altText": "Braided USB-C Cable",
+          "title": "Braided USB-C Cable",
           "sortOrder": 0,
           "isFeatured": true
         }
       ],
-      "attributes": [
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Adjustable Desk Light",
+      "slug": "adjustable-desk-light",
+      "description": "Adjustable Desk Light pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the adjustable desk light features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "tech-everyday",
+      "categorySlugs": [],
+      "price": "57",
+      "salePrice": null,
+      "stock": 10,
+      "sku": "DEMO-029",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
         {
-          "name": "Size",
-          "values": [
-            {
-              "value": "S",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XXL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "L",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "XL",
-              "colorSwatch": null,
-              "image": null
-            },
-            {
-              "value": "M",
-              "colorSwatch": null,
-              "image": null
-            }
-          ]
+          "url": "/product-placeholder.svg",
+          "altText": "Adjustable Desk Light",
+          "title": "Adjustable Desk Light",
+          "sortOrder": 0,
+          "isFeatured": true
         }
       ],
-      "variations": [
+      "attributes": [],
+      "variations": []
+    },
+    {
+      "name": "Insulated Water Bottle",
+      "slug": "insulated-water-bottle",
+      "description": "Insulated Water Bottle pairs thoughtful design with reliable everyday quality.",
+      "longDescription": "Made for daily use, the insulated water bottle features carefully selected materials, a comfortable feel, and a clean, versatile finish.",
+      "categorySlug": "tech-everyday",
+      "categorySlugs": [],
+      "price": "31",
+      "salePrice": "27",
+      "stock": 35,
+      "sku": "DEMO-030",
+      "productType": "SIMPLE",
+      "images": [
+        "/product-placeholder.svg"
+      ],
+      "productAttributes": null,
+      "variants": null,
+      "variationImages": null,
+      "isPerishable": false,
+      "isActive": true,
+      "showOnHome": false,
+      "seoTitle": null,
+      "seoDescription": null,
+      "imagesDetails": [
         {
-          "name": "BEIGE_KABULI_FATUA — S",
-          "sku": "BEIGE_KABULI_FATUA-S",
-          "price": "1150",
-          "salePrice": "950",
-          "stock": 32,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "S"
-            }
-          ]
-        },
-        {
-          "name": "BEIGE_KABULI_FATUA — M",
-          "sku": "BEIGE_KABULI_FATUA-M",
-          "price": "1200",
-          "salePrice": "1000",
-          "stock": 32,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "M"
-            }
-          ]
-        },
-        {
-          "name": "BEIGE_KABULI_FATUA — L",
-          "sku": "BEIGE_KABULI_FATUA-L",
-          "price": "1250",
-          "salePrice": "1050",
-          "stock": 36,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "L"
-            }
-          ]
-        },
-        {
-          "name": "BEIGE_KABULI_FATUA — XL",
-          "sku": "BEIGE_KABULI_FATUA-XL",
-          "price": "1300",
-          "salePrice": "1100",
-          "stock": 36,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XL"
-            }
-          ]
-        },
-        {
-          "name": "BEIGE_KABULI_FATUA — XXL",
-          "sku": "BEIGE_KABULI_FATUA-XXL",
-          "price": "1350",
-          "salePrice": "1150",
-          "stock": 39,
-          "manageStock": true,
-          "weight": null,
-          "image": null,
-          "gallery": null,
-          "description": null,
-          "status": "active",
-          "attributes": [
-            {
-              "attribute": "Size",
-              "value": "XXL"
-            }
-          ]
+          "url": "/product-placeholder.svg",
+          "altText": "Insulated Water Bottle",
+          "title": "Insulated Water Bottle",
+          "sortOrder": 0,
+          "isFeatured": true
         }
-      ]
+      ],
+      "attributes": [],
+      "variations": []
     }
   ]
 }
