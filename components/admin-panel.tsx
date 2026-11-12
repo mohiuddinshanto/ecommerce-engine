@@ -1818,7 +1818,7 @@ function AdminProducts({ token }: { token: string }) {
                     <Switch
                       size="sm"
                       isSelected={sameVariationPrice}
-                      onValueChange={(enabled) => {
+                      onValueChange={(enabled: boolean) => {
                         setSameVariationPrice(enabled);
                         if (enabled) setVariations((current) => current.map((variation) => ({ ...variation, price: basePrice || "0" })));
                       }}
@@ -4450,7 +4450,7 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div>
               <Input type="number" min={1} max={50} label="Default products per category" value={String(homepageCategories.defaultProductLimit ?? 8)} isDisabled={homepageCategories.defaultProductLimit === null} onValueChange={(value) => { setHomepageCategories((current) => ({ ...current, defaultProductLimit: Math.max(1, Math.min(50, Math.floor(Number(value) || 1))) })); setHomepageCategoriesDirty(true); }} />
-              <Switch className="mt-2" size="sm" isSelected={homepageCategories.defaultProductLimit === null} onValueChange={(unlimited) => { setHomepageCategories((current) => ({ ...current, defaultProductLimit: unlimited ? null : 8 })); setHomepageCategoriesDirty(true); }} color="primary">Show all products</Switch>
+              <Switch className="mt-2" size="sm" isSelected={homepageCategories.defaultProductLimit === null} onValueChange={(unlimited: boolean) => { setHomepageCategories((current) => ({ ...current, defaultProductLimit: unlimited ? null : 8 })); setHomepageCategoriesDirty(true); }} color="primary">Show all products</Switch>
             </div>
             <Select label="Default display mode" selectedKeys={[homepageCategories.defaultDisplayStyle]} onSelectionChange={(keys) => { const value = Array.from(keys as Set<string>)[0]; if (value === "grid" || value === "slider" || value === "loop") { setHomepageCategories((current) => ({ ...current, defaultDisplayStyle: value, ...(value === "loop" ? { defaultAuto: true, defaultLoop: true } : {}) })); setHomepageCategoriesDirty(true); } }}>
               <SelectItem key="grid">Grid</SelectItem><SelectItem key="slider">Slider</SelectItem><SelectItem key="loop">Loop auto-sliding carousel</SelectItem>
@@ -4463,9 +4463,9 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
             <Input type="number" min={1} max={60} label="Auto-slide seconds" value={String(homepageCategories.defaultSeconds)} onValueChange={(value) => { setHomepageCategories((current) => ({ ...current, defaultSeconds: Math.max(1, Math.min(60, Math.floor(Number(value) || 3))) })); setHomepageCategoriesDirty(true); }} />
             {(["mobile", "tablet", "desktop"] as const).map((device) => <Input key={device} type="number" min={1} max={12} label={`Per view — ${device}`} value={String(homepageCategories.defaultPerView[device])} onValueChange={(value) => { setHomepageCategories((current) => ({ ...current, defaultPerView: { ...current.defaultPerView, [device]: Math.max(1, Math.min(12, Math.floor(Number(value) || 1))) } })); setHomepageCategoriesDirty(true); }} />)}
             <div className="flex flex-wrap items-center gap-4 sm:col-span-4">
-              {homepageCategories.defaultDisplayStyle === "slider" && <Switch isSelected={homepageCategories.defaultAuto} onValueChange={(value) => { setHomepageCategories((current) => ({ ...current, defaultAuto: value })); setHomepageCategoriesDirty(true); }} color="primary">Auto-slide</Switch>}
-              {homepageCategories.defaultDisplayStyle === "slider" && <Switch isSelected={homepageCategories.defaultLoop} onValueChange={(value) => { setHomepageCategories((current) => ({ ...current, defaultLoop: value })); setHomepageCategoriesDirty(true); }} color="primary">Loop</Switch>}
-              <Switch isSelected={homepageCategories.defaultPagination} onValueChange={(value) => { setHomepageCategories((current) => ({ ...current, defaultPagination: value })); setHomepageCategoriesDirty(true); }} color="primary">Pagination dots</Switch>
+              {homepageCategories.defaultDisplayStyle === "slider" && <Switch isSelected={homepageCategories.defaultAuto} onValueChange={(value: boolean) => { setHomepageCategories((current) => ({ ...current, defaultAuto: value })); setHomepageCategoriesDirty(true); }} color="primary">Auto-slide</Switch>}
+              {homepageCategories.defaultDisplayStyle === "slider" && <Switch isSelected={homepageCategories.defaultLoop} onValueChange={(value: boolean) => { setHomepageCategories((current) => ({ ...current, defaultLoop: value })); setHomepageCategoriesDirty(true); }} color="primary">Loop</Switch>}
+              <Switch isSelected={homepageCategories.defaultPagination} onValueChange={(value: boolean) => { setHomepageCategories((current) => ({ ...current, defaultPagination: value })); setHomepageCategoriesDirty(true); }} color="primary">Pagination dots</Switch>
             </div>
           </div>}
           </details>
@@ -4503,7 +4503,7 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
                         <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">{category.name}</p>
                         <p className="text-xs text-gray-500 dark:text-slate-400">{category._count?.products ?? 0} active products{homepageCategories.mode === "automatic" && (category._count?.products ?? 0) === 0 ? " · hidden until products are added" : ""}</p>
                       </div>
-                      <Switch size="sm" isSelected={visible} onValueChange={(checked) => updateHomepageCategory(category.id, { visible: checked })} color="primary">Show</Switch>
+                      <Switch size="sm" isSelected={visible} onValueChange={(checked: boolean) => updateHomepageCategory(category.id, { visible: checked })} color="primary">Show</Switch>
                       {homepageCategories.mode === "manual" && <div className="flex gap-1"><button type="button" aria-label={`Move ${category.name} up`} disabled={index === 0} onClick={() => moveHomepageCategory(category.id, -1)} className="grid h-8 w-8 place-items-center rounded-lg border text-gray-600 disabled:opacity-30 dark:border-white/10 dark:text-slate-300"><FiArrowUp /></button><button type="button" aria-label={`Move ${category.name} down`} disabled={index === orderedHomepageCategories.length - 1} onClick={() => moveHomepageCategory(category.id, 1)} className="grid h-8 w-8 place-items-center rounded-lg border text-gray-600 disabled:opacity-30 dark:border-white/10 dark:text-slate-300"><FiArrowDown /></button></div>}
                     </div>
                     {homepageCategories.mode === "manual" && <details className="homepage-category-details mt-3 border-t border-gray-100 pt-3 dark:border-white/10">
@@ -4512,7 +4512,7 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
                       <div>
                         <Input type="number" min={1} max={50} label="Products to show" value={String(limit ?? homepageCategories.defaultProductLimit ?? 8)} isDisabled={limit === null} onValueChange={(value) => updateHomepageCategory(category.id, { productLimit: Math.max(1, Math.min(50, Math.floor(Number(value) || 1))) })} />
                         <div className="mt-2 flex flex-wrap items-center gap-3">
-                          <Switch size="sm" isSelected={limit === null} onValueChange={(unlimited) => updateHomepageCategory(category.id, { productLimit: unlimited ? null : homepageCategories.defaultProductLimit ?? 8 })} color="primary">Show all</Switch>
+                          <Switch size="sm" isSelected={limit === null} onValueChange={(unlimited: boolean) => updateHomepageCategory(category.id, { productLimit: unlimited ? null : homepageCategories.defaultProductLimit ?? 8 })} color="primary">Show all</Switch>
                           {entry?.productLimit !== undefined && <button type="button" onClick={() => updateHomepageCategory(category.id, { productLimit: undefined })} className="text-xs font-semibold text-primary hover:underline">Use default</button>}
                         </div>
                       </div>
@@ -4523,9 +4523,9 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
                         <Input type="number" min={1} max={60} label="Auto-slide seconds" value={String(seconds)} onValueChange={(value) => updateHomepageCategory(category.id, { seconds: Math.max(1, Math.min(60, Math.floor(Number(value) || 3))) })} />
                         {(["mobile", "tablet", "desktop"] as const).map((device) => <Input key={device} type="number" min={1} max={12} label={`Per view — ${device}`} value={String(perView[device])} onValueChange={(value) => updateHomepageCategory(category.id, { perView: { ...perView, [device]: Math.max(1, Math.min(12, Math.floor(Number(value) || 1))) } })} />)}
                         <div className="flex flex-wrap items-center gap-4 sm:col-span-2">
-                          {style === "slider" && <Switch size="sm" isSelected={auto} onValueChange={(value) => updateHomepageCategory(category.id, { auto: value })} color="primary">Auto-slide</Switch>}
-                          {style === "slider" && <Switch size="sm" isSelected={loop} onValueChange={(value) => updateHomepageCategory(category.id, { loop: value })} color="primary">Loop</Switch>}
-                          <Switch size="sm" isSelected={pagination} onValueChange={(value) => updateHomepageCategory(category.id, { pagination: value })} color="primary">Pagination dots</Switch>
+                          {style === "slider" && <Switch size="sm" isSelected={auto} onValueChange={(value: boolean) => updateHomepageCategory(category.id, { auto: value })} color="primary">Auto-slide</Switch>}
+                          {style === "slider" && <Switch size="sm" isSelected={loop} onValueChange={(value: boolean) => updateHomepageCategory(category.id, { loop: value })} color="primary">Loop</Switch>}
+                          <Switch size="sm" isSelected={pagination} onValueChange={(value: boolean) => updateHomepageCategory(category.id, { pagination: value })} color="primary">Pagination dots</Switch>
                         </div>
                       </>}
                       {(entry?.displayStyle !== undefined || entry?.auto !== undefined || entry?.loop !== undefined || entry?.seconds !== undefined || entry?.pagination !== undefined || entry?.perView !== undefined) && <button type="button" onClick={() => updateHomepageCategory(category.id, { displayStyle: undefined, auto: undefined, loop: undefined, seconds: undefined, pagination: undefined, perView: undefined })} className="text-left text-xs font-semibold text-primary hover:underline sm:col-span-2">Use automatic defaults</button>}
@@ -4550,7 +4550,7 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
                 <SelectItem key="slider">Slider</SelectItem><SelectItem key="grid">Grid</SelectItem>
               </Select>
             </div>
-            {popularProducts.mode !== "grid" && <Switch isSelected={popularProducts.auto !== false} onValueChange={(auto) => { setPopularProducts((current) => ({ ...current, auto })); setPopularProductsDirty(true); }} color="primary">Auto-slide</Switch>}
+            {popularProducts.mode !== "grid" && <Switch isSelected={popularProducts.auto !== false} onValueChange={(auto: boolean) => { setPopularProducts((current) => ({ ...current, auto })); setPopularProductsDirty(true); }} color="primary">Auto-slide</Switch>}
             {popularProductsDirty && <div className="flex justify-end"><button type="button" onClick={savePopularProducts} disabled={saving} className="h-10 rounded-xl bg-primary px-5 text-sm font-bold text-white shadow-sm transition hover:bg-primary-dark disabled:opacity-60">{saving ? "Saving…" : "Save changes"}</button></div>}
           </div>
         </details>
@@ -4670,15 +4670,15 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
         {catShow.mode === "carousel" && (
           <div className="flex flex-wrap items-center gap-6">
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-slate-300">
-              <Switch isSelected={catShow.auto ?? false} onValueChange={(v) => { setCatShow((s) => ({ ...s, auto: v })); setCatShowDirty(true); }} color="primary" />
+              <Switch isSelected={catShow.auto ?? false} onValueChange={(v: boolean) => { setCatShow((s) => ({ ...s, auto: v })); setCatShowDirty(true); }} color="primary" />
               Auto-slide
             </label>
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-slate-300">
-              <Switch isSelected={catShow.loop ?? false} onValueChange={(v) => { setCatShow((s) => ({ ...s, loop: v })); setCatShowDirty(true); }} color="primary" />
+              <Switch isSelected={catShow.loop ?? false} onValueChange={(v: boolean) => { setCatShow((s) => ({ ...s, loop: v })); setCatShowDirty(true); }} color="primary" />
               Loop
             </label>
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-slate-300">
-              <Switch isSelected={catShow.pagination ?? false} onValueChange={(v) => { setCatShow((s) => ({ ...s, pagination: v })); setCatShowDirty(true); }} color="primary" />
+              <Switch isSelected={catShow.pagination ?? false} onValueChange={(v: boolean) => { setCatShow((s) => ({ ...s, pagination: v })); setCatShowDirty(true); }} color="primary" />
               Dots
             </label>
           </div>
@@ -4714,7 +4714,7 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
               <Switch
                 isSelected={config.homePageConfig?.sectionVisibility?.[key] ?? (key === "announcement" ? config.heroBannerConfig?.announceEnabled ?? false : true)}
                 isDisabled={saving}
-                onValueChange={(value) => setSectionVisibility(key, value)}
+                onValueChange={(value: boolean) => setSectionVisibility(key, value)}
               />
             </label>
           ))}
@@ -4746,7 +4746,7 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
               <div className="flex items-center gap-3">
                 <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Banner {i + 1}</span>
                 <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-300">
-                  <Switch isSelected={p.enabled !== false} onValueChange={(v) => { setPromos((prev) => prev.map((b, bi) => (bi === i ? { ...b, enabled: v } : b))); setPromosDirty(true); }} color="primary" />
+                  <Switch isSelected={p.enabled !== false} onValueChange={(v: boolean) => { setPromos((prev) => prev.map((b, bi) => (bi === i ? { ...b, enabled: v } : b))); setPromosDirty(true); }} color="primary" />
                   Show
                 </label>
               </div>
@@ -4794,7 +4794,7 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
               <div className="flex items-center gap-3">
                 <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Badge {i + 1}</span>
                 <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-slate-300">
-                  <Switch isSelected={t.enabled !== false} onValueChange={(v) => { setTrust((prev) => prev.map((b, bi) => (bi === i ? { ...b, enabled: v } : b))); setTrustDirty(true); }} color="primary" />
+                  <Switch isSelected={t.enabled !== false} onValueChange={(v: boolean) => { setTrust((prev) => prev.map((b, bi) => (bi === i ? { ...b, enabled: v } : b))); setTrustDirty(true); }} color="primary" />
                   Show
                 </label>
               </div>
@@ -4842,7 +4842,7 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
           </div>
           <div className="flex items-center gap-3">
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-slate-300">
-              <Switch isSelected={testimonials.enabled !== false} onValueChange={(v) => { setTestimonials((t) => ({ ...t, enabled: v })); setTestimonialsDirty(true); }} color="primary" />
+              <Switch isSelected={testimonials.enabled !== false} onValueChange={(v: boolean) => { setTestimonials((t) => ({ ...t, enabled: v })); setTestimonialsDirty(true); }} color="primary" />
               Show section
             </label>
             {testimonialsDirty && (
@@ -4953,7 +4953,7 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
           </div>
           <div className="flex items-center gap-3">
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-slate-300">
-              <Switch isSelected={footer.enabled !== false} onValueChange={(v) => { setFooter((f) => ({ ...f, enabled: v })); setFooterDirty(true); }} color="primary" />
+              <Switch isSelected={footer.enabled !== false} onValueChange={(v: boolean) => { setFooter((f) => ({ ...f, enabled: v })); setFooterDirty(true); }} color="primary" />
               Show footer
             </label>
             {footerDirty && (
@@ -4990,7 +4990,7 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
         {/* Categories */}
         <div className="flex items-center gap-3 pt-1">
           <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-slate-300">
-            <Switch isSelected={footer.showCategories !== false} onValueChange={(v) => { setFooter((f) => ({ ...f, showCategories: v })); setFooterDirty(true); }} color="primary" />
+            <Switch isSelected={footer.showCategories !== false} onValueChange={(v: boolean) => { setFooter((f) => ({ ...f, showCategories: v })); setFooterDirty(true); }} color="primary" />
             Show categories column
           </label>
         </div>
@@ -5131,16 +5131,16 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-4">
-            <Switch isSelected={s.auto} onValueChange={(v) => update(s.id, { auto: v })} color="primary" className="gap-2 min-w-0">
+            <Switch isSelected={s.auto} onValueChange={(v: boolean) => update(s.id, { auto: v })} color="primary" className="gap-2 min-w-0">
               Auto-slide
             </Switch>
             <div className="min-w-0">
               <Input type="number" min={1} max={60} label="Seconds" value={String(s.seconds)} onValueChange={(v) => update(s.id, { seconds: Math.max(1, Math.min(60, Number(v) || 1)) })} />
             </div>
-            <Switch isSelected={s.pagination} onValueChange={(v) => update(s.id, { pagination: v })} color="primary" className="gap-2 min-w-0">
+            <Switch isSelected={s.pagination} onValueChange={(v: boolean) => update(s.id, { pagination: v })} color="primary" className="gap-2 min-w-0">
               Pagination dots
             </Switch>
-            <Switch isSelected={s.loop} onValueChange={(v) => update(s.id, { loop: v })} color="primary" className="gap-2 min-w-0">
+            <Switch isSelected={s.loop} onValueChange={(v: boolean) => update(s.id, { loop: v })} color="primary" className="gap-2 min-w-0">
               Loop
             </Switch>
           </div>
@@ -5151,7 +5151,7 @@ function HomeLayoutSettings({ config, save, saving, token }: { config: Config; s
             <Input type="number" step="0.5" min="0.5" label="Per view (Desktop)" value={String(s.perView.desktop)} onValueChange={(v) => update(s.id, { perView: { ...s.perView, desktop: Math.max(0.5, Number(v) || 1) } })} />
           </div>
 
-          <Switch isSelected={s.showViewAll} onValueChange={(v) => update(s.id, { showViewAll: v })} color="primary">
+          <Switch isSelected={s.showViewAll} onValueChange={(v: boolean) => update(s.id, { showViewAll: v })} color="primary">
             Show “View All” link
           </Switch>
         </div>
@@ -5888,7 +5888,7 @@ function StorageSettings({ save, saving, configured, storage }: {
             <p className="text-sm font-medium text-gray-800 dark:text-slate-200">Use Object Storage</p>
             <p className="text-xs text-gray-400 dark:text-slate-500">Switch to S3 compatible object storage endpoint.</p>
           </div>
-          <Switch isSelected={provider === "hostinger-object-storage"} onValueChange={(v) => setProvider(v ? "hostinger-object-storage" : "local")} color="primary" />
+          <Switch isSelected={provider === "hostinger-object-storage"} onValueChange={(v: boolean) => setProvider(v ? "hostinger-object-storage" : "local")} color="primary" />
         </div>
 
         {provider === "local" ? (
@@ -5973,11 +5973,11 @@ function CheckoutFormSettings({ save, saving, config }: { save: (payload: object
               <div className="flex items-center gap-6">
                 <label className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
                   Required
-                  <Switch size="sm" isSelected={fields[key].required} onValueChange={(v) => setField(key, { required: v })} color="primary" />
+                  <Switch size="sm" isSelected={fields[key].required} onValueChange={(v: boolean) => setField(key, { required: v })} color="primary" />
                 </label>
                 <label className="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-400">
                   Show
-                  <Switch size="sm" isSelected={fields[key].enabled} onValueChange={(v) => setField(key, { enabled: v })} color="primary" />
+                  <Switch size="sm" isSelected={fields[key].enabled} onValueChange={(v: boolean) => setField(key, { enabled: v })} color="primary" />
                 </label>
               </div>
             </div>
