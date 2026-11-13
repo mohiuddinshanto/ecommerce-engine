@@ -1528,7 +1528,13 @@ app.get("/api/admin/steadfast/balance", requireAuth, requireRole("ADMIN", "STAFF
   res.json({ ok: true, balance: body.current_balance, fetchedAt: new Date().toISOString() });
 });
 
-app.post("/api/admin/categories", requireAuth, requireRole("ADMIN"), async (req, res) => {
+const requireProductCategoryAccess: express.RequestHandler = (req, res, next) => {
+  const user = req.user;
+  const canManage = user?.role === "ADMIN" || (user?.role === "STAFF" && ["PRODUCT_MANAGER", "ORDER_AND_PRODUCT_MANAGER"].includes(user.staffType ?? ""));
+  return canManage ? next() : res.status(403).json({ error: "Product Manager access required" });
+};
+
+app.post("/api/admin/categories", requireAuth, requireProductCategoryAccess, async (req, res) => {
   const data = z
     .object({
       name: z.string().trim().min(2),
@@ -1542,7 +1548,7 @@ app.post("/api/admin/categories", requireAuth, requireRole("ADMIN"), async (req,
   res.status(201).json(await prisma.category.create({ data: { ...data.data, attributeSchema: data.data.attributeSchema as Prisma.InputJsonValue } }));
 });
 
-app.patch("/api/admin/categories/:id", requireAuth, requireRole("ADMIN"), async (req, res) => {
+app.patch("/api/admin/categories/:id", requireAuth, requireProductCategoryAccess, async (req, res) => {
   const data = z
     .object({
       name: z.string().trim().min(2).optional(),
@@ -1555,7 +1561,7 @@ app.patch("/api/admin/categories/:id", requireAuth, requireRole("ADMIN"), async 
   res.json(await prisma.category.update({ where: { id: String(req.params.id) }, data: data.data }));
 });
 
-app.delete("/api/admin/categories/:id", requireAuth, requireRole("ADMIN"), async (req, res) => {
+app.delete("/api/admin/categories/:id", requireAuth, requireProductCategoryAccess, async (req, res) => {
   const id = String(req.params.id);
   const body = (req.body && typeof req.body === "object" ? req.body : {}) as Record<string, unknown>;
   const moveTo = typeof body.moveToCategoryId === "string" && body.moveToCategoryId.trim() ? body.moveToCategoryId.trim() : null;
@@ -2062,7 +2068,7 @@ app.post("/api/admin/staff", requireAuth, requireRole("ADMIN"), async (req, res)
       name: z.string().trim().min(2),
       email: z.string().email(),
       password: z.string().min(8),
-      staffType: z.enum(["ORDER_MANAGER", "PRODUCT_MANAGER"]),
+      staffType: z.enum(["ORDER_MANAGER", "PRODUCT_MANAGER", "ORDER_AND_PRODUCT_MANAGER"]),
       allowedCategories: z.array(z.string()).optional(),
     })
     .safeParse(req.body);
@@ -2084,6 +2090,15 @@ app.post("/api/admin/staff", requireAuth, requireRole("ADMIN"), async (req, res)
   });
 
   res.status(201).json({ id: staff.id, name: staff.name, email: staff.email, role: staff.role });
+});
+
+app.patch("/api/admin/staff/:id", requireAuth, requireRole("ADMIN"), async (req, res) => {
+  const data = z.object({ staffType: z.enum(["ORDER_MANAGER", "PRODUCT_MANAGER", "ORDER_AND_PRODUCT_MANAGER"]) }).safeParse(req.body);
+  if (!data.success) return res.status(400).json({ error: "Select a valid staff access level" });
+  const staff = await prisma.user.findFirst({ where: { id: String(req.params.id), role: "STAFF" }, select: { id: true } });
+  if (!staff) return res.status(404).json({ error: "Staff account not found" });
+  const updated = await prisma.user.update({ where: { id: staff.id }, data: { staffType: data.data.staffType } });
+  res.json({ id: updated.id, staffType: updated.staffType });
 });
 
 app.delete("/api/admin/staff/:id", requireAuth, requireRole("ADMIN"), async (req, res) => {

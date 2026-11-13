@@ -18,6 +18,7 @@ enum Role {
 enum StaffType {
   ORDER_MANAGER
   PRODUCT_MANAGER
+  ORDER_AND_PRODUCT_MANAGER
 }
 
 enum OrderStatus {

@@ -3,7 +3,7 @@ import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma.js";
 
-export type AuthUser = { id: string; name: string; email: string; emailVerified: boolean; role: "ADMIN" | "STAFF" | "CUSTOMER" | "REVIEWER"; staffType: "ORDER_MANAGER" | "PRODUCT_MANAGER" | null; allowedCategories: unknown };
+export type AuthUser = { id: string; name: string; email: string; emailVerified: boolean; role: "ADMIN" | "STAFF" | "CUSTOMER" | "REVIEWER"; staffType: "ORDER_MANAGER" | "PRODUCT_MANAGER" | "ORDER_AND_PRODUCT_MANAGER" | null; allowedCategories: unknown };
 declare global { namespace Express { interface Request { user?: AuthUser; sessionToken?: string; } } }
 
 export const SESSION_COOKIE = "epic_session";

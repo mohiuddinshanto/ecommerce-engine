@@ -284,7 +284,8 @@ type Category = { id: string; name: string; slug: string; image?: string | null;
 type MenuItem = { id: string; label: string; type: "category" | "custom"; categoryId?: string; href?: string; children: MenuItem[] };
 type Coupon = { id: string; code: string; type: string; value: string; minSpend?: string; usedCount: number; isActive: boolean };
 type Review = { id: string; rating: number; comment?: string; isApproved: boolean; product: { name: string }; user: { name: string; email: string } };
-type StaffUser = { id: string; name: string; email: string; staffType: string; allowedCategories?: string };
+type StaffType = "ORDER_MANAGER" | "PRODUCT_MANAGER" | "ORDER_AND_PRODUCT_MANAGER";
+type StaffUser = { id: string; name: string; email: string; staffType: StaffType; allowedCategories?: string };
 
 const money = formatMoney;
 
@@ -350,7 +351,8 @@ const BASIC_SECTIONS: Section[] = ["overview", "products", "categories", "orders
 // section; each manager only sees the sections its API permissions allow.
 const STAFF_SECTIONS: Record<string, Section[]> = {
   ORDER_MANAGER: ["overview", "orders", "delivery", "reviews"],
-  PRODUCT_MANAGER: ["overview", "products", "media", "reviews"],
+  PRODUCT_MANAGER: ["overview", "products", "media", "categories", "reviews"],
+  ORDER_AND_PRODUCT_MANAGER: ["overview", "orders", "delivery", "products", "media", "categories", "reviews"],
 };
 
 const categoryOptions = (categories: Category[]) =>
@@ -3728,11 +3730,17 @@ function AdminReviews({ token }: { token: string }) {
 function AdminStaff({ token }: { token: string }) {
   const [staff, setStaff] = useState<StaffUser[]>([]);
   const [creating, setCreating] = useState(false);
+  const [staffAccess, setStaffAccess] = useState<Record<string, StaffType>>({});
+  const [savingStaffId, setSavingStaffId] = useState<string | null>(null);
 
   const load = () => {
     api("/api/admin/staff", token)
       .then((r) => r.json())
-      .then((res) => Array.isArray(res) && setStaff(res))
+      .then((res) => {
+        if (!Array.isArray(res)) return;
+        setStaff(res);
+        setStaffAccess(Object.fromEntries(res.map((member: StaffUser) => [member.id, member.staffType])));
+      })
       .catch(() => {});
   };
 
@@ -3754,6 +3762,22 @@ function AdminStaff({ token }: { token: string }) {
       load();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not create staff");
+    }
+  }
+
+  async function updateStaffAccess(id: string) {
+    const staffType = staffAccess[id];
+    if (!staffType) return;
+    setSavingStaffId(id);
+    try {
+      const response = await api(`/api/admin/staff/${id}`, token, { method: "PATCH", body: JSON.stringify({ staffType }) });
+      if (!response.ok) throw new Error((await response.json()).error ?? "Could not update access");
+      toast.success("Staff access updated");
+      load();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not update access");
+    } finally {
+      setSavingStaffId(null);
     }
   }
 
@@ -3785,6 +3809,7 @@ function AdminStaff({ token }: { token: string }) {
           <Select label="Staff Role Type" name="staffType" defaultSelectedKeys={["ORDER_MANAGER"]}>
             <SelectItem key="ORDER_MANAGER">Order Manager</SelectItem>
             <SelectItem key="PRODUCT_MANAGER">Product Manager</SelectItem>
+            <SelectItem key="ORDER_AND_PRODUCT_MANAGER">Order + Product Manager</SelectItem>
           </Select>
           <button type="submit" className="sm:col-span-2 h-10 bg-primary text-white font-display font-bold rounded-xl hover:bg-primary-dark transition-colors">
             Create Staff Account
@@ -3805,12 +3830,33 @@ function AdminStaff({ token }: { token: string }) {
                 <div className="text-xs text-gray-400 dark:text-slate-500">{s.email} · {s.staffType}</div>
               </div>
             </div>
-            <button
-              onClick={() => removeStaff(s.id)}
-              className="icon-square-btn w-7 h-7 rounded-lg bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-slate-400 hover:bg-rose-100 dark:hover:bg-rose-500/10 hover:text-rose-500 transition-colors flex items-center justify-center text-xs"
-            >
-              <FiTrash2 />
-            </button>
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <Select
+                aria-label={`Access for ${s.name}`}
+                size="sm"
+                className="w-52"
+                selectedKeys={new Set([staffAccess[s.id] ?? s.staffType])}
+                onSelectionChange={(selection) => {
+                  if (selection === "all") return;
+                  const selected = Array.from(selection)[0];
+                  if (selected) setStaffAccess((current) => ({ ...current, [s.id]: String(selected) as StaffType }));
+                }}
+              >
+                <SelectItem key="ORDER_MANAGER">Order Manager</SelectItem>
+                <SelectItem key="PRODUCT_MANAGER">Product Manager</SelectItem>
+                <SelectItem key="ORDER_AND_PRODUCT_MANAGER">Order + Product Manager</SelectItem>
+              </Select>
+              <Button size="sm" isLoading={savingStaffId === s.id} isDisabled={(staffAccess[s.id] ?? s.staffType) === s.staffType} onPress={() => updateStaffAccess(s.id)}>
+                Save access
+              </Button>
+              <button
+                onClick={() => removeStaff(s.id)}
+                aria-label={`Remove ${s.name}`}
+                className="icon-square-btn w-7 h-7 rounded-lg bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-slate-400 hover:bg-rose-100 dark:hover:bg-rose-500/10 hover:text-rose-500 transition-colors flex items-center justify-center text-xs"
+              >
+                <FiTrash2 />
+              </button>
+            </div>
           </div>
         )}
       />

@@ -130,7 +130,7 @@ On Hostinger, configure the environment variables in the Node.js application set
 
 ## Authentication Setup
 
-Customer registration and login are available from the account interface. Passwords are hashed with bcrypt, and successful authentication uses a JWT session cookie. Set a unique `JWT_SECRET` before starting the app. For an initial admin, set `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` in the private server environment, then run the seed; never publish admin credentials. The first-admin onboarding route is also available when no admin account exists. Admins create staff accounts from the Staff Team page; staff use the same `/admin` sign-in and see sections permitted by their Order Manager or Product Manager role.
+Customer registration and login are available from the account interface. Passwords are hashed with bcrypt, and successful authentication uses a JWT session cookie. Set a unique `JWT_SECRET` before starting the app. For an initial admin, set `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` in the private server environment, then run the seed; never publish admin credentials. The first-admin onboarding route is also available when no admin account exists. Admins create and update staff access from **Staff Team**; staff use the same `/admin` sign-in. Order Manager can access orders, Product Manager can manage products and categories, and Order + Product Manager can access both sets of sections. Access can be changed later from the staff member's row.
 
 ## Payment Setup
 
