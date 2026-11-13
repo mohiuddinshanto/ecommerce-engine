@@ -158,6 +158,9 @@ type HeroBannerConfig = {
   badge?: string | null;
   title?: string | null;
   accent?: string | null;
+  cardLabel?: string | null;
+  cardText?: string | null;
+  cardLink?: string | null;
   subtitle?: string | null;
   buttonLabel?: string | null;
   buttonLink?: string | null;
@@ -180,6 +183,9 @@ type HeroBannerConfig = {
     badge?: string | null;
     title?: string | null;
     accent?: string | null;
+    cardLabel?: string | null;
+    cardText?: string | null;
+    cardLink?: string | null;
     subtitle?: string | null;
     buttonLabel?: string | null;
     buttonLink?: string | null;
@@ -5112,6 +5118,9 @@ function BannerSettings({ save, saving, config, token }: { save: (payload: objec
     badge: string;
     title: string;
     accent: string;
+    cardLabel: string;
+    cardText: string;
+    cardLink: string;
     subtitle: string;
     buttonLabel: string;
     buttonLink: string;
@@ -5123,6 +5132,7 @@ function BannerSettings({ save, saving, config, token }: { save: (payload: objec
   const makeEmptySlide = (): SlideData => ({
     id: crypto.randomUUID(),
     image: "", badge: "", title: "", accent: "", subtitle: "",
+    cardLabel: "", cardText: "", cardLink: "",
     buttonLabel: "", buttonLink: "", secondaryLabel: "", secondaryLink: "",
     uploading: false,
   });
@@ -5136,6 +5146,9 @@ function BannerSettings({ save, saving, config, token }: { save: (payload: objec
         badge: s.badge ?? "",
         title: s.title ?? "",
         accent: s.accent ?? "",
+        cardLabel: s.cardLabel ?? "",
+        cardText: s.cardText ?? "",
+        cardLink: s.cardLink ?? "",
         subtitle: s.subtitle ?? "",
         buttonLabel: s.buttonLabel ?? "",
         buttonLink: s.buttonLink ?? "",
@@ -5151,6 +5164,9 @@ function BannerSettings({ save, saving, config, token }: { save: (payload: objec
         badge: current.badge ?? "",
         title: current.title ?? "",
         accent: current.accent ?? "",
+        cardLabel: current.cardLabel ?? "",
+        cardText: current.cardText ?? "",
+        cardLink: current.cardLink ?? "",
         subtitle: current.subtitle ?? "",
         buttonLabel: current.buttonLabel ?? "",
         buttonLink: current.buttonLink ?? "",
@@ -5173,6 +5189,9 @@ function BannerSettings({ save, saving, config, token }: { save: (payload: objec
         badge: s.badge ?? "",
         title: s.title ?? "",
         accent: s.accent ?? "",
+        cardLabel: s.cardLabel ?? "",
+        cardText: s.cardText ?? "",
+        cardLink: s.cardLink ?? "",
         subtitle: s.subtitle ?? "",
         buttonLabel: s.buttonLabel ?? "",
         buttonLink: s.buttonLink ?? "",
@@ -5233,6 +5252,9 @@ function BannerSettings({ save, saving, config, token }: { save: (payload: objec
         badge: s.badge || null,
         title: s.title || null,
         accent: s.accent || null,
+        cardLabel: s.cardLabel || null,
+        cardText: s.cardText || null,
+        cardLink: s.cardLink || null,
         subtitle: s.subtitle || null,
         buttonLabel: s.buttonLabel || null,
         buttonLink: s.buttonLink || null,
@@ -5256,6 +5278,9 @@ function BannerSettings({ save, saving, config, token }: { save: (payload: objec
         badge: cleaned[0]?.badge ?? null,
         title: cleaned[0]?.title ?? null,
         accent: cleaned[0]?.accent ?? null,
+        cardLabel: cleaned[0]?.cardLabel ?? null,
+        cardText: cleaned[0]?.cardText ?? null,
+        cardLink: cleaned[0]?.cardLink ?? null,
         subtitle: cleaned[0]?.subtitle ?? null,
         buttonLabel: cleaned[0]?.buttonLabel ?? null,
         buttonLink: cleaned[0]?.buttonLink ?? null,
@@ -5365,6 +5390,9 @@ function BannerSettings({ save, saving, config, token }: { save: (payload: objec
             <Input label="Badge" placeholder="e.g. New collection" value={slide.badge} onValueChange={(v) => updateSlide(slide.id, { badge: v })} />
             <Input label="Title (first line)" placeholder="Objects for" value={slide.title} onValueChange={(v) => updateSlide(slide.id, { title: v })} />
             <Input className="sm:col-span-2" label="Title (accent line)" placeholder="a softer daily life." value={slide.accent} onValueChange={(v) => updateSlide(slide.id, { accent: v })} />
+            <Input label="Floating card label" placeholder="Curated for you" value={slide.cardLabel} onValueChange={(v) => updateSlide(slide.id, { cardLabel: v })} />
+            <Input label="Floating card text" placeholder="Use the banner title if empty" value={slide.cardText} onValueChange={(v) => updateSlide(slide.id, { cardText: v })} />
+            <Input className="sm:col-span-2" label="Floating card link (optional)" placeholder="#shop, /categories/accessories, or https://…" value={slide.cardLink} onValueChange={(v) => updateSlide(slide.id, { cardLink: v })} description="Leave empty to show the card without a link." />
             <Textarea className="sm:col-span-2" label="Subtitle" minRows={2} placeholder="Thoughtfully curated premium pieces…" value={slide.subtitle} onValueChange={(v) => updateSlide(slide.id, { subtitle: v })} />
             <Input label="Primary button text" placeholder="Explore Collection" value={slide.buttonLabel} onValueChange={(v) => updateSlide(slide.id, { buttonLabel: v })} />
             <Input label="Primary button link" placeholder="#shop or /products/slug or https://…" value={slide.buttonLink} onValueChange={(v) => updateSlide(slide.id, { buttonLink: v })} />

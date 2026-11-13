@@ -194,6 +194,9 @@ type HeroBannerConfig = {
   badge?: string | null;
   title?: string | null;
   accent?: string | null;
+  cardLabel?: string | null;
+  cardText?: string | null;
+  cardLink?: string | null;
   subtitle?: string | null;
   buttonLabel?: string | null;
   buttonLink?: string | null;
@@ -215,6 +218,9 @@ type HeroBannerConfig = {
     badge?: string | null;
     title?: string | null;
     accent?: string | null;
+    cardLabel?: string | null;
+    cardText?: string | null;
+    cardLink?: string | null;
     subtitle?: string | null;
     buttonLabel?: string | null;
     buttonLink?: string | null;
@@ -229,6 +235,9 @@ type HeroSlide = {
   badge: string | null;
   title: string | null;
   accent: string | null;
+  cardLabel?: string | null;
+  cardText?: string | null;
+  cardLink?: string | null;
   subtitle: string | null;
   buttonLabel: string | null;
   buttonLink: string | null;
@@ -548,6 +557,9 @@ export function Storefront({
       badge: bannerConfig?.badge ?? DEFAULT_HERO.badge,
       title: bannerConfig?.title ?? DEFAULT_HERO.title,
       accent: bannerConfig?.accent ?? DEFAULT_HERO.accent,
+      cardLabel: bannerConfig?.cardLabel,
+      cardText: bannerConfig?.cardText,
+      cardLink: bannerConfig?.cardLink,
       subtitle: bannerConfig?.subtitle ?? DEFAULT_HERO.subtitle,
       buttonLabel: bannerConfig?.buttonLabel ?? DEFAULT_HERO.buttonLabel,
       buttonLink: bannerConfig?.buttonLink ?? DEFAULT_HERO.buttonLink,
@@ -563,6 +575,9 @@ export function Storefront({
             badge: s.badge ?? fallbackSlide.badge,
             title: s.title ?? fallbackSlide.title,
             accent: s.accent ?? fallbackSlide.accent,
+            cardLabel: s.cardLabel ?? fallbackSlide.cardLabel,
+            cardText: s.cardText ?? fallbackSlide.cardText,
+            cardLink: s.cardLink ?? fallbackSlide.cardLink,
             subtitle: s.subtitle ?? fallbackSlide.subtitle,
             buttonLabel: s.buttonLabel ?? fallbackSlide.buttonLabel,
             buttonLink: s.buttonLink ?? fallbackSlide.buttonLink,

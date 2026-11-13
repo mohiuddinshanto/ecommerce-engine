@@ -62,6 +62,9 @@ type HeroSlide = {
   badge: string | null;
   title: string | null;
   accent: string | null;
+  cardLabel?: string | null;
+  cardText?: string | null;
+  cardLink?: string | null;
   subtitle: string | null;
   buttonLabel: string | null;
   buttonLink: string | null;
@@ -579,10 +582,16 @@ export function CatalogHome({
                   <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,#ffffff_0%,#f1f0ec_72%)]" />
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={s.image} alt="" fetchPriority="high" decoding="async" className="relative h-full min-h-[260px] w-full object-contain p-3 sm:min-h-[340px] md:absolute md:inset-0 md:min-h-0 md:p-5" />
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-2xl border border-white/70 bg-white/85 px-4 py-3 shadow-lg shadow-slate-900/5 backdrop-blur-md sm:bottom-6 sm:left-6 sm:right-6">
-                    <div className="min-w-0"><p className="text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">Curated for you</p><p className="mt-0.5 line-clamp-2 text-sm font-bold leading-snug text-slate-800">{[s.title, s.accent].filter(Boolean).join(" ") || "Discover something special"}</p></div>
-                    <span className="ml-3 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--primary)] text-white"><FiArrowRight size={16} /></span>
-                  </div>
+                  {s.cardLink ? (
+                    <Link href={s.cardLink} className="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-2xl border border-white/70 bg-white/85 px-4 py-3 shadow-lg shadow-slate-900/5 backdrop-blur-md transition hover:bg-white sm:bottom-6 sm:left-6 sm:right-6">
+                      <span className="min-w-0"><span className="block text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">{s.cardLabel || "Curated for you"}</span><span className="mt-0.5 line-clamp-2 block text-sm font-bold leading-snug text-slate-800">{s.cardText || [s.title, s.accent].filter(Boolean).join(" ") || "Discover something special"}</span></span>
+                      <span className="ml-3 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--primary)] text-white"><FiArrowRight size={16} /></span>
+                    </Link>
+                  ) : (
+                    <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-2xl border border-white/70 bg-white/85 px-4 py-3 shadow-lg shadow-slate-900/5 backdrop-blur-md sm:bottom-6 sm:left-6 sm:right-6">
+                      <span className="min-w-0"><span className="block text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">{s.cardLabel || "Curated for you"}</span><span className="mt-0.5 line-clamp-2 block text-sm font-bold leading-snug text-slate-800">{s.cardText || [s.title, s.accent].filter(Boolean).join(" ") || "Discover something special"}</span></span>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
