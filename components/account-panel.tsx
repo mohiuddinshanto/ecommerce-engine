@@ -25,6 +25,7 @@ import {
 
 const money = formatMoney;
 const apiUrl = "";
+const reviewerDemo = { email: "reviewer@epic-store.example.com", password: "EpicReview-2026!" };
 
 type User = { id: string; name: string; email: string; role: string; emailVerified?: boolean };
 type Order = { id: string; status: string; totalAmount: string; createdAt: string };
@@ -266,6 +267,20 @@ export function AccountPanel() {
                     <button type="button" role="tab" aria-selected={authMode === "sign-up"} onClick={() => setAuthMode("sign-up")}>Create account</button>
                   </div>
                   <AccountForm mode={authMode} submit={submit} />
+                  {authMode === "sign-in" && (
+                    <aside className="mt-5 rounded-2xl border border-primary/15 bg-primary/5 p-4" aria-label="Reviewer demo account">
+                      <div className="flex items-center justify-between gap-3">
+                        <h2 className="text-sm font-bold text-slate-800">Reviewer demo account</h2>
+                        <span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-primary">Customer</span>
+                      </div>
+                      <p className="mt-2 break-all text-xs text-slate-600">Email: {reviewerDemo.email}</p>
+                      <p className="mt-1 text-xs text-slate-600">Password: {reviewerDemo.password}</p>
+                      <p className="mt-2 text-[11px] leading-5 text-slate-500">For storefront review only. This account has no admin access.</p>
+                      <button type="button" onClick={() => window.dispatchEvent(new CustomEvent("epic:fill-reviewer-demo"))} className="mt-3 text-xs font-bold text-primary hover:underline">
+                        Fill demo sign-in
+                      </button>
+                    </aside>
+                  )}
                   <button
                     type="button"
                     onClick={() => setShowForgot(true)}
@@ -525,6 +540,17 @@ function AccountForm({
 }) {
   const [showPassword, setShowPassword] = useState(false);
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  useEffect(() => {
+    const fillDemo = () => {
+      setEmail(reviewerDemo.email);
+      setPassword(reviewerDemo.password);
+    };
+    window.addEventListener("epic:fill-reviewer-demo", fillDemo);
+    return () => window.removeEventListener("epic:fill-reviewer-demo", fillDemo);
+  }, []);
+
   return (
     <form
       onSubmit={(event) => submit(event, mode)}
@@ -533,11 +559,13 @@ function AccountForm({
       {mode === "sign-up" && (
         <Input name="name" label="Full name" placeholder="Rahim Ahmed" isRequired startContent={<FiUser />} />
       )}
-      <Input name="email" type="email" label="Email" placeholder="you@example.com" isRequired startContent={<FiMail />} />
+      <Input name="email" type="email" label="Email" placeholder="you@example.com" value={email} onValueChange={setEmail} isRequired startContent={<FiMail />} />
       <Input
         name="password"
         type={showPassword ? "text" : "password"}
         label="Password"
+        value={password}
+        onValueChange={setPassword}
         placeholder="••••••••"
         minLength={8}
         isRequired
