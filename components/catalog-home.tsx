@@ -74,8 +74,8 @@ const scrollToId = (link: string) => document.getElementById(link.replace(/^#/, 
 const CTA = ({ label, href, primary }: { label: string; href?: string; primary?: boolean }) => {
   const text = label || (primary ? "Shop now" : "View collection");
   const base = primary
-    ? "inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-500 text-gray-950 font-bold px-7 py-3 rounded-full text-sm transition shadow hover:shadow-lg transform active:scale-95"
-    : "inline-flex items-center gap-2 bg-emerald-900 hover:bg-emerald-800 text-white font-semibold px-5 py-2.5 rounded-full text-sm transition shadow-sm hover:shadow active:scale-95";
+    ? "inline-flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-bold px-6 py-3 rounded-full text-sm transition shadow-lg shadow-black/10 hover:shadow-xl active:scale-[.98]"
+    : "inline-flex items-center gap-2 border border-white/25 bg-white/10 hover:bg-white/15 text-white font-semibold px-5 py-3 rounded-full text-sm transition backdrop-blur-sm active:scale-[.98]";
   if (href) {
     if (href.startsWith("#")) return <button className={base} onClick={() => scrollToId(href)}>{text} <FiArrowRight size={14} /></button>;
     const isExternal = /^https?:/.test(href);
@@ -552,44 +552,36 @@ export function CatalogHome({
   return (
     <>
       {/* HERO */}
-      {sectionVisibility?.hero !== false && <section className="mx-auto max-w-7xl px-4 py-4 md:py-6">
-        <div className="overflow-hidden rounded-2xl shadow-xl">
+      {sectionVisibility?.hero !== false && <section className="mx-auto max-w-[1440px] px-4 py-5 sm:px-6 md:py-8">
+        <div className="overflow-hidden rounded-[28px] shadow-2xl shadow-slate-900/10">
           <CarouselSlider
             items={heroSlides.map((s) => (
-              <div key={s.id} className="relative flex min-h-[360px] items-center overflow-hidden bg-gradient-to-r from-[#031d14] via-[var(--primary)] to-[#12573d] text-white sm:min-h-[420px] md:min-h-[480px]">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={s.image} alt="" fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover opacity-40" />
-                <div className="relative z-10 grid w-full items-center gap-6 px-5 py-8 sm:px-8 sm:gap-6 md:grid-cols-12 md:px-14">
-                  <div className="space-y-4 md:col-span-7">
-                    {s.badge && <p className="text-sm font-medium tracking-wide text-amber-300">{s.badge}</p>}
-                    <h1 className="text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl md:text-5xl lg:text-6xl">
-                      {s.title || "For every moment"} <br />
-                      <span className="text-amber-400">{s.accent || "Made to be worn"}</span>
-                    </h1>
-                    {s.subtitle && (
-                      <p className="flex flex-wrap items-center gap-2 text-sm text-emerald-100/95 font-normal md:text-base">
-                        {s.subtitle.split("|").map((t, i) => (
-                          <span key={i} className="flex items-center gap-2">
-                            {i > 0 && <span className="opacity-50">|</span>}
-                            {t.trim()}
-                          </span>
-                        ))}
-                      </p>
-                    )}
-                    <div className="flex flex-wrap gap-3 pt-3">
-                      <CTA label={s.buttonLabel ?? ""} href={s.buttonLink ?? "#shop"} primary />
-                      <CTA label={s.secondaryLabel ?? ""} href={s.secondaryLink ?? "#categories"} />
-                    </div>
+              <div key={s.id} className="relative grid min-h-[500px] overflow-hidden bg-[#172521] text-white md:min-h-[520px] md:grid-cols-[1.02fr_.98fr]">
+                <div className="pointer-events-none absolute -left-24 -top-36 h-[440px] w-[440px] rounded-full border border-white/[0.07]" />
+                <div className="pointer-events-none absolute -left-10 -top-20 h-[300px] w-[300px] rounded-full border border-white/[0.06]" />
+                <div className="relative z-10 flex flex-col justify-center px-6 py-10 sm:px-10 md:px-14 lg:px-16">
+                  {s.badge && <p className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[.18em] text-white/75"><span className="h-1.5 w-1.5 rounded-full bg-[var(--primary-light)]" />{s.badge}</p>}
+                  <h1 className="max-w-[680px] text-4xl font-extrabold leading-[1.04] tracking-[-.045em] sm:text-5xl lg:text-[4.4rem]">
+                    {s.title || "For every moment"}
+                    {s.accent && <><br /><span className="text-[var(--primary-light)]">{s.accent}</span></>}
+                  </h1>
+                  {s.subtitle && <p className="mt-5 max-w-xl text-sm leading-7 text-white/65 sm:text-base">{s.subtitle.split("|").map((part) => part.trim()).filter(Boolean).join("  ·  ")}</p>}
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    <CTA label={s.buttonLabel ?? ""} href={s.buttonLink ?? "#shop"} primary />
+                    <CTA label={s.secondaryLabel ?? ""} href={s.secondaryLink ?? "#categories"} />
                   </div>
-                  <div className="relative flex justify-center md:col-span-5 md:justify-end">
-                    <div className="relative max-w-xs w-full md:max-w-md">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={s.image}
-                        alt="Banner"
-                        className="h-52 w-full rounded-xl object-cover object-top shadow-2xl sm:h-72 md:h-96"
-                      />
-                    </div>
+                  <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-medium text-white/55">
+                    <span className="inline-flex items-center gap-2"><FiShield className="text-[var(--primary-light)]" />Secure checkout</span>
+                    <span className="inline-flex items-center gap-2"><FiTruck className="text-[var(--primary-light)]" />Reliable delivery</span>
+                  </div>
+                </div>
+                <div className="relative mx-5 mb-5 min-h-[240px] overflow-hidden rounded-[22px] bg-[#f1f0ec] sm:mx-8 md:my-8 md:ml-0 md:mr-8 md:min-h-0">
+                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,#ffffff_0%,#f1f0ec_72%)]" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={s.image} alt="" fetchPriority="high" decoding="async" className="relative h-full min-h-[260px] w-full object-contain p-3 sm:min-h-[340px] md:absolute md:inset-0 md:min-h-0 md:p-5" />
+                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-2xl border border-white/70 bg-white/85 px-4 py-3 shadow-lg shadow-slate-900/5 backdrop-blur-md sm:bottom-6 sm:left-6 sm:right-6">
+                    <div className="min-w-0"><p className="text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">Curated for you</p><p className="mt-0.5 line-clamp-2 text-sm font-bold leading-snug text-slate-800">{[s.title, s.accent].filter(Boolean).join(" ") || "Discover something special"}</p></div>
+                    <span className="ml-3 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--primary)] text-white"><FiArrowRight size={16} /></span>
                   </div>
                 </div>
               </div>
@@ -615,34 +607,38 @@ export function CatalogHome({
           <Link
             key={c.id}
             href={`/categories/${c.slug}`}
-            className="group flex h-full flex-col rounded-xl border border-gray-100 bg-white p-3 text-center shadow-sm transition hover:border-emerald-300 hover:shadow-md"
+            className="group relative block overflow-hidden rounded-[20px] border border-slate-200/80 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[var(--primary)]/30 hover:shadow-xl hover:shadow-slate-900/10"
           >
-            <div className="relative mb-2.5 aspect-square overflow-hidden rounded-lg bg-emerald-50">
+            <div className="relative aspect-[4/4.7] overflow-hidden bg-slate-100">
               <Image
                 src={c.image ?? img(products.find((p) => p.categoryId === c.id || p.categoryLinks?.some((link) => link.categoryId === c.id)) ?? { images: [] } as any)}
                 alt=""
                 fill
-                sizes="200px"
-                className="rounded-lg object-cover transition duration-300 group-hover:scale-105"
+                sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 16vw"
+                className="object-cover transition duration-700 group-hover:scale-110"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/0 to-black/0" />
+              <span className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2 text-left sm:bottom-4 sm:left-4 sm:right-4">
+                <span className="min-w-0"><span className="block truncate text-sm font-bold text-white sm:text-base">{c.name}</span><span className="mt-0.5 block text-[11px] font-medium text-white/70">{c.count} items</span></span>
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/35 bg-white/15 text-white backdrop-blur transition group-hover:bg-white group-hover:text-slate-900"><FiArrowRight size={14} /></span>
+              </span>
             </div>
-            <h3 className="truncate text-sm font-bold text-gray-800 group-hover:text-[var(--primary)] sm:text-[0.95rem]">{c.name}</h3>
-            <p className="text-xs text-gray-500">({c.count})</p>
           </Link>
         );
         return (
-          <section id="categories" className="mx-auto max-w-7xl px-4 py-8">
-            <div className="mb-5 flex items-center justify-between gap-3">
+          <section id="categories" className="mx-auto max-w-[1360px] px-4 py-9 sm:px-6 md:py-12">
+            <div className="mb-5 flex items-end justify-between gap-3 sm:mb-7">
               <div className="flex items-center gap-2">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100 text-[var(--primary)]">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--primary)]/10 text-[var(--primary)]">
                   <FiShoppingBag size={18} />
                 </span>
                 <div>
-                  {eyebrow && <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">{eyebrow}</p>}
-                  <h2 className="text-xl font-bold text-gray-900 md:text-2xl">
-                    {title || "Categories"}
-                    {accent && <span className="text-emerald-700"> {accent}</span>}
+                  <p className="text-[10px] font-bold uppercase tracking-[.2em] text-[var(--primary)]">{eyebrow || "Find your style"}</p>
+                  <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+                    {title || "Shop by category"}
+                    {accent && <span className="text-[var(--primary)]"> {accent}</span>}
                   </h2>
+                  <p className="mt-1.5 text-sm text-slate-500">A few good places to start exploring.</p>
                 </div>
               </div>
               <Link href="/shop" className="flex shrink-0 items-center gap-1 text-sm font-semibold text-[var(--primary)] hover:underline">
@@ -650,7 +646,7 @@ export function CatalogHome({
               </Link>
             </div>
             {mode === "grid" ? (
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-7">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
                 {catCounts.slice(0, maxCategories).map(card)}
               </div>
             ) : (
