@@ -608,6 +608,7 @@ async function availableStock(productId: string, variationId?: string) {
   return prisma.product.findUnique({ where: { id: productId }, select: { stock: true, manageStock: true } });
 }
 app.get("/api/cart", requireAuth, async (req, res) => res.json(cartResponse(await getUserCart(req.user!.id))));
+app.post("/api/cart", requireAuth, async (req, res) => res.json(cartResponse(await getUserCart(req.user!.id))));
 app.post("/api/cart/items", requireAuth, async (req, res) => {
   const parsed = cartItemInput.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid cart item" });
