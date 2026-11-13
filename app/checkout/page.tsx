@@ -96,6 +96,7 @@ export default function CheckoutPage() {
   const [form, setForm] = useState<CheckoutForm>(DEFAULT_CHECKOUT_FORM);
   const [optionsLoading, setOptionsLoading] = useState(true);
   const [shippingConfig, setShippingConfig] = useState<ShippingConfig | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [selectedShipping, setSelectedShipping] = useState("");
   const [shippingDetails, setShippingDetails] = useState<Record<string, string>>({ country: "" });
   const [checkoutSessionId, setCheckoutSessionId] = useState("");
@@ -222,8 +223,26 @@ export default function CheckoutPage() {
       return;
     }
 
+    const formData = new FormData(event.currentTarget);
+    const nextErrors: Record<string, string> = {};
+    for (const [key, field] of enabledFields) {
+      const value = String(formData.get(key) ?? "").trim();
+      if (field.required && !value) nextErrors[key] = `${field.label} is required.`;
+      else if (key === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) nextErrors[key] = "Enter a valid email address.";
+      else if (key === "phone" && value) {
+        const digits = value.replace(/\D/g, "");
+        if (!/^[+\d().\s-]+$/.test(value) || digits.length < 7 || digits.length > 15) nextErrors[key] = "Enter a valid phone number.";
+      }
+    }
+    setFieldErrors(nextErrors);
+    if (Object.keys(nextErrors).length) {
+      const firstInvalid = Object.keys(nextErrors)[0];
+      document.querySelector<HTMLInputElement>(`[name="${firstInvalid}"]`)?.focus();
+      return;
+    }
+
     setSaving(true);
-    const fd = new FormData(event.currentTarget);
+    const fd = formData;
 
     try {
       const response = await fetch(apiUrl + (selectedMethod === "STRIPE" ? "/api/checkout/stripe" : "/api/orders"), {
@@ -301,7 +320,7 @@ export default function CheckoutPage() {
           </span>
           <h2>Shipping & Payment Details</h2>
 
-          <form onSubmit={submit} onChange={recordCheckout} style={{ display: "grid", gap: "24px" }}>
+          <form noValidate onSubmit={submit} onChange={recordCheckout} style={{ display: "grid", gap: "24px" }}>
             <p className="text-xs text-gray-500" role="note">If you leave checkout before placing your order, the contact details and cart you entered may be kept for up to 30 days so the store can follow up. This checkout record is removed automatically after 30 days.</p>
             <div className="form-grid">
               {Object.entries(form)
@@ -315,6 +334,11 @@ export default function CheckoutPage() {
                     label={field.label}
                     placeholder={field.placeholder}
                     isRequired={Boolean(field.required)}
+                    isInvalid={Boolean(fieldErrors[key])}
+                    errorMessage={fieldErrors[key]}
+                    onChange={() => {
+                      if (fieldErrors[key]) setFieldErrors((current) => { const next = { ...current }; delete next[key]; return next; });
+                    }}
                     startContent={FIELD_META[key]?.icon}
                     {...(["country", "state", "city", "postalCode"].includes(key) ? { value: shippingDetails[key] ?? "", onValueChange: (value: string) => setShippingDetails((current) => ({ ...current, [key]: value })) } : {})}
                   />

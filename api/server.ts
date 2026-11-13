@@ -167,6 +167,25 @@ const defaultCheckoutForm = {
   postalCode: { enabled: true, required: true, label: "Postal code", placeholder: "Postal code" },
   country: { enabled: true, required: true, label: "Country", placeholder: "Country" },
 };
+
+function checkoutDetailsError(
+  details: Record<string, unknown>,
+  savedForm: Record<string, Record<string, unknown>> = {},
+): string | null {
+  for (const [key, defaults] of Object.entries(defaultCheckoutForm)) {
+    const field = { ...defaults, ...(savedForm[key] ?? {}) };
+    if (!field.enabled) continue;
+    const value = typeof details[key] === "string" ? details[key].trim() : "";
+    if (field.required && !value) return `${field.label} is required.`;
+    if (!value) continue;
+    if (key === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Enter a valid email address.";
+    if (key === "phone") {
+      const digits = value.replace(/\D/g, "");
+      if (!/^[+\d().\s-]+$/.test(value) || digits.length < 7 || digits.length > 15) return "Enter a valid phone number.";
+    }
+  }
+  return null;
+}
 const gatewayBase = {
   enabled: z.boolean(),
   mode: z.enum(["sandbox", "live"]).optional(),
@@ -685,7 +704,22 @@ app.get("/api/account/orders", requireAuth, async (req, res) => {
   res.json(await prisma.order.findMany({ where: { customerId: req.user!.id, deletedAt: null }, orderBy: { createdAt: "desc" } }));
 });
 app.get("/api/orders/:id", requireAuth, async (req, res) => {
-  const order = await prisma.order.findFirst({ where: { id: String(req.params.id), customerId: req.user!.id, deletedAt: null }, select: { id: true, status: true, paymentStatus: true, totalAmount: true, createdAt: true } });
+  const order = await prisma.order.findFirst({
+    where: { id: String(req.params.id), customerId: req.user!.id, deletedAt: null },
+    select: {
+      id: true,
+      status: true,
+      paymentStatus: true,
+      paymentMethod: true,
+      subtotal: true,
+      shippingCharge: true,
+      discountAmount: true,
+      totalAmount: true,
+      createdAt: true,
+      shippingDetails: true,
+      orderItems: true,
+    },
+  });
   if (!order) return res.status(404).json({ error: "Order not found" });
   res.json(order);
 });
@@ -763,7 +797,10 @@ app.post("/api/checkout/stripe", requireAuth, rateLimit({ windowMs: 10 * 60_000,
   const cart = await prisma.cart.findUnique({ where: { userId: req.user!.id }, include: { items: { include: { product: { include: { categoryLinks: true } }, variation: true } } } });
   if (!cart?.items.length) return res.status(400).json({ error: "Your cart is empty" });
   const details = parsed.data.shippingDetails as Record<string, unknown>;
-  for (const [key, field] of Object.entries(defaultCheckoutForm)) if (field.required && (typeof details[key] !== "string" || !String(details[key]).trim())) return res.status(400).json({ error: `${field.label} is required.` });
+  const storeConfig = await prisma.storeConfig.findUnique({ where: { id: "store-config-singleton" }, select: { checkoutForm: true } });
+  const savedForm = (storeConfig?.checkoutForm as Record<string, Record<string, unknown>> | null) ?? {};
+  const detailsError = checkoutDetailsError(details, savedForm);
+  if (detailsError) return res.status(400).json({ error: detailsError });
   const normalized: Array<{ productId: string; variationId?: string; name: string; qty: number; price: number; categoryId: string; categoryIds: string[]; sku?: string }> = [];
   let subtotalCents = 0;
   for (const item of cart.items) {
@@ -815,7 +852,7 @@ app.post("/api/checkout/stripe", requireAuth, rateLimit({ windowMs: 10 * 60_000,
     const lineItems = normalized.map((item) => ({ quantity: item.qty, price_data: { currency, unit_amount: Math.round(item.price * 100), product_data: { name: item.name } } }));
     if (shippingCents) lineItems.push({ quantity: 1, price_data: { currency, unit_amount: shippingCents, product_data: { name: "Shipping" } } });
     const discounts = discountCents ? [{ coupon: (await stripe().coupons.create({ amount_off: discountCents, currency, duration: "once" })).id }] : undefined;
-    const session = await stripe().checkout.sessions.create({ mode: "payment", line_items: lineItems, discounts, client_reference_id: req.user!.id, metadata: { orderId: order.id }, payment_intent_data: { metadata: { orderId: order.id } }, success_url: `${origin}/checkout/success?order=${order.id}`, cancel_url: `${origin}/checkout/cancel?order=${order.id}` });
+    const session = await stripe().checkout.sessions.create({ mode: "payment", line_items: lineItems, discounts, client_reference_id: req.user!.id, metadata: { orderId: order.id }, payment_intent_data: { metadata: { orderId: order.id } }, success_url: `${origin}/order-success?order=${order.id}`, cancel_url: `${origin}/checkout/cancel?order=${order.id}` });
     await prisma.order.update({ where: { id: order.id }, data: { stripeSessionId: session.id } });
     res.json({ url: session.url, orderId: order.id });
   } catch (error) {
@@ -847,12 +884,8 @@ app.post("/api/orders", requireAuth, rateLimit({ windowMs: 10 * 60_000, max: 20,
 
   const shippingDetails = parsed.data.shippingDetails as Record<string, unknown>;
   const savedForm = (storeConfig?.checkoutForm as Record<string, Record<string, unknown>> | null) ?? {};
-  for (const [key, defaults] of Object.entries(defaultCheckoutForm)) {
-    const field = { ...defaults, ...(savedForm[key] ?? {}) };
-    if (field.enabled && field.required && (typeof shippingDetails[key] !== "string" || !String(shippingDetails[key]).trim())) {
-      return res.status(400).json({ error: `${field.label} is required.` });
-    }
-  }
+  const detailsError = checkoutDetailsError(shippingDetails, savedForm);
+  if (detailsError) return res.status(400).json({ error: detailsError });
 
   const ipAddress = req.ip || "127.0.0.1";
   const requestedItems = new Map<string, { productId: string; variationId?: string; qty: number }>();
