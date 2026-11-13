@@ -3,42 +3,42 @@
     {
       "name": "Apparel",
       "slug": "apparel",
-      "image": "/product-placeholder.svg",
+      "image": "/images/products/photo-1666358059751-3accf39c2d95.jpg",
       "parentSlug": null,
       "attributeSchema": null
     },
     {
       "name": "Accessories",
       "slug": "accessories",
-      "image": "/product-placeholder.svg",
+      "image": "/images/products/photo-1584917865442-de89df76afd3.jpg",
       "parentSlug": null,
       "attributeSchema": null
     },
     {
       "name": "Footwear",
       "slug": "footwear",
-      "image": "/product-placeholder.svg",
+      "image": "/images/products/photo-1687444334081-8ca04ed2a1a3.jpg",
       "parentSlug": null,
       "attributeSchema": null
     },
     {
       "name": "Home & Living",
       "slug": "home-living",
-      "image": "/product-placeholder.svg",
+      "image": "/images/products/photo-1677519708512-fd591642ee95.jpg",
       "parentSlug": null,
       "attributeSchema": null
     },
     {
       "name": "Beauty & Care",
       "slug": "beauty-care",
-      "image": "/product-placeholder.svg",
+      "image": "/images/products/photo-1764656424627-1fa7e5e7c2ed.jpg",
       "parentSlug": null,
       "attributeSchema": null
     },
     {
       "name": "Tech & Everyday",
       "slug": "tech-everyday",
-      "image": "/product-placeholder.svg",
+      "image": "/images/products/photo-1640901821270-6e9c47fbdc07.jpg",
       "parentSlug": null,
       "attributeSchema": null
     }
@@ -57,7 +57,7 @@
       "sku": "DEMO-001",
       "productType": "VARIABLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1666358059751-3accf39c2d95.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -69,7 +69,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1666358059751-3accf39c2d95.jpg",
           "altText": "Classic Linen Shirt",
           "title": "Classic Linen Shirt",
           "sortOrder": 0,
@@ -107,7 +107,7 @@
           "stock": 8,
           "manageStock": true,
           "weight": null,
-          "image": null,
+          "image": "/images/products/photo-1666358059751-3accf39c2d95.jpg",
           "gallery": [],
           "description": null,
           "status": "active",
@@ -126,7 +126,7 @@
           "stock": 8,
           "manageStock": true,
           "weight": null,
-          "image": null,
+          "image": "/images/products/photo-1666358059751-3accf39c2d95.jpg",
           "gallery": [],
           "description": null,
           "status": "active",
@@ -145,7 +145,7 @@
           "stock": 8,
           "manageStock": true,
           "weight": null,
-          "image": null,
+          "image": "/images/products/photo-1666358059751-3accf39c2d95.jpg",
           "gallery": [],
           "description": null,
           "status": "active",
@@ -171,7 +171,7 @@
       "sku": "DEMO-002",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1521572163474-6864f9cf17ab.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -183,7 +183,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1521572163474-6864f9cf17ab.jpg",
           "altText": "Everyday Cotton Tee",
           "title": "Everyday Cotton Tee",
           "sortOrder": 0,
@@ -206,7 +206,7 @@
       "sku": "DEMO-003",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1542272604-787c3835535d.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -218,7 +218,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1542272604-787c3835535d.jpg",
           "altText": "Relaxed Fit Chinos",
           "title": "Relaxed Fit Chinos",
           "sortOrder": 0,
@@ -241,7 +241,7 @@
       "sku": "DEMO-004",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1576566588028-4147f3842f27.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -253,7 +253,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1576566588028-4147f3842f27.jpg",
           "altText": "Lightweight Knit Sweater",
           "title": "Lightweight Knit Sweater",
           "sortOrder": 0,
@@ -276,7 +276,7 @@
       "sku": "DEMO-005",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1666358059751-3accf39c2d95.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -288,7 +288,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1666358059751-3accf39c2d95.jpg",
           "altText": "Modern Overshirt",
           "title": "Modern Overshirt",
           "sortOrder": 0,
@@ -311,7 +311,7 @@
       "sku": "DEMO-006",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1584917865442-de89df76afd3.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -323,7 +323,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1584917865442-de89df76afd3.jpg",
           "altText": "Canvas Weekend Tote",
           "title": "Canvas Weekend Tote",
           "sortOrder": 0,
@@ -346,7 +346,7 @@
       "sku": "DEMO-007",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1627123424574-724758594e93.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -358,7 +358,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1627123424574-724758594e93.jpg",
           "altText": "Minimal Leather Wallet",
           "title": "Minimal Leather Wallet",
           "sortOrder": 0,
@@ -381,7 +381,7 @@
       "sku": "DEMO-008",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1584917865442-de89df76afd3.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -393,7 +393,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1584917865442-de89df76afd3.jpg",
           "altText": "Everyday Crossbody Bag",
           "title": "Everyday Crossbody Bag",
           "sortOrder": 0,
@@ -416,7 +416,7 @@
       "sku": "DEMO-009",
       "productType": "VARIABLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1623998021446-45cd9b269056.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -428,7 +428,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1623998021446-45cd9b269056.jpg",
           "altText": "Classic Metal Watch",
           "title": "Classic Metal Watch",
           "sortOrder": 0,
@@ -466,7 +466,7 @@
           "stock": 3,
           "manageStock": true,
           "weight": null,
-          "image": null,
+          "image": "/images/products/photo-1623998021446-45cd9b269056.jpg",
           "gallery": [],
           "description": null,
           "status": "active",
@@ -485,7 +485,7 @@
           "stock": 3,
           "manageStock": true,
           "weight": null,
-          "image": null,
+          "image": "/images/products/photo-1623998021446-45cd9b269056.jpg",
           "gallery": [],
           "description": null,
           "status": "active",
@@ -504,7 +504,7 @@
           "stock": 3,
           "manageStock": true,
           "weight": null,
-          "image": null,
+          "image": "/images/products/photo-1623998021446-45cd9b269056.jpg",
           "gallery": [],
           "description": null,
           "status": "active",
@@ -530,7 +530,7 @@
       "sku": "DEMO-010",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1511499767150-a48a237f0083.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -542,7 +542,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1511499767150-a48a237f0083.jpg",
           "altText": "Polarized Sunglasses",
           "title": "Polarized Sunglasses",
           "sortOrder": 0,
@@ -565,7 +565,7 @@
       "sku": "DEMO-011",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1687444334081-8ca04ed2a1a3.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -577,7 +577,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1687444334081-8ca04ed2a1a3.jpg",
           "altText": "Cloud Walk Sneakers",
           "title": "Cloud Walk Sneakers",
           "sortOrder": 0,
@@ -600,7 +600,7 @@
       "sku": "DEMO-012",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1637437757614-6491c8e915b5.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -612,7 +612,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1637437757614-6491c8e915b5.jpg",
           "altText": "Leather Court Shoes",
           "title": "Leather Court Shoes",
           "sortOrder": 0,
@@ -635,7 +635,7 @@
       "sku": "DEMO-013",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1637437757614-6491c8e915b5.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -647,7 +647,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1637437757614-6491c8e915b5.jpg",
           "altText": "Trail Ready Trainers",
           "title": "Trail Ready Trainers",
           "sortOrder": 0,
@@ -670,7 +670,7 @@
       "sku": "DEMO-014",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1687444334081-8ca04ed2a1a3.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -682,7 +682,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1687444334081-8ca04ed2a1a3.jpg",
           "altText": "Everyday Slip-ons",
           "title": "Everyday Slip-ons",
           "sortOrder": 0,
@@ -705,7 +705,7 @@
       "sku": "DEMO-015",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1687444334081-8ca04ed2a1a3.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -717,7 +717,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1687444334081-8ca04ed2a1a3.jpg",
           "altText": "Soft Step Sandals",
           "title": "Soft Step Sandals",
           "sortOrder": 0,
@@ -740,7 +740,7 @@
       "sku": "DEMO-016",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1514228742587-6b1558fcca3d.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -752,7 +752,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1514228742587-6b1558fcca3d.jpg",
           "altText": "Stoneware Coffee Mug",
           "title": "Stoneware Coffee Mug",
           "sortOrder": 0,
@@ -775,7 +775,7 @@
       "sku": "DEMO-017",
       "productType": "VARIABLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1636714560735-9f84a7c06d16.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -787,7 +787,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1636714560735-9f84a7c06d16.jpg",
           "altText": "Amber Glass Candle",
           "title": "Amber Glass Candle",
           "sortOrder": 0,
@@ -825,7 +825,7 @@
           "stock": 11,
           "manageStock": true,
           "weight": null,
-          "image": null,
+          "image": "/images/products/photo-1636714560735-9f84a7c06d16.jpg",
           "gallery": [],
           "description": null,
           "status": "active",
@@ -844,7 +844,7 @@
           "stock": 11,
           "manageStock": true,
           "weight": null,
-          "image": null,
+          "image": "/images/products/photo-1636714560735-9f84a7c06d16.jpg",
           "gallery": [],
           "description": null,
           "status": "active",
@@ -863,7 +863,7 @@
           "stock": 11,
           "manageStock": true,
           "weight": null,
-          "image": null,
+          "image": "/images/products/photo-1636714560735-9f84a7c06d16.jpg",
           "gallery": [],
           "description": null,
           "status": "active",
@@ -889,7 +889,7 @@
       "sku": "DEMO-018",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1677519708512-fd591642ee95.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -901,7 +901,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1677519708512-fd591642ee95.jpg",
           "altText": "Linen Cushion Cover",
           "title": "Linen Cushion Cover",
           "sortOrder": 0,
@@ -924,7 +924,7 @@
       "sku": "DEMO-019",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1677519708512-fd591642ee95.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -936,7 +936,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1677519708512-fd591642ee95.jpg",
           "altText": "Woven Storage Basket",
           "title": "Woven Storage Basket",
           "sortOrder": 0,
@@ -959,7 +959,7 @@
       "sku": "DEMO-020",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1677519708512-fd591642ee95.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -971,7 +971,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1677519708512-fd591642ee95.jpg",
           "altText": "Soft Cotton Throw",
           "title": "Soft Cotton Throw",
           "sortOrder": 0,
@@ -994,7 +994,7 @@
       "sku": "DEMO-021",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1764656424627-1fa7e5e7c2ed.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -1006,7 +1006,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1764656424627-1fa7e5e7c2ed.jpg",
           "altText": "Daily Hydration Serum",
           "title": "Daily Hydration Serum",
           "sortOrder": 0,
@@ -1029,7 +1029,7 @@
       "sku": "DEMO-022",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1774620714979-2c258294fa48.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -1041,7 +1041,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1774620714979-2c258294fa48.jpg",
           "altText": "Gentle Face Cleanser",
           "title": "Gentle Face Cleanser",
           "sortOrder": 0,
@@ -1064,7 +1064,7 @@
       "sku": "DEMO-023",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1774620714979-2c258294fa48.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -1076,7 +1076,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1774620714979-2c258294fa48.jpg",
           "altText": "Botanical Hand Cream",
           "title": "Botanical Hand Cream",
           "sortOrder": 0,
@@ -1099,7 +1099,7 @@
       "sku": "DEMO-024",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1774620714979-2c258294fa48.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -1111,7 +1111,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1774620714979-2c258294fa48.jpg",
           "altText": "Travel Care Set",
           "title": "Travel Care Set",
           "sortOrder": 0,
@@ -1134,7 +1134,7 @@
       "sku": "DEMO-025",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1764656424627-1fa7e5e7c2ed.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -1146,7 +1146,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1764656424627-1fa7e5e7c2ed.jpg",
           "altText": "Reusable Skin Tool Set",
           "title": "Reusable Skin Tool Set",
           "sortOrder": 0,
@@ -1169,7 +1169,7 @@
       "sku": "DEMO-026",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1640901821270-6e9c47fbdc07.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -1181,7 +1181,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1640901821270-6e9c47fbdc07.jpg",
           "altText": "Wireless Earbuds",
           "title": "Wireless Earbuds",
           "sortOrder": 0,
@@ -1204,7 +1204,7 @@
       "sku": "DEMO-027",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1609091839311-d5365f9ff1c5.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -1216,7 +1216,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1609091839311-d5365f9ff1c5.jpg",
           "altText": "Compact Power Bank",
           "title": "Compact Power Bank",
           "sortOrder": 0,
@@ -1239,7 +1239,7 @@
       "sku": "DEMO-028",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1609091839311-d5365f9ff1c5.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -1251,7 +1251,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1609091839311-d5365f9ff1c5.jpg",
           "altText": "Braided USB-C Cable",
           "title": "Braided USB-C Cable",
           "sortOrder": 0,
@@ -1274,7 +1274,7 @@
       "sku": "DEMO-029",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1507473885765-e6ed057f782c.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -1286,7 +1286,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1507473885765-e6ed057f782c.jpg",
           "altText": "Adjustable Desk Light",
           "title": "Adjustable Desk Light",
           "sortOrder": 0,
@@ -1309,7 +1309,7 @@
       "sku": "DEMO-030",
       "productType": "SIMPLE",
       "images": [
-        "/product-placeholder.svg"
+        "/images/products/photo-1602143407151-7111542de6e8.jpg"
       ],
       "productAttributes": null,
       "variants": null,
@@ -1321,7 +1321,7 @@
       "seoDescription": null,
       "imagesDetails": [
         {
-          "url": "/product-placeholder.svg",
+          "url": "/images/products/photo-1602143407151-7111542de6e8.jpg",
           "altText": "Insulated Water Bottle",
           "title": "Insulated Water Bottle",
           "sortOrder": 0,
