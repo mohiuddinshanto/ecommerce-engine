@@ -3,7 +3,7 @@ import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma.js";
 
-export type AuthUser = { id: string; name: string; email: string; emailVerified: boolean; role: "ADMIN" | "STAFF" | "CUSTOMER"; staffType: "ORDER_MANAGER" | "PRODUCT_MANAGER" | null; allowedCategories: unknown };
+export type AuthUser = { id: string; name: string; email: string; emailVerified: boolean; role: "ADMIN" | "STAFF" | "CUSTOMER" | "REVIEWER"; staffType: "ORDER_MANAGER" | "PRODUCT_MANAGER" | null; allowedCategories: unknown };
 declare global { namespace Express { interface Request { user?: AuthUser; sessionToken?: string; } } }
 
 export const SESSION_COOKIE = "epic_session";
@@ -57,7 +57,16 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
   req.sessionToken = token;
   next();
 }
-export function requireRole(...roles: AuthUser["role"][]) { return (req: Request, res: Response, next: NextFunction) => !req.user || !roles.includes(req.user.role) ? res.status(403).json({ error: "Insufficient permissions" }) : next(); }
+export function requireRole(...roles: AuthUser["role"][]) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) return res.status(403).json({ error: "Insufficient permissions" });
+    if (req.user.role === "REVIEWER") {
+      const allowed = (req.method === "GET" || req.method === "HEAD") && ["/api/admin/config", "/api/admin/dashboard"].includes(req.path);
+      return allowed ? next() : res.status(403).json({ error: "Reviewer demo access is read-only" });
+    }
+    return roles.includes(req.user.role) ? next() : res.status(403).json({ error: "Insufficient permissions" });
+  };
+}
 
 export function requireStaffArea(area: "orders" | "products") {
   return (req: Request, res: Response, next: NextFunction) => {

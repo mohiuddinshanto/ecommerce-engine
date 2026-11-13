@@ -11,6 +11,7 @@ import { productUrl } from "../lib/product-url";
 import { FiArrowDown, FiArrowUp, FiBox, FiCheck, FiChevronDown, FiCopy, FiEdit2, FiEye, FiEyeOff, FiExternalLink, FiImage, FiLayers, FiLoader, FiMail, FiMenu, FiPhone, FiPlus, FiPrinter, FiRefreshCw, FiSend, FiShuffle, FiStar, FiTag, FiTrash2, FiTruck, FiUpload, FiUser, FiX } from "react-icons/fi";
 
 const apiUrl = "";
+const reviewerDemo = { email: "reviewer@epic-store.example.com", password: "EpicReview-2026!" };
 
 type PromoBannerDef = {
   enabled?: boolean;
@@ -94,6 +95,7 @@ type Config = {
   storeName: string;
   logoUrl?: string | null;
   adminAdvanced: boolean;
+  reviewerDemo?: boolean;
   currency: string;
   themeSettings?: { primaryColor?: string; secondaryColor?: string; font?: string };
   featureFlags: { cod: boolean; reviews: boolean; wishlist: boolean; coupons: boolean; addToCart: boolean; checkoutEmail: boolean; bottomNav: boolean; productCallButton?: boolean; productWhatsappButton?: boolean };
@@ -381,9 +383,12 @@ export function AdminPanel() {
   const [mobileSidebar, setMobileSidebar] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [checking, setChecking] = useState(false);
+  const [loginEmail, setLoginEmail] = useState("");
+  const loginForm = useRef<HTMLFormElement>(null);
   const [staffScope, setStaffScope] = useState<{ role: string; staffType: string | null } | null>(null);
 
   const visibleNav = useMemo(() => {
+    if (staffScope?.role === "REVIEWER") return NAV.filter((item) => item.key === "overview");
     const available = NAV.filter((item) => config?.adminAdvanced || BASIC_SECTIONS.includes(item.key));
     if (!staffScope || staffScope.role === "ADMIN") return available;
     const allowed = staffScope.staffType ? STAFF_SECTIONS[staffScope.staffType] : null;
@@ -428,7 +433,7 @@ export function AdminPanel() {
       body: JSON.stringify({ email: form.get("email"), password: form.get("password") }),
     });
     const data = await response.json();
-    if (!response.ok || (data.user?.role !== "ADMIN" && data.user?.role !== "STAFF"))
+    if (!response.ok || (data.user?.role !== "ADMIN" && data.user?.role !== "STAFF" && data.user?.role !== "REVIEWER"))
       return toast.error("Admin or Staff account required");
     setToken("session");
     load();
@@ -468,12 +473,12 @@ export function AdminPanel() {
             </div>
             <h1 className="font-display font-bold text-2xl text-gray-900 dark:text-white">Control Dashboard</h1>
             <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
-              Enter your admin credentials to manage store catalog and orders.
+              Sign in with your admin account or use the read-only reviewer demo below.
             </p>
           </div>
 
-          <form onSubmit={login} className="flex flex-col gap-4">
-            <Input isRequired name="email" type="email" label="Admin email" placeholder="admin@store.com" />
+          <form ref={loginForm} onSubmit={login} className="flex flex-col gap-4">
+            <Input isRequired name="email" type="email" label="Email" placeholder="admin@store.com" value={loginEmail} onValueChange={setLoginEmail} />
             <Input isRequired name="password" type={showPassword ? "text" : "password"} label="Password" placeholder="••••••••"
               endContent={
                 <button type="button" aria-label="Toggle password visibility" onClick={() => setShowPassword((v) => !v)} className="cursor-pointer text-gray-400 hover:text-primary transition-colors">
@@ -487,6 +492,18 @@ export function AdminPanel() {
               Open Control Dashboard
             </Button>
           </form>
+          <aside className="mt-6 rounded-2xl border border-primary/15 bg-primary/5 p-4" aria-label="Read-only reviewer credentials">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-sm font-bold text-gray-900 dark:text-white">Reviewer demo access</h2>
+              <span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-primary">Read only</span>
+            </div>
+            <p className="mt-2 break-all text-xs text-gray-600 dark:text-slate-300">Email: {reviewerDemo.email}</p>
+            <p className="mt-1 text-xs text-gray-600 dark:text-slate-300">Password: {reviewerDemo.password}</p>
+            <p className="mt-2 text-[11px] leading-5 text-gray-500 dark:text-slate-400">Shows a sample overview. Live orders, customer details, settings, and store changes are not accessible.</p>
+            <button type="button" onClick={() => { setLoginEmail(reviewerDemo.email); const input = loginForm.current?.querySelector<HTMLInputElement>('input[name="password"]'); if (input) input.value = reviewerDemo.password; }} className="mt-3 text-xs font-bold text-primary hover:underline">
+              Fill reviewer sign-in
+            </button>
+          </aside>
         </div>
       </div>
     );
@@ -513,7 +530,7 @@ export function AdminPanel() {
           </div>
           <div className={`flex-1 min-w-0 ${collapsed ? "lg:hidden" : ""}`}>
             <p className="font-display font-bold text-gray-900 dark:text-white text-sm leading-tight truncate">{config.storeName}</p>
-            <p className="text-xs text-gray-400 dark:text-slate-500">Admin Control Panel</p>
+            <p className="text-xs text-gray-400 dark:text-slate-500">{staffScope?.role === "REVIEWER" ? "Read-only reviewer demo" : "Admin Control Panel"}</p>
           </div>
           <button
             onClick={() => setMobileSidebar(false)}
@@ -595,14 +612,15 @@ export function AdminPanel() {
               <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-violet-500 to-primary flex items-center justify-center text-white text-[10px] font-bold">
                 A
               </div>
-              <span className="text-xs font-medium text-gray-700 dark:text-slate-300">Admin</span>
+              <span className="text-xs font-medium text-gray-700 dark:text-slate-300">{staffScope?.role === "REVIEWER" ? "Reviewer" : "Admin"}</span>
             </div>
           </div>
         </div>
 
         {/* CONTENT */}
         <div className="flex-1 overflow-y-auto p-4 pb-20 sm:p-6 sm:pb-6">
-          {section === "overview" && <AdminOverview token={token} onNavigate={setSection} courierConfigured={config.courierConfigured} />}
+          {config.reviewerDemo && <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-medium text-amber-900">Read-only demo dashboard · all figures shown here are sample data.</div>}
+          {section === "overview" && <AdminOverview token={token} onNavigate={setSection} courierConfigured={config.courierConfigured} isReviewer={staffScope?.role === "REVIEWER"} />}
           {section === "products" && <AdminProducts token={token} />}
           {section === "media" && <MediaLibrary token={token} />}
           {section === "categories" && <AdminCategories token={token} config={config} save={save} saving={saving} />}
@@ -677,7 +695,13 @@ function AdminSettings({ config, save, saving }: { config: Config; save: (payloa
 }
 
 /* ==================== OVERVIEW ==================== */
-function AdminOverview({ token, onNavigate, courierConfigured }: { token: string; onNavigate: (section: Section) => void; courierConfigured: boolean }) {
+function ReviewerOverview({ data }: { data: { customers: number; lowStock: { id: string; name: string; stock: number }[]; statusCounts: Record<string, number>; payment: Record<string, { count: number; amount: number }>; today: { count: number; gross: number }; pending: { count: number; amount: number }; salesTrend: { day: string; paid: number; gross: number }[] } | null }) {
+  const cards = [["Today's orders", data?.today.count ?? 0], ["Today's sales", money(data?.today.gross ?? 0)], ["Pending orders", data?.pending.count ?? 0], ["Paid revenue", money(data?.payment?.PAID?.amount ?? 0)], ["Sample customers", data?.customers ?? 0]];
+  const max = Math.max(1, ...(data?.salesTrend ?? []).map((row) => row.paid));
+  return <div className="space-y-5"><header><h2 className="text-xl font-bold">Sample store overview</h2><p className="text-sm text-gray-400">A safe preview of the dashboard using sample figures.</p></header><div className="grid grid-cols-2 xl:grid-cols-5 gap-3">{cards.map(([label, value]) => <div key={String(label)} className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-4"><p className="text-xs text-gray-400">{label}</p><p className="mt-1 text-xl font-bold">{value}</p></div>)}</div><div className="grid xl:grid-cols-2 gap-4"><section className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h3 className="font-bold mb-4">Sample paid sales trend</h3><div className="flex h-36 items-end gap-1">{(data?.salesTrend ?? []).map((row) => <div key={row.day} title={`${new Date(row.day).toLocaleDateString("en-US")}: ${money(row.paid)}`} className="flex-1 rounded-t bg-primary/70" style={{ height: `${Math.max(3, row.paid / max * 100)}%` }} />)}</div></section><section className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h3 className="font-bold mb-3">Sample order status</h3>{Object.entries(data?.statusCounts ?? {}).map(([status, count]) => <p key={status} className="flex justify-between py-2 text-sm"><span>{STATUS_LABEL[status] ?? status}</span><span>{count}</span></p>)}</section></div><section className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h3 className="font-bold mb-3">Sample inventory alert</h3>{(data?.lowStock ?? []).map((product) => <p key={product.id} className="flex justify-between py-1 text-sm"><span>{product.name}</span><strong>{product.stock} left</strong></p>)}</section></div>;
+}
+
+function AdminOverview({ token, onNavigate, courierConfigured, isReviewer = false }: { token: string; onNavigate: (section: Section) => void; courierConfigured: boolean; isReviewer?: boolean }) {
   const [data, setData] = useState<{ recentOrders: Order[]; customers: number; lowStock: { id: string; name: string; stock: number }[]; statusCounts: Record<string, number>; payment: Record<string, { count: number; amount: number }>; today: { count: number; gross: number }; pending: { count: number; amount: number }; salesTrend: { day: string; paid: number; gross: number }[] } | null>(null);
   const [range, setRange] = useState<7 | 30>(7);
   useEffect(() => { api(`/api/admin/dashboard?days=${range}`, token).then((response) => response.json()).then(setData).catch(() => {}); }, [token, range]);
@@ -688,6 +712,7 @@ function AdminOverview({ token, onNavigate, courierConfigured }: { token: string
   orders.forEach((order) => (order.orderItems ?? []).forEach((item) => { topProducts[item.name] = (topProducts[item.name] ?? 0) + item.qty; }));
   const trend = data?.salesTrend ?? [];
   const max = Math.max(1, ...trend.map((row) => row.paid));
+  if (isReviewer) return <ReviewerOverview data={data} />;
   const cards = [["Today's orders", data?.today.count ?? 0], ["Today's sales", money(data?.today.gross ?? 0)], ["Pending orders", data?.pending.count ?? 0], ["Paid revenue", money(data?.payment?.PAID?.amount ?? 0)], ["Unpaid / COD outstanding", money(unpaid)]];
   return <div className="space-y-5"><header className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="text-xl font-bold">Store overview</h2><p className="text-sm text-gray-400">Sales, orders, and inventory at a glance.</p></div><div className="flex gap-2"><Button size="sm" onPress={() => onNavigate("products")}>Add product</Button><Button size="sm" variant="flat" onPress={() => onNavigate("orders")}>View orders</Button></div></header><div className="grid grid-cols-2 xl:grid-cols-5 gap-3">{cards.map(([label, value]) => <div key={String(label)} className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-4"><p className="text-xs text-gray-400">{label}</p><p className="mt-1 text-xl font-bold">{value}</p></div>)}</div><div className="grid xl:grid-cols-2 gap-4"><section className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><div className="flex justify-between items-center mb-4"><h3 className="font-bold">Paid sales trend</h3><div className="flex gap-1">{([7, 30] as const).map((days) => <Button key={days} size="sm" variant={range === days ? "solid" : "light"} onPress={() => setRange(days)}>{days} days</Button>)}</div></div><div className="flex h-36 items-end gap-1">{trend.map((row) => <div key={row.day} title={`${new Date(row.day).toLocaleDateString("en-US")}: ${money(row.paid)}`} className="flex-1 rounded-t bg-primary/70" style={{ height: `${Math.max(3, row.paid / max * 100)}%` }} />)}</div></section><section className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h3 className="font-bold mb-4">Order status breakdown</h3>{statuses.map((status) => { const count = data?.statusCounts[status] ?? 0; return <div key={status} className="flex justify-between py-2 text-sm"><span>{STATUS_LABEL[status] ?? status}</span><span>{count}</span></div>; })}</section></div><div className="grid md:grid-cols-2 gap-4"><section className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h3 className="font-bold mb-3">Low-stock alerts</h3>{(data?.lowStock ?? []).slice(0, 8).map((product) => <p key={product.id} className="flex justify-between py-1 text-sm"><span>{product.name}</span><strong>{product.stock}</strong></p>)}{!data?.lowStock.length && <p className="text-sm text-gray-400">No low-stock products.</p>}</section><section className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h3 className="font-bold mb-3">Top products</h3>{Object.entries(topProducts).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([name, quantity]) => <p key={name} className="flex justify-between py-1 text-sm"><span>{name}</span><strong>{quantity} sold</strong></p>)}{!Object.keys(topProducts).length && <p className="text-sm text-gray-400">No product orders yet.</p>}</section></div></div>;
 }

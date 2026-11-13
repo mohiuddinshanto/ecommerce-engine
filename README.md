@@ -146,13 +146,13 @@ Copy the CLI's `whsec_...` value into the local `.env` as `STRIPE_WEBHOOK_SECRET
 
 ## Demo Credentials
 
-The public reviewer account is a **customer account only**; it has no admin access. The same credentials are shown on the account sign-in screen to make review easier:
+The public reviewer account opens `/admin` in **read-only demo mode**. The overview uses sample figures; it does not show live orders or customer details and cannot change store data. The credentials are printed on the admin sign-in screen with a fill button:
 
 | Email | Password |
 | --- | --- |
 | `reviewer@epic-store.example.com` | `EpicReview-2026!` |
 
-This account is intended for storefront review. Do not use it for real purchases or store private customer information in it. Admin credentials must remain private and are not included here.
+Use the storefront to browse product listings and details. To test registration, cart, and checkout, create a separate customer account. Do not use the public reviewer account for purchases. Real admin credentials remain private and are not included here.
 
 ## Project Map
 

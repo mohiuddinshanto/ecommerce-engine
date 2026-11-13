@@ -12,6 +12,7 @@ enum Role {
   ADMIN
   STAFF
   CUSTOMER
+  REVIEWER
 }
 
 enum StaffType {

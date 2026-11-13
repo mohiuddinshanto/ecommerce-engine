@@ -504,10 +504,14 @@ app.get("/api/products/:slug", async (req, res) => {
 });
 
 const credentialsSchema = z.object({ email: z.string().email(), password: z.string().min(8).max(128) });
+const reviewerDemoEmail = "reviewer@epic-store.example.com";
+const rejectReviewer: express.RequestHandler = (req, res, next) =>
+  req.user?.role === "REVIEWER" ? res.status(403).json({ error: "Reviewer demo accounts cannot access customer data or place orders" }) : next();
 
 app.post("/api/auth/sign-up", rateLimit({ windowMs: 15 * 60_000, max: 10, message: "Too many sign-up attempts. Please try again later." }), async (req, res) => {
   const data = credentialsSchema.extend({ name: z.string().trim().min(2).max(100) }).safeParse(req.body);
   if (!data.success) return res.status(400).json({ error: "Invalid registration data" });
+  if (data.data.email.toLowerCase() === reviewerDemoEmail) return res.status(409).json({ error: "This email is reserved for reviewer access" });
   if (await prisma.user.findUnique({ where: { email: data.data.email } })) return res.status(409).json({ error: "Email already registered" });
   const user = await prisma.user.create({
     data: { name: data.data.name, email: data.data.email, passwordHash: await bcrypt.hash(data.data.password, 12) },
@@ -537,7 +541,7 @@ app.post("/api/auth/sign-out", requireAuth, async (req, res) => {
   res.status(204).end();
 });
 
-app.post("/api/auth/change-password", requireAuth, rateLimit({ windowMs: 15 * 60_000, max: 10, message: "Too many attempts. Please try again later." }), async (req, res) => {
+app.post("/api/auth/change-password", requireAuth, rejectReviewer, rateLimit({ windowMs: 15 * 60_000, max: 10, message: "Too many attempts. Please try again later." }), async (req, res) => {
   const parsed = z.object({ currentPassword: z.string().min(1).max(128), newPassword: z.string().min(8).max(128) }).safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid password payload" });
   const user = await prisma.user.findUnique({ where: { id: req.user!.id } });
@@ -574,7 +578,7 @@ app.post("/api/auth/verify-email", rateLimit({ windowMs: 15 * 60_000, max: 20 })
   res.json({ ok: true });
 });
 
-app.post("/api/auth/resend-verification", requireAuth, rateLimit({ windowMs: 10 * 60_000, max: 3 }), async (req, res) => {
+app.post("/api/auth/resend-verification", requireAuth, rejectReviewer, rateLimit({ windowMs: 10 * 60_000, max: 3 }), async (req, res) => {
   const user = await prisma.user.findUnique({ where: { id: req.user!.id } });
   if (!user) return res.status(404).json({ error: "Account not found" });
   if (user.emailVerified) return res.json({ ok: true, alreadyVerified: true });
@@ -588,7 +592,7 @@ app.post("/api/auth/forgot-password", rateLimit({ windowMs: 15 * 60_000, max: 5 
   const parsed = z.object({ email: z.string().email().max(200) }).safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid email address" });
   const user = await prisma.user.findUnique({ where: { email: parsed.data.email } });
-  if (user) {
+  if (user && user.role !== "REVIEWER") {
     const token = makeSessionToken();
     await prisma.user.update({ where: { id: user.id }, data: { passwordResetToken: token, passwordResetExpiry: new Date(Date.now() + PASSWORD_RESET_TTL_MS) } });
     sendPasswordReset(user.email, user.name, `${appBaseUrl()}/reset-password?token=${token}`).catch((err) => console.error("password reset mail failed:", err.message));
@@ -600,7 +604,7 @@ app.post("/api/auth/reset-password", rateLimit({ windowMs: 15 * 60_000, max: 10 
   const parsed = z.object({ token: z.string().min(10).max(200), password: z.string().min(8).max(128) }).safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Password must be at least 8 characters long." });
   const user = await prisma.user.findFirst({ where: { passwordResetToken: parsed.data.token, passwordResetExpiry: { gt: new Date() } } });
-  if (!user) return res.status(400).json({ error: "This reset link is invalid or has expired." });
+  if (!user || user.role === "REVIEWER") return res.status(400).json({ error: "This reset link is invalid or has expired." });
   const passwordHash = await bcrypt.hash(parsed.data.password, 12);
   await prisma.$transaction([
     prisma.user.update({ where: { id: user.id }, data: { passwordHash, passwordResetToken: null, passwordResetExpiry: null, emailVerified: true } }),
@@ -626,9 +630,9 @@ async function availableStock(productId: string, variationId?: string) {
   if (variationId) return prisma.productVariation.findFirst({ where: { id: variationId, productId, status: "active" }, select: { stock: true, manageStock: true } });
   return prisma.product.findUnique({ where: { id: productId }, select: { stock: true, manageStock: true } });
 }
-app.get("/api/cart", requireAuth, async (req, res) => res.json(cartResponse(await getUserCart(req.user!.id))));
-app.post("/api/cart", requireAuth, async (req, res) => res.json(cartResponse(await getUserCart(req.user!.id))));
-app.post("/api/cart/items", requireAuth, async (req, res) => {
+app.get("/api/cart", requireAuth, rejectReviewer, async (req, res) => res.json(cartResponse(await getUserCart(req.user!.id))));
+app.post("/api/cart", requireAuth, rejectReviewer, async (req, res) => res.json(cartResponse(await getUserCart(req.user!.id))));
+app.post("/api/cart/items", requireAuth, rejectReviewer, async (req, res) => {
   const parsed = cartItemInput.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid cart item" });
   const { productId, variationId, quantity } = parsed.data;
@@ -645,7 +649,7 @@ app.post("/api/cart/items", requireAuth, async (req, res) => {
   else await prisma.cartItem.create({ data: { cartId: cart.id, productId, variationId, variationKey: variationId ?? "", quantity } });
   res.status(201).json(cartResponse(await getUserCart(req.user!.id)));
 });
-app.put("/api/cart/items/:itemId", requireAuth, async (req, res) => {
+app.put("/api/cart/items/:itemId", requireAuth, rejectReviewer, async (req, res) => {
   const parsed = z.object({ quantity: z.number().int().min(1).max(999) }).safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Quantity must be an integer of at least one" });
   const item = await prisma.cartItem.findFirst({ where: { id: String(req.params.itemId), cart: { userId: req.user!.id } } });
@@ -655,11 +659,11 @@ app.put("/api/cart/items/:itemId", requireAuth, async (req, res) => {
   await prisma.cartItem.update({ where: { id: item.id }, data: { quantity: parsed.data.quantity } });
   res.json(cartResponse(await getUserCart(req.user!.id)));
 });
-app.delete("/api/cart/items/:itemId", requireAuth, async (req, res) => {
+app.delete("/api/cart/items/:itemId", requireAuth, rejectReviewer, async (req, res) => {
   await prisma.cartItem.deleteMany({ where: { id: String(req.params.itemId), cart: { userId: req.user!.id } } });
   res.json(cartResponse(await getUserCart(req.user!.id)));
 });
-app.delete("/api/cart", requireAuth, async (req, res) => {
+app.delete("/api/cart", requireAuth, rejectReviewer, async (req, res) => {
   await prisma.cartItem.deleteMany({ where: { cart: { userId: req.user!.id } } });
   res.json({ items: [], subtotal: 0 });
 });
@@ -675,7 +679,7 @@ app.get("/api/wishlist", async (req, res) => {
     res.json(await prisma.wishlist.findMany({ where: { userId: payload.sub }, include: { product: { include: { category: true } } } }));
   } catch { res.json([]); }
 });
-app.post("/api/wishlist/:productId", requireAuth, async (req, res) => {
+app.post("/api/wishlist/:productId", requireAuth, rejectReviewer, async (req, res) => {
   const productId = String(req.params.productId);
   const where = { userId_productId: { userId: req.user!.id, productId } };
   const existing = await prisma.wishlist.findUnique({ where });
@@ -688,7 +692,7 @@ app.post("/api/wishlist/:productId", requireAuth, async (req, res) => {
 });
 
 // Product Reviews
-app.post("/api/products/:productId/reviews", requireAuth, async (req, res) => {
+app.post("/api/products/:productId/reviews", requireAuth, rejectReviewer, async (req, res) => {
   const data = z.object({ rating: z.number().int().min(1).max(5), comment: z.string().max(2000).optional() }).safeParse(req.body);
   if (!data.success) return res.status(400).json({ error: "Invalid review" });
   const productId = String(req.params.productId);
@@ -700,10 +704,10 @@ app.post("/api/products/:productId/reviews", requireAuth, async (req, res) => {
   res.status(201).json(review);
 });
 
-app.get("/api/account/orders", requireAuth, async (req, res) => {
+app.get("/api/account/orders", requireAuth, rejectReviewer, async (req, res) => {
   res.json(await prisma.order.findMany({ where: { customerId: req.user!.id, deletedAt: null }, orderBy: { createdAt: "desc" } }));
 });
-app.get("/api/orders/:id", requireAuth, async (req, res) => {
+app.get("/api/orders/:id", requireAuth, rejectReviewer, async (req, res) => {
   const order = await prisma.order.findFirst({
     where: { id: String(req.params.id), customerId: req.user!.id, deletedAt: null },
     select: {
@@ -790,7 +794,7 @@ app.post("/api/checkout/abandoned", rateLimit({ windowMs: 10 * 60_000, max: 60 }
   res.json({ ok: true });
 });
 
-app.post("/api/checkout/stripe", requireAuth, rateLimit({ windowMs: 10 * 60_000, max: 20 }), async (req, res) => {
+app.post("/api/checkout/stripe", requireAuth, rejectReviewer, rateLimit({ windowMs: 10 * 60_000, max: 20 }), async (req, res) => {
   if (!process.env.STRIPE_SECRET_KEY || !process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) return res.status(503).json({ error: "Stripe test keys not configured" });
   const parsed = z.object({ shippingDetails: z.record(z.string(), z.unknown()), couponId: z.string().optional() }).safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: "Invalid checkout details" });
@@ -861,7 +865,7 @@ app.post("/api/checkout/stripe", requireAuth, rateLimit({ windowMs: 10 * 60_000,
   }
 });
 
-app.post("/api/orders", requireAuth, rateLimit({ windowMs: 10 * 60_000, max: 20, message: "Too many order attempts. Please try again later." }), checkIpCooldown, async (req, res) => {
+app.post("/api/orders", requireAuth, rejectReviewer, rateLimit({ windowMs: 10 * 60_000, max: 20, message: "Too many order attempts. Please try again later." }), checkIpCooldown, async (req, res) => {
   const schema = z.object({
     paymentMethod: z.literal("COD"),
     couponId: z.string().optional(),
@@ -1054,6 +1058,32 @@ app.post("/api/orders", requireAuth, rateLimit({ windowMs: 10 * 60_000, max: 20,
 
 app.get("/api/admin/dashboard", requireAuth, requireRole("ADMIN", "STAFF"), async (req, res) => {
   const days = Math.min(30, Math.max(7, Number(req.query.days) || 7));
+  if (req.user?.role === "REVIEWER") {
+    const today = new Date();
+    const salesTrend = Array.from({ length: days }, (_, index) => {
+      const day = new Date(today);
+      day.setDate(day.getDate() - (days - index - 1));
+      return { day: day.toISOString(), gross: 2100 + ((index * 731) % 2600), paid: 1650 + ((index * 487) % 1900) };
+    });
+    return res.json({
+      demoMode: true,
+      products: 30,
+      customers: 126,
+      pendingReviews: 2,
+      recentOrders: [{ id: "demo-order-1", status: "DELIVERED", paymentStatus: "PAID", totalAmount: 2450, createdAt: today.toISOString(), orderItems: [{ name: "Everyday Tote", qty: 2 }] }],
+      lowStock: [{ id: "demo-product-1", name: "Sample low stock item", stock: 3 }],
+      statusCounts: { PENDING: 4, CONFIRMED: 7, IN_COURIER: 0, SHIPPED: 3, DELIVERED: 62, CANCELLED: 5, ON_HOLD: 0 },
+      payment: { PAID: { count: 68, amount: 158200 }, UNPAID: { count: 13, amount: 22600 }, FAILED: { count: 0, amount: 0 } },
+      totalOrders: 81,
+      averageOrderValue: 2232,
+      today: { count: 4, gross: 8450 },
+      yesterday: { count: 3, gross: 6120 },
+      pending: { count: 4, amount: 10450 },
+      codOutstanding: { count: 2, amount: 3980 },
+      alerts: { oldPending: [], deliveredUnpaid: [], confirmedUnsent: [] },
+      salesTrend,
+    });
+  }
   const now = new Date(); const today = new Date(now); today.setHours(0, 0, 0, 0);
   const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
   const from = new Date(today); from.setDate(from.getDate() - days + 1);
@@ -2505,6 +2535,22 @@ app.patch("/api/admin/config", requireAuth, requireRole("ADMIN"), async (req, re
 app.get("/api/admin/config", requireAuth, requireRole("ADMIN"), async (_req, res) => {
   const config = await prisma.storeConfig.findUnique({ where: { id: "store-config-singleton" } });
   if (!config) return res.status(404).json({ error: "Store is not configured" });
+  if (_req.user?.role === "REVIEWER") return res.json({
+    storeName: config.storeName,
+    logoUrl: config.logoUrl,
+    adminAdvanced: false,
+    reviewerDemo: true,
+    currency: process.env.NEXT_PUBLIC_CURRENCY || process.env.PAYMENT_CURRENCY || "USD",
+    featureFlags: config.featureFlags,
+    emailConfigured: false,
+    courierConfigured: false,
+    storageConfigured: false,
+    aiConfigured: false,
+    stripeConfigured: false,
+    stripeTestMode: true,
+    enableIpLimit: false,
+    cooldownMinutes: 0,
+  });
   const encrypted = config.paymentConfig as { encrypted?: string } | null;
   const payments = encrypted?.encrypted ? (decrypt<PaymentSettings>(encrypted.encrypted) ?? {}) : {};
   const storage = config.storageConfig as { encrypted?: string } | null;
