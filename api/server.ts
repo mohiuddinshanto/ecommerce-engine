@@ -2532,7 +2532,7 @@ app.patch("/api/admin/config", requireAuth, requireRole("ADMIN"), async (req, re
   });
 });
 
-app.get("/api/admin/config", requireAuth, requireRole("ADMIN"), async (_req, res) => {
+app.get("/api/admin/config", requireAuth, requireRole("ADMIN", "STAFF"), async (_req, res) => {
   const config = await prisma.storeConfig.findUnique({ where: { id: "store-config-singleton" } });
   if (!config) return res.status(404).json({ error: "Store is not configured" });
   if (_req.user?.role === "REVIEWER") return res.json({
@@ -2561,6 +2561,24 @@ app.get("/api/admin/config", requireAuth, requireRole("ADMIN"), async (_req, res
   const courierDecrypted = courier?.encrypted ? (decrypt<CourierSettings>(courier.encrypted) ?? null) : null;
   const ai = config.aiConfig as { encrypted?: string } | null;
   const aiDecrypted = ai?.encrypted ? (decrypt<Record<string, unknown>>(ai.encrypted) ?? null) : null;
+  if (_req.user?.role === "STAFF") {
+    return res.json({
+      storeName: config.storeName,
+      logoUrl: config.logoUrl,
+      adminAdvanced: advancedAdminEnabled(),
+      currency: process.env.NEXT_PUBLIC_CURRENCY || process.env.PAYMENT_CURRENCY || "USD",
+      featureFlags: { ...defaultFeatureFlags, ...((config.featureFlags as Record<string, boolean> | null) ?? {}) },
+      shippingConfig: config.shippingConfig,
+      courierConfigured: isCourierConfigured(courierDecrypted),
+      emailConfigured: false,
+      storageConfigured: advancedAdminEnabled() && Boolean(config.storageConfig),
+      aiConfigured: false,
+      stripeConfigured: Boolean(process.env.STRIPE_SECRET_KEY && process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY),
+      stripeTestMode: Boolean(process.env.STRIPE_SECRET_KEY?.startsWith("sk_test_")),
+      enableIpLimit: config.enableIpLimit,
+      cooldownMinutes: config.cooldownMinutes,
+    });
+  }
   res.json({
     ...config,
     homePageConfig: advancedAdminEnabled() ? config.homePageConfig : null,

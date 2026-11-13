@@ -349,8 +349,8 @@ const BASIC_SECTIONS: Section[] = ["overview", "products", "categories", "orders
 // STAFF sub-role split. ADMIN (or legacy staff with no staffType) sees every
 // section; each manager only sees the sections its API permissions allow.
 const STAFF_SECTIONS: Record<string, Section[]> = {
-  ORDER_MANAGER: ["overview", "orders", "delivery", "categories", "reviews"],
-  PRODUCT_MANAGER: ["overview", "products", "media", "categories", "reviews", "home", "banner", "menu"],
+  ORDER_MANAGER: ["overview", "orders", "delivery", "reviews"],
+  PRODUCT_MANAGER: ["overview", "products", "media", "reviews"],
 };
 
 const categoryOptions = (categories: Category[]) =>
