@@ -396,7 +396,7 @@ export function Storefront({
           if (status?.config?.heroBannerConfig) setBannerConfig(status.config.heroBannerConfig);
           if (status?.config?.navigationConfig?.menus?.[0]?.items) setNavMenus(status.config.navigationConfig.menus[0].items);
           if (typeof status?.config?.storeName === "string" && status.config.storeName.trim()) setStoreName(status.config.storeName.trim());
-          if (status?.config?.logoUrl) setLogoUrl(status.config.logoUrl);
+          if (status?.config && "logoUrl" in status.config) setLogoUrl(status.config.logoUrl ?? null);
           setAllowAddToCart(status?.config?.featureFlags?.addToCart !== false);
           setBottomNav(status?.config?.featureFlags?.bottomNav !== false);
         })

@@ -92,6 +92,7 @@ type HomepageCategoriesSettings = {
 
 type Config = {
   storeName: string;
+  logoUrl?: string | null;
   adminAdvanced: boolean;
   currency: string;
   themeSettings?: { primaryColor?: string; secondaryColor?: string; font?: string };
@@ -664,8 +665,9 @@ function AdminCustomers({ token }: { token: string }) {
 
 function AdminSettings({ config, save, saving }: { config: Config; save: (payload: object) => void; saving: boolean }) {
   const [storeName, setStoreName] = useState(config.storeName);
+  const [logoUrl, setLogoUrl] = useState(config.logoUrl ?? "");
   const [shippingCharge, setShippingCharge] = useState(String(config.shippingConfig?.defaultCharge ?? 8));
-  return <section className="max-w-2xl rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5 space-y-5"><div><h2 className="text-xl font-bold">Store settings</h2><p className="mt-1 text-sm text-gray-400">Basic storefront settings.</p></div><Input label="Store name" value={storeName} onValueChange={setStoreName} /><Input label="Currency" value={config.currency || "USD"} isReadOnly /><Input label="Default shipping charge" type="number" min="0" step="0.01" value={shippingCharge} onValueChange={setShippingCharge} /><Button isLoading={saving} onPress={() => save({ storeName, shippingConfig: { defaultCharge: Math.max(0, Number(shippingCharge) || 0) } })}>Save settings</Button></section>;
+  return <section className="max-w-2xl rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5 space-y-5"><div><h2 className="text-xl font-bold">Store settings</h2><p className="mt-1 text-sm text-gray-400">Basic storefront settings.</p></div><Input label="Store name" value={storeName} onValueChange={setStoreName} /><Input label="Store logo URL" type="url" value={logoUrl} onValueChange={setLogoUrl} placeholder="https://example.com/logo.png" description="Upload an image in Media Library and paste its public URL here. Leave blank to remove the header logo." /><Input label="Currency" value={config.currency || "USD"} isReadOnly /><Input label="Default shipping charge" type="number" min="0" step="0.01" value={shippingCharge} onValueChange={setShippingCharge} /><Button isLoading={saving} onPress={() => save({ storeName, logoUrl: logoUrl.trim() || null, shippingConfig: { defaultCharge: Math.max(0, Number(shippingCharge) || 0) } })}>Save settings</Button></section>;
 }
 
 /* ==================== OVERVIEW ==================== */

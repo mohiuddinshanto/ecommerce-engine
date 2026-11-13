@@ -2112,7 +2112,7 @@ app.patch("/api/admin/config", requireAuth, requireRole("ADMIN"), async (req, re
   const data = z
     .object({
       storeName: z.string().min(2).max(100).optional(),
-      logoUrl: z.string().url().optional(),
+      logoUrl: z.string().url().nullable().optional(),
       themeSettings: z.unknown().optional(),
       featureFlags: z.object({ reviews: z.boolean().optional(), wishlist: z.boolean().optional(), coupons: z.boolean().optional(), cod: z.boolean().optional(), addToCart: z.boolean().optional(), checkoutEmail: z.boolean().optional(), bottomNav: z.boolean().optional(), productCallButton: z.boolean().optional(), productWhatsappButton: z.boolean().optional() }).optional(),
       checkoutForm: z.object({
