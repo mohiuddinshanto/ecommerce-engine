@@ -74,7 +74,7 @@ function computeShipping(subtotal: number, config: ShippingConfig | null, detail
   if (!subtotal) return 0;
   const freeAbove = config?.freeAbove;
   if (typeof freeAbove === "number" && freeAbove > 0 && subtotal >= freeAbove) return 0;
-  const location = [details.country, details.state, details.city, details.postalCode].map((value) => value.trim().toLowerCase());
+  const location = [details.country, details.state, details.city, details.postalCode].map((value) => (value ?? "").trim().toLowerCase());
   const match = (config?.zones ?? []).find((zone) =>
     [zone.countries, zone.regions, zone.cities, zone.postalCodes].some((entries) =>
       (entries ?? []).some((entry) => location.includes(entry.trim().toLowerCase())),
