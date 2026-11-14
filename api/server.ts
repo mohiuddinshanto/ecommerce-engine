@@ -2069,7 +2069,7 @@ app.post("/api/admin/staff", requireAuth, requireRole("ADMIN"), async (req, res)
       name: z.string().trim().min(2),
       email: z.string().email(),
       password: z.string().min(8),
-      staffType: z.enum(["ORDER_MANAGER", "PRODUCT_MANAGER", "ORDER_AND_PRODUCT_MANAGER", "ADMIN"]),
+      access: z.array(z.enum(["ORDER_MANAGER", "PRODUCT_MANAGER", "ADMIN"])).min(1).max(3),
       allowedCategories: z.array(z.string()).optional(),
     })
     .safeParse(req.body);
@@ -2079,13 +2079,16 @@ app.post("/api/admin/staff", requireAuth, requireRole("ADMIN"), async (req, res)
   if (existing) return res.status(409).json({ error: "Email already registered" });
 
   const passwordHash = await bcrypt.hash(data.data.password, 12);
+  const isAdmin = data.data.access.includes("ADMIN");
+  const hasOrders = data.data.access.includes("ORDER_MANAGER");
+  const hasProducts = data.data.access.includes("PRODUCT_MANAGER");
   const staff = await prisma.user.create({
     data: {
       name: data.data.name,
       email: data.data.email,
       passwordHash,
-      role: data.data.staffType === "ADMIN" ? "ADMIN" : "STAFF",
-      staffType: data.data.staffType === "ADMIN" ? null : data.data.staffType,
+      role: isAdmin ? "ADMIN" : "STAFF",
+      staffType: isAdmin ? null : hasOrders && hasProducts ? "ORDER_AND_PRODUCT_MANAGER" : hasProducts ? "PRODUCT_MANAGER" : "ORDER_MANAGER",
       allowedCategories: data.data.allowedCategories ? (data.data.allowedCategories as Prisma.InputJsonValue) : undefined,
     },
   });
@@ -2094,19 +2097,19 @@ app.post("/api/admin/staff", requireAuth, requireRole("ADMIN"), async (req, res)
 });
 
 app.patch("/api/admin/staff/:id", requireAuth, requireRole("ADMIN"), async (req, res) => {
-  const accessSchema = z.discriminatedUnion("role", [
-    z.object({ role: z.literal("ADMIN") }),
-    z.object({ role: z.literal("STAFF"), staffType: z.enum(["ORDER_MANAGER", "PRODUCT_MANAGER", "ORDER_AND_PRODUCT_MANAGER"]) }),
-  ]);
+  const accessSchema = z.object({ access: z.array(z.enum(["ORDER_MANAGER", "PRODUCT_MANAGER", "ADMIN"])).min(1).max(3) });
   const data = accessSchema.safeParse(req.body);
   if (!data.success) return res.status(400).json({ error: "Select a valid access level" });
   const id = String(req.params.id);
   if (id === req.user!.id) return res.status(403).json({ error: "You cannot change your own admin access" });
   const member = await prisma.user.findFirst({ where: { id, role: { in: ["STAFF", "ADMIN"] } }, select: { id: true } });
   if (!member) return res.status(404).json({ error: "Team member not found" });
-  const updated = await prisma.user.update({ where: { id: member.id }, data: data.data.role === "ADMIN"
+  const isAdmin = data.data.access.includes("ADMIN");
+  const hasOrders = data.data.access.includes("ORDER_MANAGER");
+  const hasProducts = data.data.access.includes("PRODUCT_MANAGER");
+  const updated = await prisma.user.update({ where: { id: member.id }, data: isAdmin
     ? { role: "ADMIN", staffType: null, allowedCategories: Prisma.DbNull }
-    : { role: "STAFF", staffType: data.data.staffType } });
+    : { role: "STAFF", staffType: hasOrders && hasProducts ? "ORDER_AND_PRODUCT_MANAGER" : hasProducts ? "PRODUCT_MANAGER" : "ORDER_MANAGER" } });
   res.json({ id: updated.id, role: updated.role, staffType: updated.staffType });
 });
 

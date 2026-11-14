@@ -285,7 +285,7 @@ type MenuItem = { id: string; label: string; type: "category" | "custom"; catego
 type Coupon = { id: string; code: string; type: string; value: string; minSpend?: string; usedCount: number; isActive: boolean };
 type Review = { id: string; rating: number; comment?: string; isApproved: boolean; product: { name: string }; user: { name: string; email: string } };
 type StaffType = "ORDER_MANAGER" | "PRODUCT_MANAGER" | "ORDER_AND_PRODUCT_MANAGER";
-type StaffAccess = StaffType | "ADMIN";
+type StaffAccess = "ORDER_MANAGER" | "PRODUCT_MANAGER" | "ADMIN";
 type StaffUser = { id: string; name: string; email: string; role: "ADMIN" | "STAFF"; staffType: StaffType | null; isCurrentUser?: boolean; allowedCategories?: string };
 
 const money = formatMoney;
@@ -360,6 +360,18 @@ const STAFF_TYPE_LABEL: Record<StaffType, string> = {
   PRODUCT_MANAGER: "Product Manager",
   ORDER_AND_PRODUCT_MANAGER: "Order + Product Manager",
 };
+const STAFF_ACCESS_CHOICES: { key: StaffAccess; label: string }[] = [
+  { key: "ORDER_MANAGER", label: "Order Manager" },
+  { key: "PRODUCT_MANAGER", label: "Product Manager" },
+  { key: "ADMIN", label: "Full Admin" },
+];
+const staffAccessFor = (member: StaffUser): StaffAccess[] => member.role === "ADMIN"
+  ? ["ADMIN"]
+  : member.staffType === "ORDER_AND_PRODUCT_MANAGER"
+    ? ["ORDER_MANAGER", "PRODUCT_MANAGER"]
+    : [member.staffType ?? "ORDER_MANAGER"];
+const sameStaffAccess = (left: StaffAccess[], right: StaffAccess[]) =>
+  [...left].sort().join("|") === [...right].sort().join("|");
 
 const categoryOptions = (categories: Category[]) =>
   categories
@@ -3736,7 +3748,8 @@ function AdminReviews({ token }: { token: string }) {
 function AdminStaff({ token }: { token: string }) {
   const [staff, setStaff] = useState<StaffUser[]>([]);
   const [creating, setCreating] = useState(false);
-  const [staffAccess, setStaffAccess] = useState<Record<string, StaffAccess>>({});
+  const [newAccess, setNewAccess] = useState<StaffAccess[]>(["ORDER_MANAGER"]);
+  const [staffAccess, setStaffAccess] = useState<Record<string, StaffAccess[]>>({});
   const [savingStaffId, setSavingStaffId] = useState<string | null>(null);
 
   const load = () => {
@@ -3745,7 +3758,7 @@ function AdminStaff({ token }: { token: string }) {
       .then((res) => {
         if (!Array.isArray(res)) return;
         setStaff(res);
-        setStaffAccess(Object.fromEntries(res.map((member: StaffUser) => [member.id, member.role === "ADMIN" ? "ADMIN" : member.staffType ?? "ORDER_MANAGER"])));
+        setStaffAccess(Object.fromEntries(res.map((member: StaffUser) => [member.id, staffAccessFor(member)])));
       })
       .catch(() => {});
   };
@@ -3757,14 +3770,16 @@ function AdminStaff({ token }: { token: string }) {
   async function createStaff(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
+    if (!newAccess.length) return toast.error("Select at least one access level");
     try {
       const res = await api("/api/admin/staff", token, {
         method: "POST",
-        body: JSON.stringify({ name: f.get("name"), email: f.get("email"), password: f.get("password"), staffType: f.get("staffType") }),
+        body: JSON.stringify({ name: f.get("name"), email: f.get("email"), password: f.get("password"), access: newAccess }),
       });
       if (!res.ok) throw new Error((await res.json()).error);
       toast.success("Staff account created!");
       setCreating(false);
+      setNewAccess(["ORDER_MANAGER"]);
       load();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not create staff");
@@ -3772,12 +3787,13 @@ function AdminStaff({ token }: { token: string }) {
   }
 
   async function updateStaffAccess(id: string) {
-    const access = staffAccess[id];
+    const access = staffAccess[id] ?? [];
     const member = staff.find((item) => item.id === id);
-    if (!access || !member || member.isCurrentUser) return;
-    if (access === "ADMIN" && member.role !== "ADMIN" && !confirm(`Grant ${member.name} full admin access to all store settings, orders, products, and staff?`)) return;
-    if (member.role === "ADMIN" && access !== "ADMIN" && !confirm(`Change ${member.name} from Full Admin to ${STAFF_TYPE_LABEL[access]}?`)) return;
-    const body = access === "ADMIN" ? { role: "ADMIN" } : { role: "STAFF", staffType: access };
+    if (!access.length || !member || member.isCurrentUser) return;
+    const isAdmin = access.includes("ADMIN");
+    if (isAdmin && member.role !== "ADMIN" && !confirm(`Grant ${member.name} full admin access to all store settings, orders, products, and staff?`)) return;
+    if (member.role === "ADMIN" && !isAdmin && !confirm(`Remove ${member.name}'s Full Admin access?`)) return;
+    const body = { access };
     setSavingStaffId(id);
     try {
       const response = await api(`/api/admin/staff/${id}`, token, { method: "PATCH", body: JSON.stringify(body) });
@@ -3816,12 +3832,26 @@ function AdminStaff({ token }: { token: string }) {
           <Input label="Staff Name" name="name" isRequired />
           <Input label="Staff Email" name="email" type="email" isRequired />
           <Input label="Password" name="password" type="password" minLength={8} isRequired />
-          <Select label="Access Level" name="staffType" defaultSelectedKeys={["ORDER_MANAGER"]}>
-            <SelectItem key="ORDER_MANAGER">Order Manager</SelectItem>
-            <SelectItem key="PRODUCT_MANAGER">Product Manager</SelectItem>
-            <SelectItem key="ORDER_AND_PRODUCT_MANAGER">Order + Product Manager</SelectItem>
-            <SelectItem key="ADMIN">Full Admin (all permissions)</SelectItem>
-          </Select>
+          <fieldset className="sm:col-span-2 rounded-xl border border-gray-200 dark:border-white/10 p-4">
+            <legend className="px-1 text-sm font-semibold">Access levels (select any combination)</legend>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {STAFF_ACCESS_CHOICES.map((choice) => (
+                <label key={choice.key} className="flex cursor-pointer items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={newAccess.includes(choice.key)}
+                    onChange={(event) => setNewAccess((current) => {
+                      if (choice.key === "ADMIN") return event.target.checked ? ["ADMIN"] : [];
+                      const staffChoices = current.filter((item) => item !== "ADMIN");
+                      return event.target.checked ? [...staffChoices, choice.key] : staffChoices.filter((item) => item !== choice.key);
+                    })}
+                  />
+                  {choice.label}{choice.key === "ADMIN" ? " (all permissions)" : ""}
+                </label>
+              ))}
+            </div>
+            {newAccess.includes("ADMIN") && <p className="mt-3 text-xs text-amber-700">Full Admin can view and change every admin area.</p>}
+          </fieldset>
           <button type="submit" className="sm:col-span-2 h-10 bg-primary text-white font-display font-bold rounded-xl hover:bg-primary-dark transition-colors">
             Create Staff Account
           </button>
@@ -3842,24 +3872,25 @@ function AdminStaff({ token }: { token: string }) {
               </div>
             </div>
             <div className="flex flex-wrap items-center justify-end gap-2">
-              <Select
-                aria-label={`Access for ${s.name}`}
-                size="sm"
-                className="w-52"
-                isDisabled={Boolean(s.isCurrentUser)}
-                selectedKeys={new Set([staffAccess[s.id] ?? (s.role === "ADMIN" ? "ADMIN" : s.staffType ?? "ORDER_MANAGER")])}
-                onSelectionChange={(selection) => {
-                  if (selection === "all") return;
-                  const selected = Array.from(selection)[0];
-                  if (selected) setStaffAccess((current) => ({ ...current, [s.id]: String(selected) as StaffAccess }));
-                }}
-              >
-                <SelectItem key="ORDER_MANAGER">Order Manager</SelectItem>
-                <SelectItem key="PRODUCT_MANAGER">Product Manager</SelectItem>
-                <SelectItem key="ORDER_AND_PRODUCT_MANAGER">Order + Product Manager</SelectItem>
-                <SelectItem key="ADMIN">Full Admin (all permissions)</SelectItem>
-              </Select>
-              <Button size="sm" isLoading={savingStaffId === s.id} isDisabled={Boolean(s.isCurrentUser) || (staffAccess[s.id] ?? (s.role === "ADMIN" ? "ADMIN" : s.staffType ?? "ORDER_MANAGER")) === (s.role === "ADMIN" ? "ADMIN" : s.staffType ?? "ORDER_MANAGER")} onPress={() => updateStaffAccess(s.id)}>
+              <div className="flex flex-wrap gap-x-3 gap-y-2">
+                {STAFF_ACCESS_CHOICES.map((choice) => (
+                  <label key={choice.key} className={`flex items-center gap-1.5 text-xs ${s.isCurrentUser ? "opacity-50" : ""}`}>
+                    <input
+                      type="checkbox"
+                      disabled={Boolean(s.isCurrentUser)}
+                      checked={(staffAccess[s.id] ?? staffAccessFor(s)).includes(choice.key)}
+                      onChange={(event) => setStaffAccess((current) => {
+                        const existing = current[s.id] ?? staffAccessFor(s);
+                        if (choice.key === "ADMIN") return { ...current, [s.id]: event.target.checked ? ["ADMIN"] : [] };
+                        const staffChoices = existing.filter((item) => item !== "ADMIN");
+                        return { ...current, [s.id]: event.target.checked ? [...staffChoices, choice.key] : staffChoices.filter((item) => item !== choice.key) };
+                      })}
+                    />
+                    {choice.label}
+                  </label>
+                ))}
+              </div>
+              <Button size="sm" isLoading={savingStaffId === s.id} isDisabled={Boolean(s.isCurrentUser) || !staffAccess[s.id]?.length || sameStaffAccess(staffAccess[s.id] ?? staffAccessFor(s), staffAccessFor(s))} onPress={() => updateStaffAccess(s.id)}>
                 Save access
               </Button>
               {s.role === "STAFF" && <button
