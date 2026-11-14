@@ -1117,6 +1117,33 @@ app.get("/api/admin/customers", requireAuth, requireRole("ADMIN"), async (_req, 
   res.json(customers);
 });
 
+async function permanentlyRemoveCustomers(ids: string[]) {
+  return prisma.$transaction(async (tx) => {
+    const customers = await tx.user.findMany({ where: { id: { in: ids }, role: "CUSTOMER" }, select: { id: true } });
+    if (!customers.length) return { deleted: 0, ordersAnonymized: 0 };
+    const customerIds = customers.map((customer) => customer.id);
+    const orders = await tx.order.findMany({ where: { customerId: { in: customerIds } }, select: { id: true } });
+    await Promise.all(orders.map((order) => tx.order.update({
+      where: { id: order.id },
+      data: { customerId: null, ipAddress: "0.0.0.0", shippingDetails: { name: "Deleted customer", anonymized: true } },
+    })));
+    const deleted = await tx.user.deleteMany({ where: { id: { in: customerIds }, role: "CUSTOMER" } });
+    return { deleted: deleted.count, ordersAnonymized: orders.length };
+  });
+}
+
+app.delete("/api/admin/customers/bulk", requireAuth, requireRole("ADMIN"), async (req, res) => {
+  const parsed = z.object({ ids: z.array(z.string().min(1)).min(1).max(500) }).safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Select between 1 and 500 customers" });
+  res.json(await permanentlyRemoveCustomers(parsed.data.ids));
+});
+
+app.delete("/api/admin/customers/:id", requireAuth, requireRole("ADMIN"), async (req, res) => {
+  const result = await permanentlyRemoveCustomers([String(req.params.id)]);
+  if (!result.deleted) return res.status(404).json({ error: "Customer not found" });
+  res.json(result);
+});
+
 app.get("/api/admin/products", requireAuth, requireRole("ADMIN", "STAFF"), async (_req, res) => {
   res.json(
     await prisma.product.findMany({
@@ -1278,6 +1305,21 @@ async function softDeleteOrders(ids: string[], actorId: string) {
   });
 }
 
+async function permanentlyDeleteOrders(ids: string[], actorId: string) {
+  return prisma.$transaction(async (tx) => {
+    const rows = await tx.order.findMany({ where: { id: { in: ids } }, select: { id: true, status: true, paymentStatus: true, totalAmount: true, courierName: true, courierTrackingId: true, createdAt: true } });
+    if (!rows.length) return 0;
+    const deletedAt = new Date();
+    await tx.orderDeletionAudit.createMany({ data: rows.map((row) => ({
+      id: randomUUID(), orderId: row.id, actorId, action: "PERMANENTLY_DELETED",
+      snapshot: { status: row.status, paymentStatus: row.paymentStatus, totalAmount: Number(row.totalAmount), courierName: row.courierName, courierTrackingId: row.courierTrackingId, createdAt: row.createdAt.toISOString() } as Prisma.InputJsonValue,
+      createdAt: deletedAt,
+    })) });
+    await tx.order.deleteMany({ where: { id: { in: rows.map((row) => row.id) } } });
+    return rows.length;
+  });
+}
+
 app.get("/api/admin/order-deletion-audit", requireAuth, requireRole("ADMIN"), async (_req, res) => {
   res.json(await prisma.orderDeletionAudit.findMany({ orderBy: { createdAt: "desc" }, take: 200 }));
 });
@@ -1301,6 +1343,19 @@ app.post("/api/admin/orders/:id/restore", requireAuth, requireRole("ADMIN"), asy
   });
   if (!restored) return res.status(404).json({ error: "Archived order not found" });
   res.json({ restored: true });
+});
+
+app.delete("/api/admin/orders/permanent/bulk", requireAuth, requireRole("ADMIN"), async (req, res) => {
+  const parsed = z.object({ ids: z.array(z.string().min(1)).min(1).max(500) }).safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ error: "Select between 1 and 500 orders" });
+  const deleted = await permanentlyDeleteOrders(parsed.data.ids, req.user!.id);
+  res.json({ deleted });
+});
+
+app.delete("/api/admin/orders/:id/permanent", requireAuth, requireRole("ADMIN"), async (req, res) => {
+  const deleted = await permanentlyDeleteOrders([String(req.params.id)], req.user!.id);
+  if (!deleted) return res.status(404).json({ error: "Order not found" });
+  res.json({ deleted });
 });
 
 app.delete("/api/admin/orders/bulk", requireAuth, requireRole("ADMIN"), async (req, res) => {

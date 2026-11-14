@@ -703,8 +703,21 @@ export function AdminPanel() {
 /* ==================== CUSTOMERS ==================== */
 function AdminCustomers({ token }: { token: string }) {
   const [customers, setCustomers] = useState<{ id: string; name: string; email: string; createdAt: string; _count: { orders: number } }[]>([]);
-  useEffect(() => { api("/api/admin/customers", token).then((r) => r.json()).then((rows) => Array.isArray(rows) && setCustomers(rows)).catch(() => {}); }, [token]);
-  return <section className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><h2 className="text-xl font-bold mb-4">Customers</h2><div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr>{["Name", "Email", "Orders", "Joined"].map((label) => <th key={label} className="text-left p-3 text-xs text-gray-400">{label}</th>)}</tr></thead><tbody>{customers.map((customer) => <tr key={customer.id} className="border-t border-gray-100 dark:border-white/8"><td className="p-3">{customer.name}</td><td className="p-3">{customer.email}</td><td className="p-3">{customer._count.orders}</td><td className="p-3">{new Date(customer.createdAt).toLocaleDateString("en-US")}</td></tr>)}</tbody></table></div>{!customers.length && <p className="text-sm text-gray-400">No customers found.</p>}</section>;
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const load = () => api("/api/admin/customers", token).then((r) => r.json()).then((rows) => { if (Array.isArray(rows)) setCustomers(rows); }).catch(() => {});
+  useEffect(() => { load(); }, [token]);
+
+  async function removeCustomers(ids: string[]) {
+    if (!ids.length || !window.confirm(`Permanently remove ${ids.length} customer account${ids.length === 1 ? "" : "s"}? Related orders will remain with customer details anonymized.`)) return;
+    const response = await api(ids.length === 1 ? `/api/admin/customers/${ids[0]}` : "/api/admin/customers/bulk", token, { method: "DELETE", ...(ids.length === 1 ? {} : { body: JSON.stringify({ ids }) }) });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) return toast.error(result.error ?? "Could not remove customers");
+    toast.success(`${result.deleted} customer account${result.deleted === 1 ? "" : "s"} removed; ${result.ordersAnonymized} order${result.ordersAnonymized === 1 ? "" : "s"} anonymized`);
+    setSelectedIds([]);
+    load();
+  }
+
+  return <section className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 p-5"><div className="mb-4 flex flex-wrap items-center justify-between gap-3"><div><h2 className="text-xl font-bold">Customers</h2><p className="mt-1 text-xs text-gray-400">Removing an account anonymizes its order contact details and keeps order history.</p></div>{selectedIds.length > 0 && <Button size="sm" color="danger" onPress={() => removeCustomers(selectedIds)}><FiTrash2 size={12} /> Remove {selectedIds.length} selected</Button>}</div><div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr><th className="p-3 text-left"><input aria-label="Select all customers" type="checkbox" checked={customers.length > 0 && selectedIds.length === customers.length} onChange={(event) => setSelectedIds(event.target.checked ? customers.map((customer) => customer.id) : [])} /></th>{["Name", "Email", "Orders", "Joined", ""].map((label, index) => <th key={`${label}-${index}`} className="text-left p-3 text-xs text-gray-400">{label}</th>)}</tr></thead><tbody>{customers.map((customer) => <tr key={customer.id} className="border-t border-gray-100 dark:border-white/8"><td className="p-3"><input aria-label={`Select ${customer.name}`} type="checkbox" checked={selectedIds.includes(customer.id)} onChange={(event) => setSelectedIds((current) => event.target.checked ? [...current, customer.id] : current.filter((id) => id !== customer.id))} /></td><td className="p-3">{customer.name}</td><td className="p-3">{customer.email}</td><td className="p-3">{customer._count.orders}</td><td className="p-3">{new Date(customer.createdAt).toLocaleDateString("en-US")}</td><td className="p-3 text-right"><Button size="sm" variant="flat" color="danger" aria-label={`Remove ${customer.name}`} onPress={() => removeCustomers([customer.id])}><FiTrash2 /></Button></td></tr>)}</tbody></table></div>{!customers.length && <p className="text-sm text-gray-400">No customers found.</p>}</section>;
 }
 
 function AdminSettings({ config, save, saving }: { config: Config; save: (payload: object) => void; saving: boolean }) {
@@ -2875,6 +2888,19 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
     setSelectedOrderIds([]); toast.success(`${result.deleted} order${result.deleted === 1 ? "" : "s"} archived; audit record saved`); load();
   }
 
+  async function permanentlyDeleteSelectedOrders(ids: string[]) {
+    const affected = orders.filter((order) => ids.includes(order.id));
+    const paidCount = affected.filter((order) => order.paymentStatus === "PAID").length;
+    const courierCount = affected.filter((order) => Boolean(order.courierName || order.courierTrackingId)).length;
+    if (!ids.length || !window.confirm(`Permanently delete ${ids.length} selected order${ids.length === 1 ? "" : "s"}? This cannot be undone. No payment refund will be sent and stock will not be changed. ${paidCount} order(s) are paid; ${courierCount} are courier-linked. An audit record will remain.`)) return;
+    const response = await api("/api/admin/orders/permanent/bulk", token, { method: "DELETE", body: JSON.stringify({ ids }) });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) { toast.error(result.error || "Could not permanently delete orders"); return; }
+    setSelectedOrderIds([]);
+    toast.success(`${result.deleted} order${result.deleted === 1 ? "" : "s"} permanently deleted`);
+    load();
+  }
+
   async function restoreOrder(id: string) {
     const response = await api(`/api/admin/orders/${id}/restore`, token, { method: "POST" });
     if (response.ok) { toast.success("Order restored to active orders"); load(); }
@@ -3107,7 +3133,7 @@ function AdminOrders({ token, config, isAdmin }: { token: string; config: Config
         </div>
       </div>
 
-      {isAdmin && selectedOrderIds.length > 0 && <div className="flex justify-end"><Button size="sm" color="danger" onPress={() => deleteOrders(selectedOrderIds)}><FiTrash2 size={12} /> Delete {selectedOrderIds.length} selected</Button></div>}
+      {isAdmin && selectedOrderIds.length > 0 && <div className="flex flex-wrap justify-end gap-2"><Button size="sm" variant="flat" color="warning" onPress={() => deleteOrders(selectedOrderIds)}>Archive {selectedOrderIds.length} selected</Button><Button size="sm" color="danger" onPress={() => permanentlyDeleteSelectedOrders(selectedOrderIds)}><FiTrash2 size={12} /> Delete permanently</Button></div>}
       {isAdmin && <div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 overflow-hidden"><div className="px-4 py-3 border-b border-gray-100 dark:border-white/8"><h3 className="font-bold text-sm">Abandoned checkouts</h3><p className="text-xs text-gray-400">{abandonedCount} unfinished checkout sessions</p></div>{abandoned.length ? <div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr>{["Last activity","Customer","Contact","Items","Cart total"].map(h=><th key={h} className="text-left p-3 text-xs text-gray-400">{h}</th>)}</tr></thead><tbody>{abandoned.slice(0,20).map(c=><tr key={c.sessionId} className="border-t border-gray-100 dark:border-white/6"><td className="p-3 text-xs">{new Date(c.updatedAt).toLocaleString()}</td><td className="p-3 text-xs">{c.name || "Guest"}</td><td className="p-3 text-xs">{c.phone || c.email || "—"}</td><td className="p-3 text-xs">{(c.items || []).map(i=>`${i.name} × ${i.qty}`).join(", ")}</td><td className="p-3 text-xs font-bold">{money(c.total)}</td></tr>)}</tbody></table></div>:<p className="p-4 text-xs text-gray-400">No abandoned checkouts recorded. A session appears after a shopper enters checkout details.</p>}</div>}
       {isAdmin && archivedOrders.length > 0 && <div className="rounded-2xl border border-gray-100 dark:border-white/6 bg-white dark:bg-white/4 overflow-hidden"><div className="px-4 py-3 border-b border-gray-100 dark:border-white/8"><h3 className="font-bold text-sm">Archived orders</h3><p className="text-xs text-gray-400">Soft deleted and retained in the database · restore to return to active orders</p></div><div className="overflow-x-auto"><table className="w-full text-sm"><tbody>{archivedOrders.map(o=><tr key={o.id} className="border-t border-gray-100 dark:border-white/6"><td className="p-3 text-xs font-bold text-primary">#{o.id.slice(0,8)}</td><td className="p-3 text-xs">{STATUS_LABEL[o.status] ?? o.status}</td><td className="p-3 text-xs">{o.paymentStatus}</td><td className="p-3 text-xs">{money(o.totalAmount)}</td><td className="p-3 text-xs">{new Date(o.deletedAt).toLocaleString()}</td><td className="p-3 text-right"><Button size="sm" variant="flat" onPress={()=>restoreOrder(o.id)}>Restore</Button></td></tr>)}</tbody></table></div></div>}
 
