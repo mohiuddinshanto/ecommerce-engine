@@ -146,13 +146,13 @@ Copy the CLI's `whsec_...` value into the local `.env` as `STRIPE_WEBHOOK_SECRET
 
 ## Demo Credentials
 
-The public reviewer account opens `/admin` in **read-only demo mode**. The overview uses sample figures; it does not show live orders or customer details and cannot change store data. The credentials are printed on the admin sign-in screen with a fill button:
+The task demo account opens `/admin` with **Full Admin** permissions so a reviewer can inspect the complete admin workflow. The credentials are printed on the admin sign-in screen with a fill button:
 
 | Email | Password |
 | --- | --- |
-| `reviewer@epic-store.example.com` | `EpicReview-2026!` |
+| `demo@admin.com` | `demo1234` |
 
-Use the storefront to browse product listings and details. To test registration, cart, and checkout, create a separate customer account. Do not use the public reviewer account for purchases. Real admin credentials remain private and are not included here.
+Use the storefront to browse product listings and details. To test registration, cart, and checkout, create a separate customer account. The task demo admin is intended for assessment of this project. Do not store real customer information in the demo account.
 
 ## Project Map
 

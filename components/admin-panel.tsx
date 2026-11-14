@@ -11,7 +11,7 @@ import { productUrl } from "../lib/product-url";
 import { FiArrowDown, FiArrowUp, FiBox, FiCheck, FiChevronDown, FiCopy, FiEdit2, FiEye, FiEyeOff, FiExternalLink, FiImage, FiLayers, FiLoader, FiMail, FiMenu, FiPhone, FiPlus, FiPrinter, FiRefreshCw, FiSend, FiShuffle, FiStar, FiTag, FiTrash2, FiTruck, FiUpload, FiUser, FiX } from "react-icons/fi";
 
 const apiUrl = "";
-const reviewerDemo = { email: "reviewer@epic-store.example.com", password: "EpicReview-2026!" };
+const taskDemoAdmin = { email: "demo@admin.com", password: "demo1234" };
 
 type PromoBannerDef = {
   enabled?: boolean;
@@ -493,7 +493,7 @@ export function AdminPanel() {
             </div>
             <h1 className="font-display font-bold text-2xl text-gray-900 dark:text-white">Control Dashboard</h1>
             <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
-              Sign in with your admin account or use the read-only reviewer demo below.
+              Sign in with your admin account or use the task demo account below.
             </p>
           </div>
 
@@ -512,16 +512,16 @@ export function AdminPanel() {
               Open Control Dashboard
             </Button>
           </form>
-          <aside className="mt-6 rounded-2xl border border-primary/15 bg-primary/5 p-4" aria-label="Read-only reviewer credentials">
+          <aside className="mt-6 rounded-2xl border border-primary/15 bg-primary/5 p-4" aria-label="Task demo admin credentials">
             <div className="flex items-center justify-between gap-3">
-              <h2 className="text-sm font-bold text-gray-900 dark:text-white">Reviewer demo access</h2>
-              <span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-primary">Read only</span>
+              <h2 className="text-sm font-bold text-gray-900 dark:text-white">Task demo access</h2>
+              <span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-primary">Full Admin</span>
             </div>
-            <p className="mt-2 break-all text-xs text-gray-600 dark:text-slate-300">Email: {reviewerDemo.email}</p>
-            <p className="mt-1 text-xs text-gray-600 dark:text-slate-300">Password: {reviewerDemo.password}</p>
-            <p className="mt-2 text-[11px] leading-5 text-gray-500 dark:text-slate-400">Shows a sample overview. Live orders, customer details, settings, and store changes are not accessible.</p>
-            <button type="button" onClick={() => { setLoginEmail(reviewerDemo.email); const input = loginForm.current?.querySelector<HTMLInputElement>('input[name="password"]'); if (input) input.value = reviewerDemo.password; }} className="mt-3 text-xs font-bold text-primary hover:underline">
-              Fill reviewer sign-in
+            <p className="mt-2 break-all text-xs text-gray-600 dark:text-slate-300">Email: {taskDemoAdmin.email}</p>
+            <p className="mt-1 text-xs text-gray-600 dark:text-slate-300">Password: {taskDemoAdmin.password}</p>
+            <p className="mt-2 text-[11px] leading-5 text-gray-500 dark:text-slate-400">Full admin access is enabled for task review.</p>
+            <button type="button" onClick={() => { setLoginEmail(taskDemoAdmin.email); const input = loginForm.current?.querySelector<HTMLInputElement>('input[name="password"]'); if (input) input.value = taskDemoAdmin.password; }} className="mt-3 text-xs font-bold text-primary hover:underline">
+              Fill demo sign-in
             </button>
           </aside>
         </div>
