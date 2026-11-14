@@ -6,7 +6,7 @@ import helmet from "helmet";
 import { randomUUID } from "node:crypto";
 import multer from "multer";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library.js";
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "./lib/prisma.js";
 import { cached, purgeCache, PUBLIC_CACHE_CONTROL } from "./lib/cache.js";
@@ -2059,7 +2059,8 @@ app.delete("/api/admin/reviews/:id", requireAuth, requireRole("ADMIN", "STAFF"),
 
 // Admin Staff Management APIs
 app.get("/api/admin/staff", requireAuth, requireRole("ADMIN"), async (_req, res) => {
-  res.json(await prisma.user.findMany({ where: { role: "STAFF" }, select: { id: true, name: true, email: true, role: true, staffType: true, allowedCategories: true, createdAt: true } }));
+  const members = await prisma.user.findMany({ where: { role: { in: ["STAFF", "ADMIN"] } }, orderBy: [{ role: "desc" }, { name: "asc" }], select: { id: true, name: true, email: true, role: true, staffType: true, allowedCategories: true, createdAt: true } });
+  res.json(members.map((member) => ({ ...member, isCurrentUser: member.id === _req.user!.id })));
 });
 
 app.post("/api/admin/staff", requireAuth, requireRole("ADMIN"), async (req, res) => {
@@ -2068,7 +2069,7 @@ app.post("/api/admin/staff", requireAuth, requireRole("ADMIN"), async (req, res)
       name: z.string().trim().min(2),
       email: z.string().email(),
       password: z.string().min(8),
-      staffType: z.enum(["ORDER_MANAGER", "PRODUCT_MANAGER", "ORDER_AND_PRODUCT_MANAGER"]),
+      staffType: z.enum(["ORDER_MANAGER", "PRODUCT_MANAGER", "ORDER_AND_PRODUCT_MANAGER", "ADMIN"]),
       allowedCategories: z.array(z.string()).optional(),
     })
     .safeParse(req.body);
@@ -2083,8 +2084,8 @@ app.post("/api/admin/staff", requireAuth, requireRole("ADMIN"), async (req, res)
       name: data.data.name,
       email: data.data.email,
       passwordHash,
-      role: "STAFF",
-      staffType: data.data.staffType,
+      role: data.data.staffType === "ADMIN" ? "ADMIN" : "STAFF",
+      staffType: data.data.staffType === "ADMIN" ? null : data.data.staffType,
       allowedCategories: data.data.allowedCategories ? (data.data.allowedCategories as Prisma.InputJsonValue) : undefined,
     },
   });
@@ -2093,16 +2094,27 @@ app.post("/api/admin/staff", requireAuth, requireRole("ADMIN"), async (req, res)
 });
 
 app.patch("/api/admin/staff/:id", requireAuth, requireRole("ADMIN"), async (req, res) => {
-  const data = z.object({ staffType: z.enum(["ORDER_MANAGER", "PRODUCT_MANAGER", "ORDER_AND_PRODUCT_MANAGER"]) }).safeParse(req.body);
-  if (!data.success) return res.status(400).json({ error: "Select a valid staff access level" });
-  const staff = await prisma.user.findFirst({ where: { id: String(req.params.id), role: "STAFF" }, select: { id: true } });
-  if (!staff) return res.status(404).json({ error: "Staff account not found" });
-  const updated = await prisma.user.update({ where: { id: staff.id }, data: { staffType: data.data.staffType } });
-  res.json({ id: updated.id, staffType: updated.staffType });
+  const accessSchema = z.discriminatedUnion("role", [
+    z.object({ role: z.literal("ADMIN") }),
+    z.object({ role: z.literal("STAFF"), staffType: z.enum(["ORDER_MANAGER", "PRODUCT_MANAGER", "ORDER_AND_PRODUCT_MANAGER"]) }),
+  ]);
+  const data = accessSchema.safeParse(req.body);
+  if (!data.success) return res.status(400).json({ error: "Select a valid access level" });
+  const id = String(req.params.id);
+  if (id === req.user!.id) return res.status(403).json({ error: "You cannot change your own admin access" });
+  const member = await prisma.user.findFirst({ where: { id, role: { in: ["STAFF", "ADMIN"] } }, select: { id: true } });
+  if (!member) return res.status(404).json({ error: "Team member not found" });
+  const updated = await prisma.user.update({ where: { id: member.id }, data: data.data.role === "ADMIN"
+    ? { role: "ADMIN", staffType: null, allowedCategories: Prisma.DbNull }
+    : { role: "STAFF", staffType: data.data.staffType } });
+  res.json({ id: updated.id, role: updated.role, staffType: updated.staffType });
 });
 
 app.delete("/api/admin/staff/:id", requireAuth, requireRole("ADMIN"), async (req, res) => {
-  await prisma.user.delete({ where: { id: String(req.params.id) } });
+  const id = String(req.params.id);
+  if (id === req.user!.id) return res.status(403).json({ error: "You cannot remove your own admin account" });
+  const deleted = await prisma.user.deleteMany({ where: { id, role: "STAFF" } });
+  if (!deleted.count) return res.status(404).json({ error: "Staff account not found" });
   res.status(204).end();
 });
 

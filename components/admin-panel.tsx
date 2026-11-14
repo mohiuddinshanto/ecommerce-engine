@@ -285,7 +285,8 @@ type MenuItem = { id: string; label: string; type: "category" | "custom"; catego
 type Coupon = { id: string; code: string; type: string; value: string; minSpend?: string; usedCount: number; isActive: boolean };
 type Review = { id: string; rating: number; comment?: string; isApproved: boolean; product: { name: string }; user: { name: string; email: string } };
 type StaffType = "ORDER_MANAGER" | "PRODUCT_MANAGER" | "ORDER_AND_PRODUCT_MANAGER";
-type StaffUser = { id: string; name: string; email: string; staffType: StaffType; allowedCategories?: string };
+type StaffAccess = StaffType | "ADMIN";
+type StaffUser = { id: string; name: string; email: string; role: "ADMIN" | "STAFF"; staffType: StaffType | null; isCurrentUser?: boolean; allowedCategories?: string };
 
 const money = formatMoney;
 
@@ -353,6 +354,11 @@ const STAFF_SECTIONS: Record<string, Section[]> = {
   ORDER_MANAGER: ["overview", "orders", "delivery", "reviews"],
   PRODUCT_MANAGER: ["overview", "products", "media", "categories", "reviews"],
   ORDER_AND_PRODUCT_MANAGER: ["overview", "orders", "delivery", "products", "media", "categories", "reviews"],
+};
+const STAFF_TYPE_LABEL: Record<StaffType, string> = {
+  ORDER_MANAGER: "Order Manager",
+  PRODUCT_MANAGER: "Product Manager",
+  ORDER_AND_PRODUCT_MANAGER: "Order + Product Manager",
 };
 
 const categoryOptions = (categories: Category[]) =>
@@ -3730,7 +3736,7 @@ function AdminReviews({ token }: { token: string }) {
 function AdminStaff({ token }: { token: string }) {
   const [staff, setStaff] = useState<StaffUser[]>([]);
   const [creating, setCreating] = useState(false);
-  const [staffAccess, setStaffAccess] = useState<Record<string, StaffType>>({});
+  const [staffAccess, setStaffAccess] = useState<Record<string, StaffAccess>>({});
   const [savingStaffId, setSavingStaffId] = useState<string | null>(null);
 
   const load = () => {
@@ -3739,7 +3745,7 @@ function AdminStaff({ token }: { token: string }) {
       .then((res) => {
         if (!Array.isArray(res)) return;
         setStaff(res);
-        setStaffAccess(Object.fromEntries(res.map((member: StaffUser) => [member.id, member.staffType])));
+        setStaffAccess(Object.fromEntries(res.map((member: StaffUser) => [member.id, member.role === "ADMIN" ? "ADMIN" : member.staffType ?? "ORDER_MANAGER"])));
       })
       .catch(() => {});
   };
@@ -3766,11 +3772,15 @@ function AdminStaff({ token }: { token: string }) {
   }
 
   async function updateStaffAccess(id: string) {
-    const staffType = staffAccess[id];
-    if (!staffType) return;
+    const access = staffAccess[id];
+    const member = staff.find((item) => item.id === id);
+    if (!access || !member || member.isCurrentUser) return;
+    if (access === "ADMIN" && member.role !== "ADMIN" && !confirm(`Grant ${member.name} full admin access to all store settings, orders, products, and staff?`)) return;
+    if (member.role === "ADMIN" && access !== "ADMIN" && !confirm(`Change ${member.name} from Full Admin to ${STAFF_TYPE_LABEL[access]}?`)) return;
+    const body = access === "ADMIN" ? { role: "ADMIN" } : { role: "STAFF", staffType: access };
     setSavingStaffId(id);
     try {
-      const response = await api(`/api/admin/staff/${id}`, token, { method: "PATCH", body: JSON.stringify({ staffType }) });
+      const response = await api(`/api/admin/staff/${id}`, token, { method: "PATCH", body: JSON.stringify(body) });
       if (!response.ok) throw new Error((await response.json()).error ?? "Could not update access");
       toast.success("Staff access updated");
       load();
@@ -3806,10 +3816,11 @@ function AdminStaff({ token }: { token: string }) {
           <Input label="Staff Name" name="name" isRequired />
           <Input label="Staff Email" name="email" type="email" isRequired />
           <Input label="Password" name="password" type="password" minLength={8} isRequired />
-          <Select label="Staff Role Type" name="staffType" defaultSelectedKeys={["ORDER_MANAGER"]}>
+          <Select label="Access Level" name="staffType" defaultSelectedKeys={["ORDER_MANAGER"]}>
             <SelectItem key="ORDER_MANAGER">Order Manager</SelectItem>
             <SelectItem key="PRODUCT_MANAGER">Product Manager</SelectItem>
             <SelectItem key="ORDER_AND_PRODUCT_MANAGER">Order + Product Manager</SelectItem>
+            <SelectItem key="ADMIN">Full Admin (all permissions)</SelectItem>
           </Select>
           <button type="submit" className="sm:col-span-2 h-10 bg-primary text-white font-display font-bold rounded-xl hover:bg-primary-dark transition-colors">
             Create Staff Account
@@ -3818,7 +3829,7 @@ function AdminStaff({ token }: { token: string }) {
       )}
       <ListCard
         items={staff}
-        empty="No staff members yet. Add team members to manage orders or products."
+        empty="No team members yet. Add staff or a full admin account."
         render={(s: StaffUser) => (
           <div className="flex items-center gap-3 justify-between p-4 bg-white dark:bg-white/4 rounded-xl border border-gray-100 dark:border-white/6">
             <div className="flex items-center gap-3">
@@ -3826,8 +3837,8 @@ function AdminStaff({ token }: { token: string }) {
                 {s.name?.[0]?.toUpperCase() ?? "S"}
               </div>
               <div>
-                <strong className="text-sm text-gray-900 dark:text-white">{s.name}</strong>
-                <div className="text-xs text-gray-400 dark:text-slate-500">{s.email} · {s.staffType}</div>
+                <strong className="text-sm text-gray-900 dark:text-white">{s.name}{s.role === "ADMIN" ? " · Full Admin" : ""}{s.isCurrentUser ? " (You)" : ""}</strong>
+                <div className="text-xs text-gray-400 dark:text-slate-500">{s.email}{s.role === "STAFF" && s.staffType ? ` · ${STAFF_TYPE_LABEL[s.staffType]}` : ""}</div>
               </div>
             </div>
             <div className="flex flex-wrap items-center justify-end gap-2">
@@ -3835,27 +3846,29 @@ function AdminStaff({ token }: { token: string }) {
                 aria-label={`Access for ${s.name}`}
                 size="sm"
                 className="w-52"
-                selectedKeys={new Set([staffAccess[s.id] ?? s.staffType])}
+                isDisabled={Boolean(s.isCurrentUser)}
+                selectedKeys={new Set([staffAccess[s.id] ?? (s.role === "ADMIN" ? "ADMIN" : s.staffType ?? "ORDER_MANAGER")])}
                 onSelectionChange={(selection) => {
                   if (selection === "all") return;
                   const selected = Array.from(selection)[0];
-                  if (selected) setStaffAccess((current) => ({ ...current, [s.id]: String(selected) as StaffType }));
+                  if (selected) setStaffAccess((current) => ({ ...current, [s.id]: String(selected) as StaffAccess }));
                 }}
               >
                 <SelectItem key="ORDER_MANAGER">Order Manager</SelectItem>
                 <SelectItem key="PRODUCT_MANAGER">Product Manager</SelectItem>
                 <SelectItem key="ORDER_AND_PRODUCT_MANAGER">Order + Product Manager</SelectItem>
+                <SelectItem key="ADMIN">Full Admin (all permissions)</SelectItem>
               </Select>
-              <Button size="sm" isLoading={savingStaffId === s.id} isDisabled={(staffAccess[s.id] ?? s.staffType) === s.staffType} onPress={() => updateStaffAccess(s.id)}>
+              <Button size="sm" isLoading={savingStaffId === s.id} isDisabled={Boolean(s.isCurrentUser) || (staffAccess[s.id] ?? (s.role === "ADMIN" ? "ADMIN" : s.staffType ?? "ORDER_MANAGER")) === (s.role === "ADMIN" ? "ADMIN" : s.staffType ?? "ORDER_MANAGER")} onPress={() => updateStaffAccess(s.id)}>
                 Save access
               </Button>
-              <button
+              {s.role === "STAFF" && <button
                 onClick={() => removeStaff(s.id)}
                 aria-label={`Remove ${s.name}`}
                 className="icon-square-btn w-7 h-7 rounded-lg bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-slate-400 hover:bg-rose-100 dark:hover:bg-rose-500/10 hover:text-rose-500 transition-colors flex items-center justify-center text-xs"
               >
                 <FiTrash2 />
-              </button>
+              </button>}
             </div>
           </div>
         )}
